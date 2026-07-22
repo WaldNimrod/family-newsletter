@@ -1,17 +1,17 @@
-# Famely Neuslettr — Deployment Verification & Test Plan
+# Family Newsletter — Deployment Verification & Test Plan
 
 > **Who you are:** You are Claude Code running on the home server via terminal.
 > **Who sent this:** The architecture team (Claude Opus in Cowork) via Nimrod.
-> **What this is:** A structured verification and test plan for the Famely Neuslettr deployment.
+> **What this is:** A structured verification and test plan for the Family Newsletter deployment.
 > **How to work:** Execute each phase in order. Report results in the exact format specified. STOP at gates marked 🚦 and report back before continuing.
 
 ---
 
 ## Context
 
-Famely Neuslettr is an automated daily family newsletter system. It was built and tested in mock mode on the dev machine and has been deployed to this server via git. The system scans RSS/web/YouTube sources, generates AI summaries via Claude API, renders HTML, uploads to nimrod.bio via FTP, and sends notifications to 5 family members.
+Family Newsletter is an automated daily family newsletter system. It was built and tested in mock mode on the dev machine and has been deployed to this server via git. The system scans RSS/web/YouTube sources, generates AI summaries via Claude API, renders HTML, uploads to nimrod.bio via FTP, and sends notifications to 5 family members.
 
-**Project location:** Should be at `/opt/famely-neuslettr/` or similar — you need to locate it.
+**Project location:** Should be at `/opt/family-newsletter/` or similar — you need to locate it.
 **Version:** v1.0.0 (git tag)
 **Target:** First real newsletter on Sunday, April 13, 2026.
 
@@ -38,13 +38,13 @@ which python3
 echo ""
 echo "=== PROJECT LOCATION ==="
 # Find the project
-find / -name "orchestrator.py" -path "*/famely*" 2>/dev/null
-find / -name "settings.json" -path "*/famely*" 2>/dev/null
-ls -la /opt/famely-neuslettr/ 2>/dev/null || echo "NOT at /opt/famely-neuslettr"
+find / -name "orchestrator.py" -path "*/family*" 2>/dev/null
+find / -name "settings.json" -path "*/family*" 2>/dev/null
+ls -la /opt/family-newsletter/ 2>/dev/null || echo "NOT at /opt/family-newsletter"
 
 echo ""
 echo "=== GIT ==="
-cd /opt/famely-neuslettr 2>/dev/null || cd $(find / -name "orchestrator.py" -path "*/famely*" -exec dirname {} \; 2>/dev/null | head -1)/..
+cd /opt/family-newsletter 2>/dev/null || cd $(find / -name "orchestrator.py" -path "*/family*" -exec dirname {} \; 2>/dev/null | head -1)/..
 git log --oneline -3
 git status -s
 git remote -v
@@ -131,7 +131,7 @@ python -m src.orchestrator health-check
 echo ""
 echo "=== MOCK BUILD ==="
 # Delete any old test DB first
-rm -f data/famely.db
+rm -f data/family.db
 python -m src.orchestrator daily-build --mock
 
 echo ""
@@ -139,7 +139,7 @@ echo "=== MOCK BUILD RESULT ==="
 ls -la data/archive/html/
 python3 -c "
 from src.db import Database
-db = Database('data/famely.db')
+db = Database('data/family.db')
 nl = db.get_last_newsletter()
 if nl:
     print(f'Date: {nl[\"date\"]}')
@@ -177,7 +177,7 @@ cd [PROJECT_PATH]
 source venv/bin/activate
 
 echo "=== REAL RSS SCAN ==="
-rm -f data/famely.db
+rm -f data/family.db
 python3 -c "
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(name)s] %(levelname)s: %(message)s')
@@ -223,7 +223,7 @@ cd [PROJECT_PATH]
 source venv/bin/activate
 
 echo "=== FULL REAL BUILD ==="
-rm -f data/famely.db
+rm -f data/family.db
 python -m src.orchestrator daily-build 2>&1
 
 echo ""
@@ -231,7 +231,7 @@ echo "=== BUILD ANALYSIS ==="
 python3 -c "
 from src.db import Database
 import datetime
-db = Database('data/famely.db')
+db = Database('data/family.db')
 today = datetime.date.today().isoformat()
 nl = db.get_newsletter(today)
 if nl:
@@ -350,7 +350,7 @@ echo "=== VERIFY PUBLIC URL ==="
 URL=$(python3 -c "
 from src.db import Database
 import datetime
-db = Database('data/famely.db')
+db = Database('data/family.db')
 nl = db.get_newsletter(datetime.date.today().isoformat())
 print(nl['public_url'] if nl else 'NONE')
 db.close()
@@ -376,10 +376,10 @@ echo "=== CURRENT CRON ==="
 crontab -l 2>/dev/null || echo "(empty)"
 
 echo ""
-echo "=== ADD FAMELY CRON ==="
+echo "=== ADD FAMILY CRON ==="
 # Add to existing crontab (preserve existing entries)
 (crontab -l 2>/dev/null; echo "
-# Famely Neuslettr — Daily Schedule (IST)
+# Family Newsletter — Daily Schedule (IST)
 TZ=Asia/Jerusalem
 0  9 * * *  cd [PROJECT_PATH] && ./run.sh daily-build  >> logs/cron.log 2>&1
 0 12 * * *  cd [PROJECT_PATH] && ./run.sh daily-send   >> logs/cron.log 2>&1
@@ -397,7 +397,7 @@ crontab -l
 After all phases, compile a final report:
 
 ```
-=== FAMELY NEUSLETTR DEPLOYMENT REPORT ===
+=== FAMILY NEWSLETTER DEPLOYMENT REPORT ===
 Date: [date]
 Server: [hostname]
 Project path: [path]

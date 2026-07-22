@@ -1,10 +1,10 @@
-# Famely Neuslettr
+# Family Newsletter
 
 A personalized family newsletter generator that aggregates content from RSS feeds, websites, and social media based on individual family member interests, curates it with AI, and distributes via FTP + WhatsApp/Email.
 
 ## Overview
 
-Famely Neuslettr is a full-stack daily newsletter pipeline for families that:
+Family Newsletter is a full-stack daily newsletter pipeline for families that:
 
 - **M1 (Profiles)**: Loads family member profiles, interests, and content sources
 - **M2 (Scanner)**: Fetches content from RSS feeds, websites, and YouTube
@@ -26,7 +26,7 @@ Famely Neuslettr is a full-stack daily newsletter pipeline for families that:
 ```bash
 # Clone and install
 git clone <repo-url>
-cd famely-neuslettr
+cd family-newsletter
 python3 -m venv venv
 source venv/bin/activate  # or: venv\Scripts\activate on Windows
 pip install -r requirements.txt
@@ -113,7 +113,7 @@ src/
 
 ### Database
 
-SQLite (`data/famely.db`) tracks:
+SQLite (`data/family.db`) tracks:
 - Newsletter editions (date, status, HTML path, public URL)
 - Token costs per build (Claude API)
 - Submissions via webhook
@@ -184,7 +184,7 @@ TWILIO_FROM=whatsapp:+...
 SMTP_HOST=...
 SMTP_USER=...
 SMTP_PASS=...
-SMTP_FROM=famely@nimrod.bio
+SMTP_FROM=family@nimrod.bio
 
 # Webhook
 WEBHOOK_SECRET=...
@@ -257,13 +257,13 @@ python3 -m src.orchestrator daily-send --mock
 ```bash
 python3 -m src.orchestrator daily-build \
   --config /path/to/config/ \
-  --db /path/to/famely.db
+  --db /path/to/family.db
 ```
 
 ### Database Queries
 
 ```bash
-sqlite3 data/famely.db
+sqlite3 data/family.db
 sqlite> .schema
 sqlite> SELECT * FROM newsletters ORDER BY date DESC LIMIT 5;
 sqlite> SELECT * FROM token_usage WHERE date = '2026-04-09';
@@ -321,7 +321,7 @@ echo $FTP_HOST $FTP_USER
 ## Directory Structure
 
 ```
-famely-neuslettr/
+family-newsletter/
 ├── README.md                    # This file
 ├── .env.example                 # Environment template
 ├── .gitignore                   # Git ignore rules
@@ -345,7 +345,7 @@ famely-neuslettr/
 ├── templates/
 │   └── newsletter.html.j2      # Jinja2 HTML template
 ├── data/
-│   ├── famely.db              # SQLite database (generated)
+│   ├── family.db              # SQLite database (generated)
 │   ├── submissions/           # Webhook submissions
 │   └── archive/               # Old newsletters
 ├── logs/                       # Daily logs
@@ -373,16 +373,16 @@ python3 -m src.orchestrator daily-build --mock
 ```bash
 # Add to crontab (crontab -e)
 # Build: 07:00 daily
-0 7 * * * cd /path/to/famely-neuslettr && python3 -m src.orchestrator daily-build >> logs/daily-build.log 2>&1
+0 7 * * * cd /path/to/family-newsletter && python3 -m src.orchestrator daily-build >> logs/daily-build.log 2>&1
 
 # Send: 09:00 daily
-0 9 * * * cd /path/to/famely-neuslettr && python3 -m src.orchestrator daily-send >> logs/daily-send.log 2>&1
+0 9 * * * cd /path/to/family-newsletter && python3 -m src.orchestrator daily-send >> logs/daily-send.log 2>&1
 
 # Survey: 21:00 daily
-0 21 * * * cd /path/to/famely-neuslettr && python3 -m src.orchestrator daily-survey >> logs/daily-survey.log 2>&1
+0 21 * * * cd /path/to/family-newsletter && python3 -m src.orchestrator daily-survey >> logs/daily-survey.log 2>&1
 
 # Webhook: Start at boot
-@reboot cd /path/to/famely-neuslettr && nohup python3 -m src.orchestrator webhook >> logs/webhook.log 2>&1 &
+@reboot cd /path/to/family-newsletter && nohup python3 -m src.orchestrator webhook >> logs/webhook.log 2>&1 &
 ```
 
 ### Docker (Optional)

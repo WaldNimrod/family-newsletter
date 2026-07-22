@@ -22,7 +22,7 @@
 #
 # ## Identity
 # **Repo:** family-newsletter — Family Newsletter
-# **Path:** /Users/nimrod/Documents/Famely Neuslettr/famely-neuslettr
+# **Path:** /Users/nimrod/Documents/AOS_V5/family-newsletter
 # **Owner:** Team 00 (Team 00)
 # **Profile:** L0 — lean governance only
 #
@@ -64,7 +64,7 @@
 
 ## Identity
 **Repo:** family-newsletter — Family Newsletter
-**Path:** /Users/nimrod/Documents/Famely Neuslettr/famely-neuslettr
+**Path:** /Users/nimrod/Documents/AOS_V5/family-newsletter
 **Hub path:** /Users/nimrod/Documents/AOS_V5/agents-os
 **Owner:** Team 00 (Team 00)
 **Profile:** L0
@@ -99,7 +99,7 @@ Non-AOS teams route required roadmap/gate updates via report artifact to Team 10
 Canonical authority table: `methodology/AOS_DIRECTORY_CANON_v1.0.0.md` Part 5 (see hub).
 
 ## Key paths
-- Project source: `/Users/nimrod/Documents/Famely Neuslettr/famely-neuslettr/`
+- Project source: `/Users/nimrod/Documents/AOS_V5/family-newsletter/`
 - AOS governance: `_aos/`
 - Inter-team comms: `_COMMUNICATION/`
 - Validation: `_aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh`

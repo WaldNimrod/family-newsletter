@@ -1,5 +1,5 @@
 """
-Famely Neuslettr — Token Tracker
+Family Newsletter — Token Tracker
 Wraps Claude API calls, logs token usage per LOD400 §11.
 """
 
@@ -12,7 +12,7 @@ from typing import Optional
 
 from .db import Database
 
-logger = logging.getLogger('famely.tokens')
+logger = logging.getLogger('family.tokens')
 
 # Pricing per million tokens (USD)
 PRICING = {

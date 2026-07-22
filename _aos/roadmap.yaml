@@ -18,14 +18,14 @@ schema_version: "1.1"
 
 project:
   id: "family-newsletter"
-  name: "Family Newsletter"            # בית ולד — born-canonical id; "famely" is a retired typo (never in _aos/)
+  name: "Family Newsletter"            # בית ולד — born-canonical id; "family" is a retired typo (never in _aos/)
   profile: L0                          # L0 | L2 | L3
   lifecycle_archetype: SOFTWARE        # Python newsletter-generation app (M1–M6 pipeline, SQLite, Jinja2)
   lean_kit_version: "3.4.0+e7d4a39"
   created: "2026-07-22"
   owner: "familynewsletter_sd"         # system_designer team ID
   active_milestone: "S001"   # currently active milestone
-  notes: "Provisioned born-canonical by team_120 (Ambassador) under team_00 mandate MANDATE_team_00_TO_team_120_FAMELY_AOS_PROVISIONING_2026-07-22. First-cut S001/Phase-A registry seeded from REVIVAL_PLAN_2026-07-22 §3.7/§4 + team_00 track ruling — WP-level LOD specs are build-phase (team_110) work. WP id: field carries an FNL- prefix to avoid hub-DB global-PK collisions (dir names/cross-refs stay unprefixed, mirroring Sadot's SDT- convention). Track class tagged in notes (CLASS=…) until team_100 canonizes a native field. Standing law: content/data/characterization → LOD200; ANY code write/edit → full LOD400 + cross-engine validation (Grok builds → Claude validates, Iron Rule #1)."
+  notes: "Provisioned born-canonical by team_120 (Ambassador) under team_00 mandate MANDATE_team_00_TO_team_120_FAMILY_AOS_PROVISIONING_2026-07-22. First-cut S001/Phase-A registry seeded from REVIVAL_PLAN_2026-07-22 §3.7/§4 + team_00 track ruling — WP-level LOD specs are build-phase (team_110) work. WP id: field carries an FNL- prefix to avoid hub-DB global-PK collisions (dir names/cross-refs stay unprefixed, mirroring Sadot's SDT- convention). Track class tagged in notes (CLASS=…) until team_100 canonizes a native field. Standing law: content/data/characterization → LOD200; ANY code write/edit → full LOD400 + cross-engine validation (Grok builds → Claude validates, Iron Rule #1)."
 
 # WP ID FORMAT: S[stage]-P[program]-WP[number]
 #

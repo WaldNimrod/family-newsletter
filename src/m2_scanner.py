@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup
 
 from .models import NCI, SourceConfig, ScanRule, Settings, create_nci
 
-logger = logging.getLogger('famely.m2')
+logger = logging.getLogger('family.m2')
 
 TIMEOUT = 30  # seconds per source
 USER_AGENT = "FamilyNewsletter/2.0 (+https://nimrod.bio/newsletter)"

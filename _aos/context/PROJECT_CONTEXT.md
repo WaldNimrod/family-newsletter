@@ -7,7 +7,7 @@
 - **Roadmap / WP state:** `_aos/roadmap.yaml` (SSoT; born-canonical id `family-newsletter`)
 - **Boundaries (write roots, forbidden imports):** `_aos/project_identity.yaml`
 - **Governance contracts (snapshots):** `_aos/governance/team_*.md` — read **on mandate** or deep work; not required cover-to-cover each session.
-- **Provisioned:** 2026-07-22 by team_120 (Ambassador) under team_00 mandate `MANDATE_team_00_TO_team_120_FAMELY_AOS_PROVISIONING_2026-07-22`. Build was frozen until this `_aos/` existed; it now does.
+- **Provisioned:** 2026-07-22 by team_120 (Ambassador) under team_00 mandate `MANDATE_team_00_TO_team_120_FAMILY_AOS_PROVISIONING_2026-07-22`. Build was frozen until this `_aos/` existed; it now does.
 
 ## Team entry
 
@@ -35,7 +35,7 @@ A personalized weekly Hebrew family newsletter ("בית ולד") for the five Wa
 
 ## Naming (born-canonical)
 
-Canonical id **`family-newsletter`** / display "Family Newsletter" / Hebrew "בית ולד". "famely" / "Famely Neuslettr" is a **retired typo** — never write it into any `_aos/` artifact. The outer folder name, the GitHub remote (`famely-neusletter`), the eventual relocation under `/AOS_V5/`, and the server path `/data/projects/family-newsletter` are handled by a **separate post-dev rename runbook** (out of scope for provisioning).
+Canonical id **`family-newsletter`** / display "Family Newsletter" / Hebrew "בית ולד". "family" / "Family Newsletter" is a **retired typo** — never write it into any `_aos/` artifact. The outer folder name, the GitHub remote (`family-newsletter`), the eventual relocation under `/AOS_V5/`, and the server path `/data/projects/family-newsletter` are handled by a **separate post-dev rename runbook** (out of scope for provisioning).
 
 ## Standards / SSOT
 

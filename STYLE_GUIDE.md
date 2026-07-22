@@ -10,7 +10,7 @@
 ### Official Name
 **English:** Family Newsletter  
 **Hebrew:** בית ולד (transliteration: "Beit Vald")  
-⚠️ **NOTE:** "Famely Neuslettr" was a typo from early development. This is the canonical name.
+⚠️ **NOTE:** "Family Newsletter" was a typo from early development. This is the canonical name.
 
 ### Tagline & Footer
 All editions must include the footer text: **"by AgentsOS @ nimrod.bio"**
@@ -350,7 +350,7 @@ This table is the source of truth for family member data across all systems:
 ## 10. Absolute Rules (What NOT to Do)
 
 ### Naming
-- ❌ Do NOT use "Famely Neuslettr" anywhere—it's a typo
+- ❌ Do NOT use "Family Newsletter" anywhere—it's a typo
 - ✅ Use "Family Newsletter" (English) or "בית ולד" (Hebrew)
 
 ### Frequency & Schedule
@@ -421,7 +421,7 @@ Use this checklist before publishing each edition:
 - [ ] Headlines/summaries/history use Style B (factual, 3+ sentences, attributed sources)
 - [ ] No "clever" moments without basis
 - [ ] No "daily" language used anywhere
-- [ ] No "Famely Neuslettr" references
+- [ ] No "Family Newsletter" references
 
 ### Visual & Technical
 - [ ] All colors match member registry (Section 8)

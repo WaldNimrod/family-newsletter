@@ -1,5 +1,5 @@
 """
-Resolve environment variables with Upress deployment names and legacy Famely aliases.
+Resolve environment variables with Upress deployment names and legacy Family aliases.
 UPRESS_SFTP_* keys control plain FTP (port 21) — naming is historical from hosting panels.
 """
 

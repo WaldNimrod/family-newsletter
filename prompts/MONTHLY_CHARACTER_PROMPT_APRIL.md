@@ -129,7 +129,7 @@ Prompt: A whimsical Dr. Seuss-style cat character in a cozy living room setting,
 
 After generating images, save them to:
 ```
-famely-neuslettr/
+family-newsletter/
 └── assets/
     └── characters/
         └── 2026-04/

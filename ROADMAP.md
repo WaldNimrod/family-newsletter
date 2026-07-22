@@ -1,4 +1,4 @@
-# Famely Neuslettr — Roadmap & Version Plan
+# Family Newsletter — Roadmap & Version Plan
 
 ## Version History
 

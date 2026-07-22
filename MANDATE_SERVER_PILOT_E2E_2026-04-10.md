@@ -18,7 +18,7 @@ This is the first real edition. It must be perfect.
 ## 2. Pre-Flight: Pull & Install
 
 ```bash
-cd /data/projects/famely-neuslettr
+cd /data/projects/family-newsletter
 git pull origin main
 source venv/bin/activate
 pip install -r requirements.txt
@@ -195,9 +195,9 @@ After successful pilot, update cron to weekly schedule:
 ```cron
 TZ=Asia/Jerusalem
 # Weekly build: Friday 09:00 IST
-0  9 * * 5  cd /data/projects/famely-neuslettr && ./run.sh weekly-build  >> logs/cron.log 2>&1
+0  9 * * 5  cd /data/projects/family-newsletter && ./run.sh weekly-build  >> logs/cron.log 2>&1
 # Weekly send: Friday 12:00 IST
-0 12 * * 5  cd /data/projects/famely-neuslettr && ./run.sh weekly-send   >> logs/cron.log 2>&1
+0 12 * * 5  cd /data/projects/family-newsletter && ./run.sh weekly-send   >> logs/cron.log 2>&1
 ```
 
 **NOTE:** Day `5` = Friday. Not `*` (daily).

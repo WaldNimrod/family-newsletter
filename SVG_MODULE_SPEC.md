@@ -1,4 +1,4 @@
-# SVG Module — Famely Neuslettr
+# SVG Module — Family Newsletter
 ## מודול יצירת אלמנטים ויזואליים באמצעות SVG
 
 **גרסה:** 1.0.0  
@@ -204,7 +204,7 @@ def generate_hero_svg(topic, member_focus, content_item):
 ## 5. Agent Prompt — SVG Generator
 
 ```markdown
-# SVG Generator Agent — Famely Neuslettr
+# SVG Generator Agent — Family Newsletter
 
 ## Role
 You are the visual artist for the Ben-Tzvi Wald family newsletter.
@@ -320,7 +320,7 @@ You create SVG illustrations that are: warm, original, media-rich, and contextua
 ## 7. קבצי הפרויקט
 
 ```
-famely-neuslettr/
+family-newsletter/
 ├── svg/
 │   ├── design_system.json       ← צבעים, סגנון, tokens
 │   ├── characters/

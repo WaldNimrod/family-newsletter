@@ -1,5 +1,5 @@
 """
-Famely Neuslettr — Database Layer
+Family Newsletter — Database Layer
 SQLite helpers per LOD400 §9.
 """
 
@@ -10,13 +10,13 @@ from pathlib import Path
 from typing import Optional
 from datetime import datetime
 
-logger = logging.getLogger('famely.db')
+logger = logging.getLogger('family.db')
 
 
 class Database:
     """SQLite database wrapper with schema init and query helpers."""
 
-    def __init__(self, db_path: str = "data/famely.db"):
+    def __init__(self, db_path: str = "data/family.db"):
         self.db_path = db_path
         Path(db_path).parent.mkdir(parents=True, exist_ok=True)
         self.conn = sqlite3.connect(db_path)

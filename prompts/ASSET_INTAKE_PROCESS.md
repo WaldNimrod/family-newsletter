@@ -1,4 +1,4 @@
-# Asset Intake Pipeline — Famely Neuslettr
+# Asset Intake Pipeline — Family Newsletter
 ## קליטת תוצרים גרפיים מחיצוני לשילוב בניוזלטר
 
 ---
@@ -45,7 +45,7 @@
 ## מבנה תיקיות
 
 ```
-famely-neuslettr/
+family-newsletter/
 ├── assets/
 │   ├── characters/
 │   │   ├── 2026-04/                    ← אפריל: Cat in the Hat

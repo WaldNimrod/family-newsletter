@@ -1,4 +1,4 @@
-# בקשת השלמה והמשך — Famely Neuslettr (Cowork)
+# בקשת השלמה והמשך — Family Newsletter (Cowork)
 
 **תאריך:** 2026-04-10 (יום שישי)  
 **נמען:** צוות Cowork (בוני הפרויקט)  
@@ -48,7 +48,7 @@
 |--------|--------|
 | `git fetch` / `git pull origin main` | עדכני; אומת קומיט `7ab2b14` ותג `v3.0.0` |
 | `venv`, `pip install`, חבילת `anthropic` | `anthropic` מותקן ב-venv; נוסף ל-[`requirements.txt`](requirements.txt) |
-| מחיקת `data/famely.db` ו-`2026-04-10.html` | בוצע לפני בנייה |
+| מחיקת `data/family.db` ו-`2026-04-10.html` | בוצע לפני בנייה |
 | `weekly-build` (ללא `--mock`) | **הושלם** — M2: **160** פריטים; **10** נבחרו; מזג אוויר OK; **כל קריאות Claude → 401**; עלות טוקן **$0**; HTML ~**40.6 KB**; **אין** מחרוזות `[Mock response]` (שימוש ב-fallbackים סטטיים ב-`m3`) |
 | ולידציה בסיסית | ראו דוח; `Mock response`: **0** |
 | `weekly-send` | **נכשל** — FTP **530 Login incorrect**; **לא** נשלחו מיילים |
@@ -103,7 +103,7 @@ flowchart TB
     A5[FTP upload email whatsapp]
   end
   subgraph data [Persistence]
-    D1[(data/famely.db)]
+    D1[(data/family.db)]
   end
   m1 --> m2 --> m3 --> m4
   m4 --> data
@@ -157,7 +157,7 @@ flowchart TB
 
 | חלון | פעולה |
 |------|--------|
-| **שישי (מיידי)** | `ANTHROPIC_API_KEY` ב-`.env` (אומת) → מחיקת `data/famely.db` + HTML לתאריך המהדורה → `weekly-build` → grep/בדיקות מהמנדט (בלי `[Mock response]`) |
+| **שישי (מיידי)** | `ANTHROPIC_API_KEY` ב-`.env` (אומת) → מחיקת `data/family.db` + HTML לתאריך המהדורה → `weekly-build` → grep/בדיקות מהמנדט (בלי `[Mock response]`) |
 | **שבת** | תיקון פערים (קישורים, תבנית, נתיב FTP אם נדרש), בדיקה ויזואלית ידנית בדפדפן |
 | **לפני ראשון** | `weekly-send`, `curl` 200, דגימת דף חי, וידוא מיילים ל-5 חברי משפחה (מ-[`config/family.json`](config/family.json)) |
 

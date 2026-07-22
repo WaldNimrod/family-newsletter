@@ -1,4 +1,4 @@
-# MANDATE — Famely Neuslettr Bug Fixes & Server Deployment Prep
+# MANDATE — Family Newsletter Bug Fixes & Server Deployment Prep
 **Date:** 2026-04-10
 **From:** Team 100 (Architecture) via Nimrod
 **To:** Cowork Development Team
@@ -9,7 +9,7 @@
 
 ## 1. Project Status
 
-Famely Neuslettr is deployed on **waldhomeserver** and can build newsletters successfully. However, several bugs prevent email distribution, which blocks the launch.
+Family Newsletter is deployed on **waldhomeserver** and can build newsletters successfully. However, several bugs prevent email distribution, which blocks the launch.
 
 The project was tested end-to-end on the server with real RSS feeds and Claude API. Core pipeline works: scan (139 items) → normalize → render (10.9KB HTML) → but distribution fails.
 
@@ -95,9 +95,9 @@ The project was tested end-to-end on the server with real RSS feeds and Claude A
 | IP (LAN) | 10.100.102.2 |
 | IP (Tailscale) | 100.125.98.56 |
 | User | nimrodw |
-| Project path | /data/projects/famely-neuslettr |
-| Python venv | /data/projects/famely-neuslettr/venv |
-| Git remote | git@github.com:WaldNimrod/famely-neuslettr.git |
+| Project path | /data/projects/family-newsletter |
+| Python venv | /data/projects/family-newsletter/venv |
+| Git remote | git@github.com:WaldNimrod/family-newsletter.git |
 
 ### What's Already Configured on Server
 - Python 3.12.3 + venv + all requirements installed
@@ -115,7 +115,7 @@ The server has a Claude Code agent for operations. After pushing fixes:
 **Deployment:**
 ```bash
 ssh nimrodw@100.125.98.56
-cd /data/projects/famely-neuslettr
+cd /data/projects/family-newsletter
 git pull
 source venv/bin/activate
 pip install -r requirements.txt  # if new deps added
@@ -134,8 +134,8 @@ python -m src.orchestrator daily-send
 ### Cron Schedule (to be enabled after all bugs fixed)
 ```cron
 TZ=Asia/Jerusalem
-0  9 * * *  cd /data/projects/famely-neuslettr && ./run.sh daily-build  >> logs/cron.log 2>&1
-0 12 * * *  cd /data/projects/famely-neuslettr && ./run.sh daily-send   >> logs/cron.log 2>&1
+0  9 * * *  cd /data/projects/family-newsletter && ./run.sh daily-build  >> logs/cron.log 2>&1
+0 12 * * *  cd /data/projects/family-newsletter && ./run.sh daily-send   >> logs/cron.log 2>&1
 ```
 
 ---

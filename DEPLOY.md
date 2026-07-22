@@ -1,8 +1,8 @@
-# Famely Neuslettr — Deployment Guide (v3.1.2)
+# Family Newsletter — Deployment Guide (v3.1.2)
 
 ## Overview
 
-Famely Neuslettr is a 3-level content system for weekly family newsletters powered by AgentsOS. The system automatically curates, summarizes, and enriches family stories using AI, with character-driven design that changes monthly.
+Family Newsletter is a 3-level content system for weekly family newsletters powered by AgentsOS. The system automatically curates, summarizes, and enriches family stories using AI, with character-driven design that changes monthly.
 
 **Weekly Schedule:** Build on Fridays, send for weekend reading
 **Cadence:** One newsletter per week (Friday releases)
@@ -20,8 +20,8 @@ Famely Neuslettr is a 3-level content system for weekly family newsletters power
 
 ```bash
 cd /opt
-git clone https://github.com/WaldNimrod/famely-neuslettr.git
-cd famely-neuslettr
+git clone https://github.com/WaldNimrod/family-newsletter.git
+cd family-newsletter
 
 # Create virtual environment
 python3 -m venv venv
@@ -47,7 +47,7 @@ FTP_PASS=...                         # FTP password
 SMTP_HOST=...                        # Email server (e.g., smtp.gmail.com)
 SMTP_USER=...                        # Email login
 SMTP_PASS=...                        # Email password or app password
-SMTP_FROM=famely@nimrod.bio          # From address
+SMTP_FROM=family@nimrod.bio          # From address
 ```
 
 For v1.1.0, WhatsApp fields are optional (email-only distribution).
@@ -108,7 +108,7 @@ ls -la data/archive/html/
 # Check costs
 python -c "
 from src.db import Database
-db = Database('data/famely.db')
+db = Database('data/family.db')
 import datetime
 today = datetime.date.today().isoformat()
 print(f'This week cost: \${db.get_weekly_cost(today):.4f}')
@@ -137,10 +137,10 @@ crontab -e
 
 Add these lines:
 ```cron
-# Famely Neuslettr — Weekly Schedule (IST, Fridays)
+# Family Newsletter — Weekly Schedule (IST, Fridays)
 TZ=Asia/Jerusalem
-0  9 * * 5  cd /opt/famely-neuslettr && ./run.sh weekly-build  >> logs/cron.log 2>&1
-0 12 * * 5  cd /opt/famely-neuslettr && ./run.sh weekly-send   >> logs/cron.log 2>&1
+0  9 * * 5  cd /opt/family-newsletter && ./run.sh weekly-build  >> logs/cron.log 2>&1
+0 12 * * 5  cd /opt/family-newsletter && ./run.sh weekly-send   >> logs/cron.log 2>&1
 ```
 
 This runs every Friday:
@@ -183,7 +183,7 @@ Each level inherits content from the previous level. Character assets enhance al
 # Check last newsletter status
 python -c "
 from src.db import Database
-db = Database('data/famely.db')
+db = Database('data/family.db')
 nl = db.get_last_newsletter()
 if nl:
     print(f'Date: {nl[\"date\"]}')
@@ -197,7 +197,7 @@ db.close()
 python -c "
 from src.db import Database
 import datetime
-db = Database('data/famely.db')
+db = Database('data/family.db')
 today = datetime.date.today().isoformat()
 print(f'This week cost: \${db.get_weekly_cost(today):.4f}')
 db.close()
@@ -207,7 +207,7 @@ db.close()
 python -c "
 from src.db import Database
 import datetime
-db = Database('data/famely.db')
+db = Database('data/family.db')
 ym = datetime.date.today().strftime('%Y-%m')
 print(f'Monthly cost ({ym}): \${db.get_monthly_cost(ym):.4f}')
 db.close()
@@ -216,7 +216,7 @@ db.close()
 
 ## AgentsOS Integration
 
-Famely Neuslettr is managed as a project under AgentsOS (AOS) v3.1.2:
+Family Newsletter is managed as a project under AgentsOS (AOS) v3.1.2:
 - Profile: L2 (Dashboard + API backend)
 - Methodology: LOD Standard v0.3
 - Character assets: Monthly rotation driven by AOS content calendar

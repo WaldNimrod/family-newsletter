@@ -46,7 +46,7 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout),
     ]
 )
-logger = logging.getLogger('famely')
+logger = logging.getLogger('family')
 
 
 def cmd_weekly_build(args):
@@ -63,7 +63,7 @@ def cmd_weekly_build(args):
     logger.info(f"Family: {family.family_name} ({len(family.members)} members)")
 
     # Init DB
-    db = Database(args.db or "data/famely.db")
+    db = Database(args.db or "data/family.db")
 
     # Init token tracker
     tt = TokenTracker(db, mock=args.mock)
@@ -127,7 +127,7 @@ def cmd_weekly_send(args):
     family = load_profiles(config_dir)
     settings = load_settings(config_dir)
 
-    db = Database(args.db or "data/famely.db")
+    db = Database(args.db or "data/family.db")
 
     # Get today's newsletter
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
@@ -184,7 +184,7 @@ def cmd_weekly_survey(args):
     family = load_profiles(config_dir)
     settings = load_settings(config_dir)
 
-    db = Database(args.db or "data/famely.db")
+    db = Database(args.db or "data/family.db")
 
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     newsletter = db.get_newsletter(today)
@@ -235,7 +235,7 @@ def cmd_health_check(args):
 
     # Check DB
     try:
-        db = Database(args.db or "data/famely.db")
+        db = Database(args.db or "data/family.db")
         last = db.get_last_newsletter()
         if last:
             logger.info(f"  ✓ DB: last newsletter {last['date']} ({last['status']})")
@@ -272,7 +272,7 @@ def cmd_webhook(args):
         host=args.host or '0.0.0.0',
         port=args.port or 8443,
         config_dir=args.config or 'config/',
-        db_path=args.db or 'data/famely.db',
+        db_path=args.db or 'data/family.db',
     )
 
 
@@ -285,7 +285,7 @@ def main():
     ])
     parser.add_argument('--mock', action='store_true', help='Use mock data (no external calls)')
     parser.add_argument('--config', default='config/', help='Config directory')
-    parser.add_argument('--db', default='data/famely.db', help='Database path')
+    parser.add_argument('--db', default='data/family.db', help='Database path')
     parser.add_argument('--host', default='0.0.0.0', help='Webhook host')
     parser.add_argument('--port', type=int, default=8443, help='Webhook port')
 

@@ -1,5 +1,5 @@
 """
-Famely Neuslettr — M1 Profiles
+Family Newsletter — M1 Profiles
 Config loader per LOD400 §3. Read-only, no AI, no DB.
 """
 
@@ -13,7 +13,7 @@ from .models import (
     FamilyConfig, Settings, ConfigError, MemberNotFound
 )
 
-logger = logging.getLogger('famely.m1')
+logger = logging.getLogger('family.m1')
 
 
 def load_profiles(config_dir: str = "config/") -> FamilyConfig:

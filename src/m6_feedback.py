@@ -1,5 +1,5 @@
 """
-Famely Neuslettr — M6 Feedback + Submissions
+Family Newsletter — M6 Feedback + Submissions
 WhatsApp webhook handler per LOD400 §8.
 Uses stdlib http.server (no FastAPI dependency in Phase 1 dev).
 """
@@ -17,7 +17,7 @@ from .models import FamilySubmission, FeedbackEvent, FamilyConfig
 from .db import Database
 from .m1_profiles import load_profiles, load_settings
 
-logger = logging.getLogger('famely.m6')
+logger = logging.getLogger('family.m6')
 
 # Size limits
 MAX_IMAGE_SIZE = 16 * 1024 * 1024   # 16MB
@@ -251,7 +251,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
 
 
 def run_webhook_server(host: str = '0.0.0.0', port: int = 8443,
-                        config_dir: str = 'config/', db_path: str = 'data/famely.db'):
+                        config_dir: str = 'config/', db_path: str = 'data/family.db'):
     """Start the webhook HTTP server."""
     family = load_profiles(config_dir)
     db = Database(db_path)

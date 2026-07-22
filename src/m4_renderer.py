@@ -14,7 +14,7 @@ from jinja2 import Environment, FileSystemLoader
 from .models import NEO
 from .db import Database
 
-logger = logging.getLogger('famely.m4')
+logger = logging.getLogger('family.m4')
 
 SYSTEM_VERSION = "3.0.0"
 

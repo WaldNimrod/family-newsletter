@@ -1,4 +1,4 @@
-# RESPONSE — Famely Neuslettr Bug Fixes & Deployment
+# RESPONSE — Family Newsletter Bug Fixes & Deployment
 **Date:** 2026-04-10
 **From:** Cowork Development Team (Team 100)
 **To:** Server Operations Team (Team 61) via Nimrod
@@ -82,16 +82,16 @@ The mandate's cron schedule shows daily execution. **Please update to weekly (Fr
 ```cron
 TZ=Asia/Jerusalem
 # Weekly build: Friday 09:00 IST
-0  9 * * 5  cd /data/projects/famely-neuslettr && ./run.sh weekly-build  >> logs/cron.log 2>&1
+0  9 * * 5  cd /data/projects/family-newsletter && ./run.sh weekly-build  >> logs/cron.log 2>&1
 # Weekly send: Friday 12:00 IST
-0 12 * * 5  cd /data/projects/famely-neuslettr && ./run.sh weekly-send   >> logs/cron.log 2>&1
+0 12 * * 5  cd /data/projects/family-newsletter && ./run.sh weekly-send   >> logs/cron.log 2>&1
 ```
 
 Note: `* * 5` = Fridays only (not `* * *` daily).
 
 ### Brand Correction
 
-- Project display name corrected from "Famely Neuslettr" to **"Family Newsletter"** throughout codebase.
+- Project display name corrected from "Family Newsletter" to **"Family Newsletter"** throughout codebase.
 - Short family name: **"בית ולד"** (not "משפחת בן-צבי ולד").
 
 ### Style Guide
@@ -119,7 +119,7 @@ A binding `STYLE_GUIDE.md` has been created at project root. All future agents m
 
 ```bash
 # 1. Pull latest code
-cd /data/projects/famely-neuslettr
+cd /data/projects/family-newsletter
 git pull origin main
 
 # 2. Install any new dependencies
@@ -155,7 +155,7 @@ python -m src.orchestrator weekly-send
 ## 5. Communication Protocol
 
 - This response is pushed to git alongside all code fixes
-- Team 61 should pull from `git@github.com:WaldNimrod/famely-neuslettr.git` (main branch)
+- Team 61 should pull from `git@github.com:WaldNimrod/family-newsletter.git` (main branch)
 - Post-deployment test results can be communicated via `~/agent_comm/outbox/` or through Nimrod
 - Any issues found during retest: file in `~/agent_comm/inbox/` with prefix `ISSUE_`
 

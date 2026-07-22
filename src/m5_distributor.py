@@ -24,7 +24,7 @@ from .env_compat import (
     smtp_deliver_message,
 )
 
-logger = logging.getLogger('famely.m5')
+logger = logging.getLogger('family.m5')
 
 
 @dataclass

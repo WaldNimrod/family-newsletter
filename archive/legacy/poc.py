@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Famely Neuslettr - POC v1.0
+Family Newsletter - POC v1.0
 End-to-end pipeline: Fetch → Score → Curate → Generate → Build → Archive
 
 Usage:
@@ -43,7 +43,7 @@ CONFIG_DIR = BASE_DIR / 'config'
 DATA_DIR = BASE_DIR / 'data'
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-DB_PATH = DATA_DIR / 'famely.db'
+DB_PATH = DATA_DIR / 'family.db'
 
 
 # ─── Data Models ─────────────────────────────────────────────────────
@@ -140,7 +140,7 @@ def fetch_rss(url: str, source_name: str, timeout: int = 15) -> list[ContentItem
     items = []
     try:
         resp = requests.get(url, timeout=timeout, headers={
-            'User-Agent': 'FamelyNeuslettr/1.0 POC'
+            'User-Agent': 'FamilyNewsletter/1.0 POC'
         })
         resp.raise_for_status()
 
@@ -492,7 +492,7 @@ NEWSLETTER_TEMPLATE = """<!DOCTYPE html>
 <body>
 <div class="container">
   <div class="header">
-    <div class="logo">Famely Neuslettr</div>
+    <div class="logo">Family Newsletter</div>
     <h1>בוקר טוב, {{ family_name }}!</h1>
     <div class="date">{{ date_he }}</div>
     <div class="greeting">"{{ greeting }}"</div>
@@ -572,7 +572,7 @@ NEWSLETTER_TEMPLATE = """<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    Famely Neuslettr &copy; {{ year }} &middot; נבנה עם ❤️ ל{{ family_name }}<br>
+    Family Newsletter &copy; {{ year }} &middot; נבנה עם ❤️ ל{{ family_name }}<br>
     <small>POC v1.0 &middot; {{ items_count }} פריטים &middot; {{ sources_count }} מקורות</small>
   </div>
 </div>
@@ -737,7 +737,7 @@ def run(target_date: date = None, use_mock: bool = False):
 
     print(f"""
 ╔══════════════════════════════════════════════════════╗
-║  Famely Neuslettr - POC v1.0                        ║
+║  Family Newsletter - POC v1.0                        ║
 ║  Date: {target_date}                                ║
 ╚══════════════════════════════════════════════════════╝
 """)
@@ -870,7 +870,7 @@ def _mock_items() -> list[ContentItem]:
 # ─── CLI ─────────────────────────────────────────────────────────────
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Famely Neuslettr POC v1.0')
+    parser = argparse.ArgumentParser(description='Family Newsletter POC v1.0')
     parser.add_argument('--date', type=str, default=None, help='Target date (YYYY-MM-DD)')
     parser.add_argument('--mock', action='store_true', help='Use mock data (no network)')
     args = parser.parse_args()

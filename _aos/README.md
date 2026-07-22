@@ -61,7 +61,7 @@ This is intentionally manual. No automatic sync. Projects update when ready.
 
 L0 (Lean): Human orchestrates via documents. No engine infrastructure in this repo.
 All governance via `_aos/` files. Gate transitions via commit conventions.
-Born-canonical id `family-newsletter` — "famely" is a retired typo (never in `_aos/`).
+Born-canonical id `family-newsletter` — "family" is a retired typo (never in `_aos/`).
 
 ## Quick Reference
 

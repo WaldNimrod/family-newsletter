@@ -1,4 +1,4 @@
-# Famely Neuslettr — Server Deployment Brief
+# Family Newsletter — Server Deployment Brief
 
 > This document is a deployment brief for the server-side Claude agent.
 > Context: You are running as Claude Code on the home server, connected via remote terminal from the Mac dev machine.
@@ -8,7 +8,7 @@
 
 ## 1. Project Overview
 
-**Famely Neuslettr** is an automated daily family newsletter system for a family of 5. It scans content sources (RSS, websites, YouTube), personalizes content per family member using AI (Claude API), generates a beautiful HTML newsletter, uploads it to a static hosting server via FTP, and sends notification messages to each family member.
+**Family Newsletter** is an automated daily family newsletter system for a family of 5. It scans content sources (RSS, websites, YouTube), personalizes content per family member using AI (Claude API), generates a beautiful HTML newsletter, uploads it to a static hosting server via FTP, and sends notification messages to each family member.
 
 **Architecture:**
 ```
@@ -50,7 +50,7 @@ anthropic>=0.40
 ```
 
 ### Project location
-Recommended: `/opt/famely-neuslettr/`
+Recommended: `/opt/family-newsletter/`
 
 ---
 
@@ -105,7 +105,7 @@ ls /opt/*/requirements.txt 2>/dev/null
 ### E. GitHub access
 ```bash
 # Check if git can reach GitHub
-git ls-remote https://github.com/WaldNimrod/famely-neuslettr.git HEAD 2>/dev/null || echo "Cannot reach GitHub repo"
+git ls-remote https://github.com/WaldNimrod/family-newsletter.git HEAD 2>/dev/null || echo "Cannot reach GitHub repo"
 
 # Or check SSH
 ssh -T git@github.com 2>&1 | head -2
@@ -121,27 +121,27 @@ The project needs to get from the dev machine (Mac) to the server. Options in or
 If the server has GitHub access:
 ```bash
 cd /opt
-git clone https://github.com/WaldNimrod/famely-neuslettr.git
-cd famely-neuslettr
+git clone https://github.com/WaldNimrod/family-newsletter.git
+cd family-newsletter
 ```
 
 ### Option B: scp from dev machine
 If working over SSH terminal from Mac:
 ```bash
 # On Mac (dev machine), from the project directory:
-scp -r famely-neuslettr/ user@server:/opt/famely-neuslettr/
+scp -r family-newsletter/ user@server:/opt/family-newsletter/
 ```
 
 ### Option C: tar + transfer
 ```bash
 # On Mac:
-cd /path/to/Famely\ Neuslettr/
-tar czf famely-neuslettr-v1.0.0.tar.gz --exclude=data --exclude=__pycache__ --exclude=.git famely-neuslettr/
-scp famely-neuslettr-v1.0.0.tar.gz user@server:/opt/
+cd /path/to/Family\ Newsletter/
+tar czf family-newsletter-v1.0.0.tar.gz --exclude=data --exclude=__pycache__ --exclude=.git family-newsletter/
+scp family-newsletter-v1.0.0.tar.gz user@server:/opt/
 
 # On server:
 cd /opt
-tar xzf famely-neuslettr-v1.0.0.tar.gz
+tar xzf family-newsletter-v1.0.0.tar.gz
 ```
 
 ---
@@ -149,7 +149,7 @@ tar xzf famely-neuslettr-v1.0.0.tar.gz
 ## 5. Installation Steps (after transfer)
 
 ```bash
-cd /opt/famely-neuslettr
+cd /opt/family-newsletter
 
 # 1. Virtual environment
 python3 -m venv venv
@@ -176,7 +176,7 @@ cp .env.example .env
 After .env is configured:
 
 ```bash
-cd /opt/famely-neuslettr
+cd /opt/family-newsletter
 source venv/bin/activate
 
 # Step 1: Health check
@@ -210,10 +210,10 @@ crontab -e
 
 Add:
 ```cron
-# Famely Neuslettr — Daily Schedule (Israel Standard Time)
+# Family Newsletter — Daily Schedule (Israel Standard Time)
 TZ=Asia/Jerusalem
-0  9 * * *  cd /opt/famely-neuslettr && ./run.sh daily-build  >> logs/cron.log 2>&1
-0 12 * * *  cd /opt/famely-neuslettr && ./run.sh daily-send   >> logs/cron.log 2>&1
+0  9 * * *  cd /opt/family-newsletter && ./run.sh daily-build  >> logs/cron.log 2>&1
+0 12 * * *  cd /opt/family-newsletter && ./run.sh daily-send   >> logs/cron.log 2>&1
 ```
 
 Survey (21:00) will be added in v1.2.0 after WhatsApp integration.
@@ -227,7 +227,7 @@ Survey (21:00) will be added in v1.2.0 after WhatsApp integration.
 3. The `.env` file must NEVER be committed to git
 4. v1.1.0 is email-only distribution — WhatsApp fields in .env are not needed yet
 5. First real newsletter target: **Sunday, April 13, 2026**
-6. The SQLite database (`data/famely.db`) is created automatically on first run
+6. The SQLite database (`data/family.db`) is created automatically on first run
 7. All HTML files are archived in `data/archive/html/` — never delete these
 
 ---
@@ -235,7 +235,7 @@ Survey (21:00) will be added in v1.2.0 after WhatsApp integration.
 ## 9. File Structure (for reference)
 
 ```
-/opt/famely-neuslettr/
+/opt/family-newsletter/
 ├── config/
 │   ├── family.json          ← 5 family member profiles
 │   ├── sources.json         ← 17 RSS/web/YouTube sources

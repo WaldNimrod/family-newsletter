@@ -18,7 +18,7 @@ from .models import (
 from .db import Database
 from .token_tracker import TokenTracker
 
-logger = logging.getLogger('famely.m3')
+logger = logging.getLogger('family.m3')
 
 
 def build_edition(ncis: list[NCI], family: FamilyConfig, settings: Settings,

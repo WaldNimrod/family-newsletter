@@ -1,4 +1,4 @@
-# MANDATE — Famely Neuslettr: Post-Test Bug Fixes + /agents/ Migration
+# MANDATE — Family Newsletter: Post-Test Bug Fixes + /agents/ Migration
 **Date:** 2026-04-10 (v2 — supersedes MANDATE_COWORK_BUGFIX_2026-04-10.md)
 **From:** Team 100 (Architecture) via Nimrod
 **To:** Cowork Development Team
@@ -87,9 +87,9 @@ WP_FTP_ROOT=/agents/newsletter/
 | Hostname | waldhomeserver |
 | IP (Tailscale) | 100.125.98.56 |
 | User | nimrodw |
-| Project path | /data/projects/famely-neusletter |
-| Python venv | /data/projects/famely-neusletter/venv |
-| Git remote | git@github.com:WaldNimrod/famely-neuslettr.git |
+| Project path | /data/projects/family-newsletter |
+| Python venv | /data/projects/family-newsletter/venv |
+| Git remote | git@github.com:WaldNimrod/family-newsletter.git |
 
 **Installed & working:** Python 3.12, Claude API ($0.049/build), SMTP (agent@nimrod.bio), FTP (ftp.s887.upress.link)
 
@@ -114,10 +114,10 @@ expects_response: true
 ---
 
 ## Subject
-Famely Neuslettr: Pull latest and test
+Family Newsletter: Pull latest and test
 
 ## Body
-1. cd /data/projects/famely-neusletter && git pull
+1. cd /data/projects/family-newsletter && git pull
 2. source venv/bin/activate && pip install -r requirements.txt
 3. python -m src.orchestrator daily-build
 4. python -m src.orchestrator daily-send
@@ -161,7 +161,7 @@ After pushing fixes, the server team (Team 61) needs to pull and test. You can c
 **Method:** Write a message file and push via SCP:
 ```bash
 # Create message
-cat > /tmp/MSG-famely-deploy.md << 'EOF'
+cat > /tmp/MSG-family-deploy.md << 'EOF'
 # Agent Communication Message
 ---
 id: MSG-YYYYMMDD-NNN
@@ -173,11 +173,11 @@ expects_response: true
 ---
 
 ## Subject
-Famely Neuslettr: Pull latest and full test
+Family Newsletter: Pull latest and full test
 
 ## Body
 Fixes pushed. Please:
-1. cd /data/projects/famely-neusletter && git pull
+1. cd /data/projects/family-newsletter && git pull
 2. source venv/bin/activate && pip install -r requirements.txt
 3. python -m src.orchestrator health-check
 4. python -m src.orchestrator daily-build
@@ -187,7 +187,7 @@ Fixes pushed. Please:
 EOF
 
 # Push to server
-scp /tmp/MSG-famely-deploy.md nimrodw@10.100.102.2:~/agent_comm/inbox/
+scp /tmp/MSG-family-deploy.md nimrodw@10.100.102.2:~/agent_comm/inbox/
 ```
 
 **Or tell Nimrod** and he will relay to the server agent via `/send`.
