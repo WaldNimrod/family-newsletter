@@ -1,0 +1,53 @@
+# _aos/project_identity.yaml — Cross-Project Boundary Declaration
+# ================================================================
+# SSoT for project identity and boundary enforcement.
+# Read by: validate_aos.sh (Check 12), .cursorrules, CLAUDE.md, activation prompts, prompt builder.
+# Managed by: Team 00 + Team 100.
+# Deployed to: _aos/project_identity.yaml in every AOS-managed project.
+#
+# TEMPLATE — replace placeholders with project-specific values.
+
+project_id: "family-newsletter"
+display_name: "Family Newsletter"
+domain: "family_newsletter"
+profile: "L0"                    # L0 | L2 | L2.5 | L3
+
+# Hub-spoke topology
+is_hub: false                        # true only for agents-os
+# managed_projects field DEPRECATED 2026-05-25 (ADR049 Registry SSoT Lockdown).
+# Canonical project registry is `_aos/projects.yaml` (hub-only). New projects
+# created via /AOS_project-init are appended there. No code reads
+# `managed_projects` — do NOT reintroduce this field in spokes or the hub.
+
+# Boundary enforcement
+boundaries:
+  # Directories this project's agents may write to (relative to repo root)
+  allowed_write_roots:
+    - "_COMMUNICATION/"
+    - "_aos/"
+    - "src/"          # Python pipeline modules (M1–M6, publisher, researcher, editor, …)
+    - "config/"       # family.json, settings.json, sources.json
+    - "templates/"    # newsletter.html.j2
+    - "data/"         # SQLite family memory + git-ignored harvest-inbox/profile-raw
+    - "profiles/"     # per-member taste profiles (content substrate, LOD200)
+    - "assets/"       # characters/, decorations/, og-images/
+    - "prompts/"      # asset-intake + monthly character prompts
+
+  # Patterns that must NEVER appear in tracked files (other project names, domains, imports)
+  # LEFT EMPTY intentionally: adding "famely" would make Check 12 scan the existing famely
+  # build code and FAIL. The famely→family-newsletter rename is a separate post-dev runbook.
+  # Cross-project isolation is enforced by allowed_write_roots + push_scope: repo_only.
+  forbidden_patterns: []
+
+  # Instruction for agents encountering cross-project work
+  cross_project_routing: "Route cross-project artifacts to ~/Documents/_agent_comm/outbox/ and flag for Team 00"
+
+  # Push scope: "push everything" always means this repo only — never cross-repo
+  # Allowed values: repo_only (all profiles, hub and spoke)
+  push_scope: repo_only         # push commands always target this repo only, regardless of topology
+
+  # for_hub routing: how AOS-level artifacts discovered here reach the hub
+  # Allowed values: via_team_00 (spokes, is_hub:false) | self (hub, is_hub:true)
+  # When is_hub:false — flag artifact with for_hub:true; Team 00 routes to hub in a separate AOS session
+  # When is_hub:true  — hub writes directly to its own _COMMUNICATION/team_100/
+  hub_routing: "via_team_00"   # via_team_00 for spokes | self for hub

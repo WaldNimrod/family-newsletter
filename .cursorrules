@@ -1,0 +1,140 @@
+# AOS Identity: Family Newsletter L0 Spoke
+## Mandatory session startup
+# 1. Read _aos/roadmap.yaml — active WPs and milestone
+# 2. Read _COMMUNICATION/team_00/ — any active mandates
+# 3. Read _aos/project_identity.yaml — boundary declarations
+# 4. DB probe: check hub _aos/db_connectivity_status.json (probe_database)
+#    — if offline notify Team 00 (ADR034 / Iron Rule #7)
+
+# .cursorrules — Family Newsletter
+# AOS Profile: L0
+# ================================================================
+# AI agent context rules for this project.
+# Instantiate by replacing all PLACEHOLDER values.
+# Two variants below — use L0 for minimal projects, L2 for full AOS.
+# Remove the variant you don't need before deploying.
+# ================================================================
+
+# ════════════════════════════════════════════════════════════════
+# VARIANT A — L0 (minimal, governance-only)
+# Use for: AOS-Sandbox-Lean, simple proof-of-concept projects
+# ════════════════════════════════════════════════════════════════
+#
+# ## Identity
+# **Repo:** family-newsletter — Family Newsletter
+# **Path:** /Users/nimrod/Documents/Famely Neuslettr/famely-neuslettr
+# **Owner:** Team 00 (Team 00)
+# **Profile:** L0 — lean governance only
+#
+# ## What this repo is
+# Update with one-line description.
+#
+# ## Mandatory session startup
+# 1. Read `_aos/roadmap.yaml` — active WPs and milestone
+# 2. Read `_COMMUNICATION/team_00/` — any active mandates
+#
+# ## Directory Authority
+#
+# | Team | May write to |
+# |------|-------------|
+# | Team 00 (Principal) | Anywhere |
+# | Team 100 (Architect) | `_COMMUNICATION/team_100/`, `_aos/roadmap.yaml`, `_aos/work_packages/` |
+# | Team 120 (Ambassador) | `_COMMUNICATION/team_120/`, `_aos/` (bootstrap, under mandate) — inherits Team 191's `_aos/` authority (D-191auth) |
+# | ALL OTHER TEAMS | `_COMMUNICATION/team_[ID]/` and application source ONLY |
+#
+# `_aos/` is the governance layer — OFF LIMITS for all non-governance teams.
+# Do NOT write to `_aos/lean-kit/` (read-only snapshot).
+# Route required roadmap/gate updates via report artifact to Team 100.
+#
+# ## Iron Rules
+# 1. Physical lean-kit snapshots only — never symlinks
+# 2. Inter-team communication = artifact file in `_COMMUNICATION/`
+# 3. Spoke repos never modify hub files directly
+# 4. NEVER write to `_aos/` unless you are Team 00/100/120 under mandate
+#
+# ════════════════════════════════════════════════════════════════
+# END VARIANT A — delete from here up if using L2
+# ════════════════════════════════════════════════════════════════
+
+
+# ════════════════════════════════════════════════════════════════
+# VARIANT B — L2 (full AOS: governance + engine + dashboard)
+# Use for: TikTrack, AOS-Sandbox-Full, production projects
+# ════════════════════════════════════════════════════════════════
+
+## Identity
+**Repo:** family-newsletter — Family Newsletter
+**Path:** /Users/nimrod/Documents/Famely Neuslettr/famely-neuslettr
+**Hub path:** /Users/nimrod/Documents/AOS_V5/agents-os
+**Owner:** Team 00 (Team 00)
+**Profile:** L0
+
+## What this repo is
+Update with one-line description.
+
+## §BOUNDARY — Cross-Project Isolation
+**SSoT:** `_aos/project_identity.yaml` (machine-readable boundary)
+- This is an AOS **spoke** project — governance files are read-only snapshots from hub
+- Do NOT modify `_aos/governance/` files (propagated from hub, overwritten on next sync)
+- Do NOT write to other project repos from here
+- Cross-project handoff only via: `~/Documents/_agent_comm/outbox/`
+- `validate_aos.sh` Check 12 enforces `forbidden_patterns` from `project_identity.yaml`
+
+## Mandatory session startup
+1. Read `_aos/roadmap.yaml` — active milestone, programs, WPs
+2. Read `_COMMUNICATION/team_00/` — architect working documents
+3. Read `_aos/context/PROJECT_CONTEXT.md` — project background
+
+## Directory Authority
+
+| Team | May write to |
+|------|-------------|
+| Team 00 (Principal) | Anywhere |
+| Team 100 (Architect) | `_COMMUNICATION/team_100/`, `_aos/roadmap.yaml`, `_aos/work_packages/` |
+| Team 120 (Ambassador) | `_COMMUNICATION/team_120/`, `_aos/` (bootstrap/propagation, under mandate) — inherits Team 191's `_aos/` authority (D-191auth) |
+| ALL OTHER TEAMS | `_COMMUNICATION/team_[ID]/` and application source ONLY |
+
+`_aos/` is the governance layer — **OFF LIMITS for all non-governance teams**.
+Non-AOS teams route required roadmap/gate updates via report artifact to Team 100.
+Canonical authority table: `methodology/AOS_DIRECTORY_CANON_v1.0.0.md` Part 5 (see hub).
+
+## Key paths
+- Project source: `/Users/nimrod/Documents/Famely Neuslettr/famely-neuslettr/`
+- AOS governance: `_aos/`
+- Inter-team comms: `_COMMUNICATION/`
+- Validation: `_aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh`
+
+## Team model
+- Team 00: Team 00 (human, system designer)
+- Team 100: Chief System Architect (engine: see `_aos/definition.yaml`)
+- Team 110: Domain Architect / builder (engine: see `_aos/definition.yaml`)
+- Team 90: Default & Constitutional Validator (engine: see `_aos/definition.yaml`) — governance facet of all L-gates (dual gate with Team 50 at L-GATE_VALIDATE); Team 190 collapsed into Team 90 (M9-P1-WP7)
+- All communication = canonical artifact file in `_COMMUNICATION/`
+
+## Iron Rules
+1. Cross-engine: builder engine MUST differ from validator engine
+2. Physical lean-kit snapshots only (no symlinks)
+3. Project owns its `roadmap.yaml`
+4. Inter-team = artifact file (present path to Team 00 for routing)
+5. Every agent needs activation prompt as trigger
+6. DUAL gate at L-GATE_VALIDATE: Team 90 (governance) + Team 50 (functional), both must PASS (independent, cross-engine)
+7. WP-scoped files go in `_COMMUNICATION/team_[ID]/[WP-ID]/[filename].md`
+8. Spoke repos never modify hub governance files directly
+9. NEVER write to `_aos/` unless you are Team 00/100/120 under mandate — all other teams use `_COMMUNICATION/team_[ID]/`
+
+## Gate model
+```
+L-GATE_ELIGIBILITY → L-GATE_SPEC → L-GATE_BUILD → L-GATE_VALIDATE
+ (Entry)    (Spec)     (Build)    (Validate)
+```
+Track B adds L-GATE_CONCEPT (Concept) for complex WPs.
+
+## Validate
+```bash
+bash _aos/lean-kit/modules/validation-quality/scripts/validate_aos.sh .
+```
+Expected: 12 PASS / 0 FAIL
+
+# ════════════════════════════════════════════════════════════════
+# END VARIANT B
+# ════════════════════════════════════════════════════════════════

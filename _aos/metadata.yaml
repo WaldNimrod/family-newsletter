@@ -1,0 +1,20 @@
+lean_kit_version: 3.4.0+e7d4a39
+lean_kit_source_date: '2026-07-22'
+lean_kit_source_sha: 'e7d4a39ab54e4c40f3797eee32114d372026ac8e'
+profile: L0
+# active_modules: fleet-standard module set at project creation (team_00-approved
+# L0-bootstrap-drift item — "enforce schema_version + active_modules ... so new
+# spokes cannot drift"). Absent would mean "all modules active" (also valid — see
+# validate_aos.sh header) — pinning it here keeps new spokes aligned with the rest
+# of the fleet (every existing spoke's _aos/metadata.yaml already carries this
+# exact list) instead of silently diverging from it.
+active_modules:
+- '01'
+- '02'
+- '03'
+- '04'
+- '06'
+- '07'
+- '08'
+- '11'
+- '12'

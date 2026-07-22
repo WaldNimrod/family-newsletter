@@ -1,0 +1,372 @@
+# roadmap.yaml — L0 Work Package State Registry (Schema v1.1)
+# -----------------------------------------------------------
+# This file is the SSOT for WP state in this project.
+# Mirrors AOS DB schema — enables clean L0→L2 migration.
+# One entry per work package.
+#
+# SSOT RULE: roadmap.yaml project.profile is AUTHORITATIVE.
+# dashboard_config.yaml profile = read-only mirror. Divergence → roadmap.yaml wins.
+#
+# ENUM VALUES (canonical):
+#   status:             PLANNED | IN_PROGRESS | COMPLETE | BLOCKED
+#   track:              A | B
+#   current_lean_gate:  L-GATE_ELIGIBILITY | L-GATE_CONCEPT | L-GATE_SPEC | L-GATE_BUILD | L-GATE_VALIDATE | COMPLETE
+#   lod_status:         LOD100 | LOD200 | LOD300 | LOD400 | LOD500
+#   profile:            L0 | L2 | L3
+
+schema_version: "1.1"
+
+project:
+  id: "family-newsletter"
+  name: "Family Newsletter"            # בית ולד — born-canonical id; "famely" is a retired typo (never in _aos/)
+  profile: L0                          # L0 | L2 | L3
+  lifecycle_archetype: SOFTWARE        # Python newsletter-generation app (M1–M6 pipeline, SQLite, Jinja2)
+  lean_kit_version: "3.4.0+e7d4a39"
+  created: "2026-07-22"
+  owner: "familynewsletter_sd"         # system_designer team ID
+  active_milestone: "S001"   # currently active milestone
+  notes: "Provisioned born-canonical by team_120 (Ambassador) under team_00 mandate MANDATE_team_00_TO_team_120_FAMELY_AOS_PROVISIONING_2026-07-22. First-cut S001/Phase-A registry seeded from REVIVAL_PLAN_2026-07-22 §3.7/§4 + team_00 track ruling — WP-level LOD specs are build-phase (team_110) work. WP id: field carries an FNL- prefix to avoid hub-DB global-PK collisions (dir names/cross-refs stay unprefixed, mirroring Sadot's SDT- convention). Track class tagged in notes (CLASS=…) until team_100 canonizes a native field. Standing law: content/data/characterization → LOD200; ANY code write/edit → full LOD400 + cross-engine validation (Grok builds → Claude validates, Iron Rule #1)."
+
+# WP ID FORMAT: S[stage]-P[program]-WP[number]
+#
+#   S[stage]    — Major product milestone (e.g. S003, S004). Matches MILESTONE_MAP.md.
+#   P[program]  — Delivery stream within the stage (e.g. P001, P002). Groups related WPs.
+#                 Sequential within the stage. P001 = first program in stage.
+#   WP[number]  — Atomic execution unit (e.g. WP001, WP002). Sequential within program.
+#
+#   Example:    S003-P003-WP005
+#               Stage 3 (GATE-A milestone) → Program 3 (frontend cohort) → WP 5 (settings pages)
+#
+#   Full reference: lean-kit/modules/project-governance/WP_ID_STANDARD.md
+#
+# DIRECTORY:  _aos/work_packages/[WP-ID]/LOD400_spec.md  (per-WP, required at L-GATE_SPEC)
+# STAGE DOC:  _aos/work_packages/S[N]/LOD300_milestone.md (planning doc, covers all WPs in stage)
+#
+# REGISTRATION RULE:
+#   WP MUST be in roadmap.yaml no later than L-GATE_SPEC.
+#   Before per-WP LOD400 exists, spec_ref may point to the stage LOD300_milestone.md.
+#   At L-GATE_SPEC: spec_ref MUST point to per-WP LOD400_spec.md.
+
+work_packages:
+
+  # ============================================================
+  # S001 — Phase A: first real edition reaches the family group ("בית ולד 📰")
+  # Track split per team_00 ruling (2026-07-22) + REVIVAL_PLAN §3.7/§4.
+  # roadmap `track:` is the A/B gate-path enum; ADR044 track (STANDARD/CONTENT/OPS/
+  # BACKFILL/EXPRESS) is tagged in notes as CLASS= until team_100 canonizes a field.
+  # WP id: carries FNL- (hub-DB PK collision safety); dir names stay unprefixed.
+  # ============================================================
+
+  # --- P001: Product contract & housekeeping ---
+
+  - id: "FNL-S001-P001-WP001"
+    label: "LOD200 product contract — edition-1 must-contain + happy-path acceptance criterion + weekly cost_cap"
+    status: PLANNED
+    track: A
+    current_lean_gate: L-GATE_ELIGIBILITY
+    lod_status: LOD100
+    assigned_builder: "familynewsletter_arch"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Spec"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: "Registered at provisioning."
+    notes: "CLASS=STANDARD. The real missing gate (small). LOD100 intent ~done in REVIVAL_PLAN §3.7-ב; this is the LOD200 contract the whole build hangs on."
+
+  - id: "FNL-S001-P001-WP002"
+    label: "Commit the uncommitted 10.5 FTP-path fix (env_compat/settings/.env.example) + add data/ to .gitignore"
+    status: PLANNED
+    track: A
+    current_lean_gate: L-GATE_ELIGIBILITY
+    lod_status: LOD100
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Build"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: ""
+    notes: "CLASS=EXPRESS. REVIVAL_PLAN §4 Phase-A step 1."
+
+  - id: "FNL-S001-P001-WP003"
+    label: "Archive dead code (poc.py, m2_scanner, m3_normalizer, m6_feedback, config/sources.json) -> archive/legacy/; extract _fetch_weather/_format_hebrew_date/_build_neo shapes"
+    status: PLANNED
+    track: A
+    current_lean_gate: L-GATE_ELIGIBILITY
+    lod_status: LOD100
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Build"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: ""
+    notes: "CLASS=EXPRESS. REVIVAL_PLAN §3 keep/drop/replace table + §4 step 2."
+
+  # --- P002: New pipeline (CLASS=STANDARD; ANY code write/edit -> full LOD400 + cross-engine validate) ---
+
+  - id: "FNL-S001-P002-WP001"
+    label: "llm.py dual-driver layer (cursor/grok default + anthropic fallback, prompt-in/JSON-out)"
+    status: PLANNED
+    track: A
+    current_lean_gate: L-GATE_ELIGIBILITY
+    lod_status: LOD100
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Build"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: ""
+    notes: "CLASS=STANDARD. REVIVAL_PLAN §3.6. Code -> LOD400 required."
+
+  - id: "FNL-S001-P002-WP002"
+    label: "token_tracker update (claude-sonnet-5 pricing, research() with server tools + pause_turn, web_search cost logging)"
+    status: PLANNED
+    track: A
+    current_lean_gate: L-GATE_ELIGIBILITY
+    lod_status: LOD100
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Build"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: ""
+    notes: "CLASS=STANDARD. Edits existing src/token_tracker.py -> LOD400 required."
+
+  - id: "FNL-S001-P002-WP003"
+    label: "researcher.py (5x research_member two-step gather+critique; watchlist + screen-scout sections)"
+    status: PLANNED
+    track: A
+    current_lean_gate: L-GATE_ELIGIBILITY
+    lod_status: LOD100
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Build"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: ""
+    notes: "CLASS=STANDARD. REVIVAL_PLAN §3 + §3.5.1. Code -> LOD400 required."
+
+  - id: "FNL-S001-P002-WP004"
+    label: "editor.py (editorial call, structured output, --mock mode)"
+    status: PLANNED
+    track: A
+    current_lean_gate: L-GATE_ELIGIBILITY
+    lod_status: LOD100
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Build"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: ""
+    notes: "CLASS=STANDARD. Code -> LOD400 required."
+
+  - id: "FNL-S001-P002-WP005"
+    label: "teaser.py (Pillow 1080x1350 cover card, Hebrew RTL via raqm/bidi)"
+    status: PLANNED
+    track: A
+    current_lean_gate: L-GATE_ELIGIBILITY
+    lod_status: LOD100
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Build"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: ""
+    notes: "CLASS=STANDARD. Code -> LOD400 required."
+
+  - id: "FNL-S001-P002-WP006"
+    label: "orchestrator rewire + m5_distributor -> publisher.py (FTP+email kept, Twilio removed)"
+    status: PLANNED
+    track: A
+    current_lean_gate: L-GATE_ELIGIBILITY
+    lod_status: LOD100
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Build"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: ""
+    notes: "CLASS=STANDARD. Edits kept code (orchestrator, m5) -> LOD400 required."
+
+  # --- P003: WhatsApp + server (CLASS=OPS; runbook + deploy-verify) ---
+
+  - id: "FNL-S001-P003-WP001"
+    label: "WAHA docker on waldhomeserver + 'בית ולד 📰' group wiring + whatsapp.py (sendImage)"
+    status: PLANNED
+    track: A
+    current_lean_gate: L-GATE_ELIGIBILITY
+    lod_status: LOD100
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Deploy"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: ""
+    notes: "CLASS=OPS. REVIVAL_PLAN §3 WAHA + §4 step 5. Number 052-424-2342."
+
+  - id: "FNL-S001-P003-WP002"
+    label: "Clean deploy to /data/projects/family-newsletter + venv + .env + weekly Friday cron (build 09:00 / send 12:00 Asia/Jerusalem)"
+    status: PLANNED
+    track: A
+    current_lean_gate: L-GATE_ELIGIBILITY
+    lod_status: LOD100
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Deploy"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: ""
+    notes: "CLASS=OPS. REVIVAL_PLAN §4 step 7. Server path is the canonical family-newsletter path (folder rename is a separate post-dev runbook)."
+
+  # --- P004: BACKFILL kept code (as-built LOD500, no retroactive plan) ---
+
+  - id: "FNL-S001-P004-WP001"
+    label: "BACKFILL: src/m4_renderer.py (comic-template render) — as-built LOD500"
+    status: COMPLETE
+    track: A
+    current_lean_gate: COMPLETE
+    lod_status: LOD500
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Build"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: "BACKFILL registration — documented as-built only."
+    notes: "CLASS=BACKFILL. Kept verbatim (REVIVAL_PLAN §3 keep table). No retroactive spec; LOD500 as-built authored at build."
+
+  - id: "FNL-S001-P004-WP002"
+    label: "BACKFILL: src/db.py (SQLite family memory) — as-built LOD500"
+    status: COMPLETE
+    track: A
+    current_lean_gate: COMPLETE
+    lod_status: LOD500
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Build"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: "BACKFILL registration — documented as-built only."
+    notes: "CLASS=BACKFILL. Kept verbatim. watchlist/feedback tables extended at build (Phase B)."
+
+  - id: "FNL-S001-P004-WP003"
+    label: "BACKFILL: templates/newsletter.html.j2 + src/env_compat.py — as-built LOD500"
+    status: COMPLETE
+    track: A
+    current_lean_gate: COMPLETE
+    lod_status: LOD500
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Build"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: "BACKFILL registration — documented as-built only."
+    notes: "CLASS=BACKFILL. Visual identity kept; only og:image line changes at build (a code edit -> that change is its own STANDARD WP if scoped)."
+
+  # --- P005: Edition content (CLASS=CONTENT; LOD100->200->artifact, never LOD400) ---
+
+  - id: "FNL-S001-P005-WP001"
+    label: "Edition #1 content authoring (Hebrew) — happy-path from the LOD200 contract"
+    status: PLANNED
+    track: A
+    current_lean_gate: L-GATE_ELIGIBILITY
+    lod_status: LOD100
+    assigned_builder: "familynewsletter_arch"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Spec"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: ""
+    notes: "CLASS=CONTENT. Expected ~70% on-target for a CONTENT track; the monthly loop distills to 90%+ (REVIVAL_PLAN §3.7)."
+
+  - id: "FNL-S001-P005-WP002"
+    label: "Family-characterization taste profiles (round 1) — content substrate"
+    status: COMPLETE
+    track: A
+    current_lean_gate: COMPLETE
+    lod_status: LOD200
+    assigned_builder: "familynewsletter_arch"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Spec"
+    spec_ref: "TBD"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: ""
+    notes: "CLASS=CONTENT (substrate, not a gate). Round-1 profiles/ already harvested (REVIVAL_PLAN §5 open-q 3 = done). LOD200 is enough; further completion via the group feedback loop (layers 2-3)."

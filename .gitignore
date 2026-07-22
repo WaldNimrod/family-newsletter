@@ -65,3 +65,10 @@ Thumbs.db
 .idea/
 *.swp
 *~
+
+# ── AOS-GOV-CACHE (Model B / ADR054) — git-ignored governance cache; refreshed by sync, never committed ──
+# Hub is the audit SSoT; version held is recorded in tracked _aos/AOS_GOVERNANCE_VERSION.yaml.
+/_aos/governance/
+/_aos/methodology/
+/_aos/lean-kit/
+# ── /AOS-GOV-CACHE ──

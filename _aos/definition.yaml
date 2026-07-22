@@ -1,0 +1,1852 @@
+# AOS v3 registry seed (GATE_0). SSOT for seed.py row payloads.
+# Aligns with TEAM_111_AOS_V3_DDL_SPEC_v1.0.1.md §3 (Seed Data) + fresh 001 embedded seed.
+# Entity coverage: TEAM_101_AOS_V3_ENTITY_DICTIONARY_v2.0.2.md (teams, domains, gates, phases, …).
+#
+# SSoT SCOPE: L2 engine seed data — teams, gates, phases, iron rules, authorities.
+#             Defines WHO and HOW for the database layer.
+#             For WP execution tracking (WHAT/WHEN), see: _aos/roadmap.yaml
+# REF: IDEA-001 — self-referential governance boundary (open, high priority)
+
+version: "1.0.0"
+spec_refs:
+  ddl_seed: "TEAM_111_AOS_V3_DDL_SPEC_v1.0.1.md §3"
+  entity_dictionary: "TEAM_101_AOS_V3_ENTITY_DICTIONARY_v2.0.2.md"
+
+# D-03 — Principal row (mandatory). Hierarchy (AD-S8A-05) — API SSOT; not in DB teams table.
+# context layers: role_description (L1), gate_authority (L2), writes_to (L2), iron_rules (L4), mandatory_reads (L3)
+team_00:
+  id: team_00
+  label: Team 00
+  name: System Designer (Principal / human operator)
+  engine: human
+  environment: chat
+  in_gate_process: 1
+  group: leadership
+  profession: principal
+  operating_mode: GATE
+  roster_version: "1.6.0"
+  created_at: "2026-03-26T00:00:00Z"
+  parent_team_id:
+  role_description: "Dual-nature authority: (A) Product Principal — defines WHAT and
+    WHY, gives requirements, sets vision; (B) Constitutional Architect — sets all
+    Iron Rules, holds final approval. Nimrod is the single human operator. The Claude
+    Code session is the architectural advisory instrument."
+  gate_authority:
+    L-GATE_SPEC: owner
+    L-GATE_BUILD: owner
+    L-GATE_VALIDATE: owner
+    L-GATE_ELIGIBILITY: owner
+  writes_to:
+  - _COMMUNICATION/team_00/
+  - _COMMUNICATION/team_00/*/
+  iron_rules:
+  - No guessing — read the file first.
+  - Architect, not a generic implementation squad — mandates route to Teams 
+    10–60.
+  - 'GATE_4 Phase 4.3 (UX/vision sign-off): no delegation of human sign-off. (GATE_7
+    = retired alias for this phase.)'
+  - Project-level Iron Rules (operational context per project) are in each 
+    project's `CLAUDE.md`. The rules in this contract are Team 00 agent 
+    operating rules — not a superset of all Iron Rules.
+  mandatory_reads:
+  - core/definition.yaml
+  - _aos/roadmap.yaml
+  domain_scope: universal
+team_10:
+  id: team_10
+  label: Team 10
+  name: Gateway / Builder (Dual-Mode)
+  engine: cursor
+  environment: cursor
+  in_gate_process: 1
+  group: gateway
+  profession: gateway_orchestrator_builder
+  operating_mode: GATE
+  roster_version: "1.7.0"
+  created_at: "2026-03-26T00:00:00Z"
+  parent_team_id: team_00
+  role_description: "Dual-mode: Mode A (Orchestrator) — coordinates layered implementation
+    teams, generates mandates, tracks submissions. Mode B (Solo Builder) — implements
+    full WP spec directly when single-team delivery is approved by Team 00 at human
+    gate. Mode is set at L-GATE_SPEC and cannot change without Team 00 re-approval."
+  gate_authority:
+    GATE_2: phase_2.2_owner_aos
+    GATE_3: owner
+    GATE_4: submitter
+  writes_to:
+  - "_COMMUNICATION/team_10/"
+  iron_rules:
+  - "Execution lane boundaries enforced per project scope"
+  - "No gate submission without all required artifacts"
+  - "Work plan must be versioned before submission"
+  - "Identity header mandatory on all outputs"
+  - "Do not claim ownership of routine pipeline state mutations"
+  mandatory_reads:
+  - "documentation/docs-governance/01-FOUNDATIONS/PHOENIX_MASTER_WSM_v1.0.0.md"
+  - "_COMMUNICATION/agents_os/pipeline_state.json"
+  domain_scope: universal
+# team_40 — UI Assets & Design (universal)
+team_40:
+  id: team_40
+  label: Team 40
+  name: UI Assets & Design
+  engine: cursor
+  environment: ide
+  in_gate_process: 1
+  group: design
+  profession: ui_designer
+  operating_mode: GATE
+  roster_version: "1.6.0"
+  created_at: "2026-04-07T00:00:00Z"
+  parent_team_id: team_00
+  role_description: "Design tokens, CSS, visual consistency, UI assets. Advisory unless
+    new design assets explicitly required. NO QA, NO testing — that is Team 50."
+  gate_authority: {}
+  writes_to:
+  - "_COMMUNICATION/team_40/"
+  iron_rules:
+  - "Team 40 = UI Assets ONLY (Iron Rule)"
+  - "No testing, no QA — that is Team 50"
+  mandatory_reads: []
+  domain_scope: universal
+
+# team_50 — QA & Functional Acceptance (universal)
+team_50:
+  id: team_50
+  label: Team 50
+  name: AOS QA & Functional Acceptance
+  engine: cursor
+  environment: ide
+  in_gate_process: 1
+  group: qa
+  profession: qa_engineer
+  operating_mode: GATE
+  roster_version: "1.6.0"
+  created_at: "2026-03-26T00:00:00Z"
+  parent_team_id: team_00
+  role_description: "QA & Functional Acceptance. Every QA run must be a FRESH test
+    with full evidence. Never repeat prior findings without re-execution."
+  gate_authority:
+    L-GATE_SPEC: awareness_only
+    L-GATE_BUILD: awareness_only
+    L-GATE_VALIDATE: awareness_only
+    L-GATE_ELIGIBILITY: awareness_only
+  writes_to:
+  - "_COMMUNICATION/team_50/"
+  iron_rules:
+  - "Team 50 = QA (Iron Rule)"
+  - "Every QA run must be a FRESH test — never repeat prior findings without re-execution"
+  - "GATE_4 QA evidence required: commands + outputs + exit codes"
+  - "All pytest runs: AOS_E2E_RUN=1 AOS_E2E_HEADLESS=1 — expected: 141 passed,
+    0 skipped, 0 failed"
+  mandatory_reads:
+  - "_aos/governance/team_50.md"
+
+# team_80 — Research (universal, NEW)
+  domain_scope: universal
+team_80:
+  id: team_80
+  label: Team 80
+  name: Research
+  engine: variable
+  environment: chat
+  in_gate_process: 0
+  group: research
+  profession: researcher
+  operating_mode: GATE
+  roster_version: "1.6.0"
+  created_at: "2026-04-07T00:00:00Z"
+  parent_team_id: team_00
+  role_description: "External research team operating in online environments across
+    variable AI engines (Claude Chat, etc.). Performs deep analysis, competitive research,
+    technology evaluation, feasibility studies, and prompt quality assessment. Advisory
+    — delivers research artifacts to architecture teams via Team 00 routing. Not part
+    of the gate process."
+  gate_authority: {}
+  writes_to:
+  - "_COMMUNICATION/team_80/"
+  iron_rules:
+  - "Research artifacts must include sources and evidence"
+  - "Findings must be actionable — not academic"
+  - "Activation requires explicit Team 00 instruction"
+  - "Deliver findings to architecture team, not implementation"
+  - "Universal team numbering (Iron Rule #9)"
+  - "Identity header mandatory on all output artifacts"
+  mandatory_reads: []
+  domain_scope: universal
+
+# team_60 — DevOps & Platform (universal)
+team_60:
+  id: team_60
+  label: Team 60
+  name: AOS DevOps & Platform
+  engine: cursor
+  environment: ide
+  in_gate_process: 1
+  group: implementation
+  profession: devops_engineer
+  operating_mode: GATE
+  roster_version: "1.6.0"
+  created_at: "2026-03-26T00:00:00Z"
+  updated_at: "2026-07-09"
+  parent_team_id: team_10
+  role_description: "Infrastructure, runtimes, CI/CD, platform readiness. Does NOT
+    implement application logic or UI — that is team_10 (application implementation).
+    ALSO the per-domain cursor-cloud operator (session-overridable — see cloud_agent_mode
+    below): when a session sets AOS_SESSION_ENV=cursor-cloud, team_60 takes on the
+    'Cloud Agent / DevOps Automation' capability and operates under the team_200
+    discipline (OUT_OF_GATE_ISOLATED / ISOLATED_BRANCH, cursor/* PR, self-QA per WP,
+    team_90 validates before merge). This is an ADDITIVE session-time override, not a
+    change to team_60's default identity above (still `engine: cursor` / `environment:
+    ide` / operating_mode: GATE by default). Added AOS-V5-M11-WP-CURSOR-CLOUD-ENVIRONMENT
+    (team_100 reconciliation 2026-07-09; roster v1.6.5 eliminated team_61 — team_60 is
+    the sole AOS-domain DevOps/cloud operator, no per-domain '+1' team variant)."
+  gate_authority: {}
+  writes_to:
+  - "_COMMUNICATION/team_60/"
+  iron_rules:
+  - "Infrastructure ONLY — do not write application code"
+  - "Infrastructure changes require Team 00 awareness"
+  - "No production AOS deployments without gate PASS"
+  - "Submit completed infrastructure work to Team 50 for validation"
+  mandatory_reads: []
+  domain_scope: universal
+  # cloud_agent_mode — ADDITIVE (AOS-V5-M11-WP-CURSOR-CLOUD-ENVIRONMENT). NOT the default identity
+  # above; this block documents the session-overridable attributes team_60 takes on ONLY when a
+  # session is explicitly invoked with AOS_SESSION_ENV=cursor-cloud (per team_00 ruling
+  # RULING_team_120_CURSOR_CLOUD_ENV_CANON_2026-07-05 + team_100 reconciliation 2026-07-09). No
+  # schema precedent existed for "session-overridable" attributes prior to this WP — this shape
+  # (a nested cloud_agent_mode dict, rather than duplicate top-level engine:/environment: keys,
+  # which YAML cannot express on one mapping) is a new convention; flagged for team_100 review.
+  cloud_agent_mode:
+    engine: cursor-cloud-agent          # overrides default `engine: cursor` for that session only
+    environment: cursor-cloud           # overrides default `environment: ide` for that session only
+    capability: "Cloud Agent / DevOps Automation"
+    operating_model: ISOLATED_BRANCH    # team_200 discipline borrowed (NOT team_200's engine/activation)
+    gate_participation: OUT_OF_GATE_ISOLATED
+    canonical_validator: team_90        # decisive gate before merge (cross-engine, IR#1)
+    branch_pattern: "cursor/*"          # see /.git-branch-allowlist
+
+# team_70 — the Librarian (writing · composition · content, universal)
+team_70:
+  id: team_70
+  label: Team 70
+  name: the Librarian
+  engine: codex
+  environment: isolated
+  in_gate_process: 1
+  group: content
+  profession: writer_composer
+  operating_mode: GATE
+  roster_version: "1.7.0"
+  created_at: "2026-03-26T00:00:00Z"
+  updated_at: "2026-07-01"
+  parent_team_id: team_00
+  role_description: "the Librarian — writing · composition · content (universal). Authors and
+    maintains written/composed/content artifacts for the assigned domain: AOS specifications +
+    governance/closure documentation for AOS-native assignments, and a content domain's content
+    (e.g. book chapters, site/marketing copy) when assigned to it. 'AOS Documentation' is one
+    specialization; per-domain content production (e.g. nimrod-book) is another. Per-domain
+    engine/scope overrides are registered IR#14 specializations. Broadened per
+    AOS-V321-WP-TEAM70-LIBRARIAN-CANON (team_00 directive 2026-06-20)."
+  gate_authority:
+    GATE_5: phase_5.1_owner_aos
+  writes_to:
+  - "_COMMUNICATION/team_70/"
+  - "documentation/docs-governance/"
+  iron_rules:
+  - "All content/docs require identity header"
+  - "Writing · composition · content for the ASSIGNED domain only — no application code"
+  - "Do NOT modify SSM/WSM without Team 00 instruction"
+  - "Cross-domain consistency review → route to team_100"
+  - "NEVER write to _aos/ (governance layer — reserved for AOS governance teams)"
+  mandatory_reads: []
+  domain_scope: universal
+  standing: true
+
+team_90:
+  id: team_90
+  label: Team 90
+  name: Default & Constitutional Validator
+  engine: cursor-composer-2          # Cursor Composer 2 — default validation engine (updated 2026-04-12)
+  environment: isolated
+  in_gate_process: 1
+  group: governance
+  profession: dev_validator
+  operating_mode: GATE
+  roster_version: "1.7.0"
+  created_at: "2026-03-26T00:00:00Z"
+  updated_at: "2026-04-12"
+  parent_team_id: team_00
+  role_description: >
+    Default + Constitutional validator (the prior senior constitutional validator collapsed into
+    team_90 per WP M9-P1-WP7 — the senior/constitutional tier is now a PARAMETER selected per gate,
+    ADR053, not a separate team). Owns the GOVERNANCE facet of every L-gate: L-GATE_ELIGIBILITY, L-GATE_SPEC,
+    L-GATE_BUILD, and L-GATE_VALIDATE (the governance half of the DUAL final gate — team_50 owns
+    the functional half). Multi-project scope. ADVERSARIAL stance — never repeat prior findings
+    without fresh re-execution; do NOT start from the implementation team's self-assessment.
+    Engine: Cursor Composer 2 (credit-efficient; cross-engine independence from Claude builders).
+  gate_authority:
+    L-GATE_SPEC: owner
+    L-GATE_BUILD: owner
+    L-GATE_VALIDATE: owner
+    L-GATE_ELIGIBILITY: owner
+  writes_to:
+  - _COMMUNICATION/team_90/
+  - _COMMUNICATION/team_90/*/
+  iron_rules:
+  - "**Adversarial stance required** — assume the implementation has drifted from
+    spec until evidence proves otherwise. Do NOT start from the implementation team's
+    self-assessment."
+  - '**Independence is mandatory** — do NOT read Team 10 conclusions before
+    forming own verdict.'
+  - '**Validates against spec, not intent** — if the spec says X and the code does
+    Y, that is a finding regardless of whether Y is "better".'
+  - '**Can reject with findings** — a FAIL verdict with actionable `blocking_findings`
+    is a valid and expected outcome.'
+  - Identity header mandatory on all outputs.
+  - Gate submissions must include the canonical verdict file.
+  mandatory_reads:
+  - core/definition.yaml
+  - _aos/roadmap.yaml
+  domain_scope: universal
+
+team_100:
+  id: team_100
+  label: Team 100
+  name: Chief System Architect / Chief R&D
+  engine: claude-sonnet-4-6
+  environment: terminal
+  in_gate_process: 1
+  group: architecture
+  profession: domain_architect
+  operating_mode: GATE
+  roster_version: "1.6.0"
+  created_at: "2026-03-26T00:00:00Z"
+  parent_team_id: team_00
+  role_description: "Program-level architecture and synthesis under Principal (Team
+    00). GATE_2 owner for AOS domain (GATE_6 = LEGACY alias). Coordinates domain IDE
+    architects team_110 (Domain Architect) and execution teams (team_60, team_50).
+    Multi-project scope."
+  gate_authority:
+    L-GATE_SPEC: delegated
+    L-GATE_BUILD: delegated
+    L-GATE_VALIDATE: awareness_only
+    L-GATE_ELIGIBILITY: awareness_only
+  writes_to:
+  - _COMMUNICATION/team_100/
+  - _COMMUNICATION/team_100/*/
+  iron_rules:
+  - '**team_00 (Nimrod) is the single human Principal — team_100 NEVER overrides team_00.**'
+  - Independence maintained — adversarial stance when acting as validator.
+  - Identity header mandatory on all outputs.
+  - Acts as fallback only — does not displace active domain architects.
+  mandatory_reads:
+  - core/definition.yaml
+  - _aos/roadmap.yaml
+  domain_scope: universal
+
+# team_110 — Domain Architect (universal)
+team_110:
+  id: team_110
+  label: Team 110
+  name: Domain Architect (IDE)
+  engine: cursor-composer-2
+  environment: ide
+  in_gate_process: 1
+  group: architecture
+  profession: domain_architect
+  operating_mode: GATE
+  roster_version: "1.7.0"
+  created_at: "2026-03-26T00:00:00Z"
+  updated_at: "2026-04-15"
+  parent_team_id: team_100
+  role_description: "Domain Architect (IDE) — serves ALL domains (TikTrack + AOS).
+    Primary agent surface: Cursor Composer 2 in this repo. Delivers AOS v3 + TikTrack
+    spec packages to Team 100. Must always raise risks and alternatives before final
+    recommendation. Canonical artifact folder: _COMMUNICATION/team_110/. Legacy
+    artifact folders (history only, not current write scope): _COMMUNICATION/team_101/
+    (AOS, ex-team_101) and _COMMUNICATION/team_102/ (TikTrack, ex-team_102). team_11/71/111
+    do not exist as distinct teams — collapsed into team_10/70/110 (all-domains)
+    per team_00 ruling 2026-07-08."
+  gate_authority:
+    L-GATE_SPEC: delegated
+    L-GATE_BUILD: awareness_only
+    L-GATE_VALIDATE: awareness_only
+    L-GATE_ELIGIBILITY: awareness_only
+  writes_to:
+  - _COMMUNICATION/team_110/
+  - _COMMUNICATION/team_110/*/
+  iron_rules:
+  - '**8-check validation required** before advancing (see L1 task definition).'
+  - '**route_recommendation is MANDATORY on every FAIL** — spec returns to Team 100.'
+  - '**Independence maintained** — review spec on its own merits before checking prior
+    decisions.'
+  - Identity header mandatory on all outputs.
+  mandatory_reads:
+  - core/definition.yaml
+  - _aos/roadmap.yaml
+  domain_scope: universal
+
+team_120:
+  id: team_120
+  label: Team 120
+  name: Ambassador
+  engine: cursor-composer-2
+  environment: ide
+  in_gate_process: 0
+  group: governance
+  profession: ambassador_propagation
+  operating_mode: GATE
+  roster_version: "1.8.0"
+  created_at: "2026-06-24T00:00:00Z"
+  parent_team_id: team_00
+  role_description: >
+    Ambassador — governance propagation, GCR (Governance Change Request) handling, drift-audit,
+    and DOC_CANON maintenance. Inherits the `_aos/` propagation-write authority from the dissolved git/archive/file-governance
+    team (WP M9-P1-WP7, decision D-191auth): pushes hub governance snapshots to spokes, audits
+    cross-spoke drift, and stewards canonical docs. Hub intake conduit: receives all inbound domain
+    traffic (spokes address team_120, never team_100), triages and responds immediately within
+    Ambassador scope, and queues only architect-grade items to team_100 as pre-triaged work —
+    producing team_100's task queue so domain responsiveness is decoupled from architect load.
+    Archival is API-mediated (archive.py) — no direct `_aos/` file deletes. Does NOT make
+    constitutional gate verdicts (that is team_90) or architectural rulings (team_00 / team_100).
+  gate_authority:
+    L-GATE_SPEC: awareness_only
+    L-GATE_BUILD: awareness_only
+    L-GATE_VALIDATE: awareness_only
+    L-GATE_ELIGIBILITY: awareness_only
+  writes_to:
+  - _COMMUNICATION/team_120/
+  - _COMMUNICATION/team_120/*/
+  - _aos/
+  iron_rules:
+  - "Governance flows source → snapshot only (Iron Rule #11) — never the reverse."
+  - "`_aos/` writes are propagation/bootstrap only; archival is API-mediated (archive.py)."
+  - "GCR is the channel for any AOS-layer change a spoke needs — route it, do not decide it."
+  - "Identity header mandatory on all outputs."
+  mandatory_reads:
+  - core/definition.yaml
+  - _aos/roadmap.yaml
+  domain_scope: universal
+team_200:
+  id: team_200
+  label: Team 200
+  name: AOS Cowork Bundle Execution
+  hebrew_name: "צוות Cowork"
+  engine: claude-sonnet          # Claude Sonnet 4.5+ in Claude Desktop — locked per P-AOS-4 v1.3.0
+  environment: claude-desktop    # Claude Desktop (Mac) + Project with Custom Instructions — locked
+  in_gate_process: 0             # v1.7.0: moved out of gate process — team_200 is OUT_OF_GATE_ISOLATED (2026-04-22 team_00 directive)
+  group: execution
+  profession: cowork_executor
+  operating_mode: COWORK
+  gate_participation: OUT_OF_GATE_ISOLATED
+  operating_model: ISOLATED_BRANCH
+  canonical_validator: team_90
+  roster_version: "1.7.0"
+  created_at: "2026-04-15T00:00:00Z"
+  parent_team_id: team_10
+  domain_scope: per-invocation   # v1.7.0: team_200 is ALWAYS assigned to a specific domain per cowork bundle session (2026-04-22 team_00 directive)
+  role_description: >
+    Canonical Cowork Bundle Execution team. Activated per cowork bundle session
+    via P-AOS-4 protocol in Claude Desktop (Mac) + Project with Custom Instructions.
+    ALWAYS assigned to a specific domain per invocation (not universal). Implements
+    all WPs in a bundle sequentially on an isolated branch — Build + self-QA per
+    WP — never commits directly to main. NOT in the canonical gate process.
+    Canonical validation (L-GATE_VALIDATE) by team_90 required before any merge
+    to main. Environment is strictly locked: Claude Desktop + Project with Custom
+    Instructions. Team 00 must explicitly authorize each bundle via
+    PROJECT_INSTRUCTIONS.md + ACTIVATION_PROMPT.md. Sibling to team_98 (mobile
+    Dispatch) and team_99 (server-side terminal); all three share the
+    OUT_OF_GATE_ISOLATED pattern.
+  gate_authority:
+    COWORK_PHASE3: owner          # Phase 3 (Build) per WP within a bundle
+    COWORK_PHASE4: owner          # Phase 4 (QA / L-GATE_BUILD) per WP within a bundle
+  writes_to:
+  - "_COMMUNICATION/team_200/"
+  - "_COMMUNICATION/team_50/"     # QA verdicts — acting as Team 50 within bundle scope
+  - "feature branches (isolated per bundle)"
+  iron_rules:
+  - "One branch per bundle — never commit to main."
+  - "Domain assignment is per-bundle: each session is scoped to ONE specific domain."
+  - "LOD400 is law — zero deviations; FCP-4 for any spec defect found."
+  - "Gates G1/G2/G3 must exit 0 before proceeding to next WP — no exceptions."
+  - "validate_aos.sh must exit 0 after each WP (always included in gate shell block)."
+  - "Self-QA (acting as team_50) is within-bundle only; main-merge requires L-GATE_VALIDATE by team_90."
+  - "No worktree or branch creation without explicit Team 00 bundle activation."
+  - "Recovery when blocked: WIP commit + BLOCKER_LOG.md, no improvised fixes."
+  - "WP_STATUS.md MANDATORY after each QA commit — machine-readable checkpoint artifact."
+  - "API-only mutations when DB online (Iron Rule #7 / ADR034)."
+  mandatory_reads:
+  - "core/definition.yaml"
+  - "_aos/governance/team_200.md"
+  - "methodology/AOS_CONCEPT_AND_PRINCIPLES.md"  # for OUT_OF_GATE_ISOLATED section
+  - "_COMMUNICATION/team_200/AOS_COWORK_CONTEXT_v1.0.0.md"  # Hub + spokes post-propagation
+
+team_98:
+  id: team_98
+  label: Team 98
+  name: Phone Joker
+  hebrew_name: "גוקר טלפון"
+  engine: claude-sonnet-4-6
+  environment: chat
+  in_gate_process: 0
+  group: operations
+  profession: mobile_dispatch
+  operating_mode: DISPATCH
+  gate_participation: OUT_OF_GATE_ISOLATED
+  operating_model: ISOLATED_BRANCH
+  canonical_validator: team_90
+  roster_version: "1.7.0"
+  created_at: "2026-04-22T00:00:00Z"
+  parent_team_id: team_00
+  domain_scope: universal
+  role_description: >
+    Phone Joker — mobile-initiated Dispatch agent via Claude Desktop Cowork.
+    Activated by Team 00 (or other agents) from mobile for immediate-execution
+    tasks across all AOS-managed domains. Works on isolated feature branches
+    with worktrees Dispatch creates automatically (random-name prefix). Builds
+    code, runs self-tests (unit + integration), deploys to staging, produces
+    documents, browser automation, web research — all within the feature branch.
+    NOT in the canonical gate process and NOT a canonical validator (Iron Rule:
+    builder engine ≠ validator engine). All merges to main require L-GATE_VALIDATE
+    by team_90 (cross-engine validation). Sibling to team_99 (server-side SSH
+    terminal) and team_200 (Desktop Project Cowork); all three share the
+    OUT_OF_GATE_ISOLATED pattern.
+  gate_authority:
+    L-GATE_SPEC: awareness_only
+    L-GATE_BUILD: awareness_only
+    L-GATE_VALIDATE: awareness_only
+    L-GATE_ELIGIBILITY: awareness_only
+  writes_to:
+  - _COMMUNICATION/team_98/
+  - feature branches (isolated, via worktrees)
+  iron_rules:
+  - Work on feature branch only — never commit directly to main.
+  - No worktree creation without explicit Team 00 approval.
+  - State domain explicitly at start of every response — no repo context assumed.
+  - Single session, no cross-session memory — treat each activation as stateless.
+  - Self-tests (unit + integration) required before requesting canonical validation.
+  - Canonical validation (L-GATE_VALIDATE) by team_90 required before merge.
+  - Identity header mandatory on all output artifacts.
+  - API-only mutations when DB online (Iron Rule #7 / ADR034).
+  mandatory_reads:
+  - core/definition.yaml
+  - _aos/context/PROJECT_CONTEXT.md
+  - methodology/AOS_CONCEPT_AND_PRINCIPLES.md  # for OUT_OF_GATE_ISOLATED section
+
+team_99:
+  id: team_99
+  label: Team 99
+  name: Home Server Team
+  hebrew_name: "צוות שרת ביתי"
+  engine: claude-code
+  environment: terminal
+  in_gate_process: 0
+  group: operations
+  profession: server_ops
+  operating_mode: SERVER_OPS
+  gate_participation: OUT_OF_GATE_ISOLATED
+  operating_model: ISOLATED_BRANCH
+  canonical_validator: team_90
+  roster_version: "1.7.0"
+  created_at: "2026-04-11T00:00:00Z"
+  parent_team_id: team_00
+  domain_scope: universal
+  role_description: >
+    Home Server Team — Claude Code running on waldhomeserver. Activated by
+    team_00 or other agents via SSH/VPN/Tailscale. Universal scope (one team
+    across all AOS-managed domains). Primary responsibilities: environment,
+    data, timers, systemd/cron, DB ops, backups, monitoring, deployments,
+    CI/CD, health checks, log analysis, SSL/DNS, Docker management — the
+    de-facto maintenance team. Can also develop code and run self-tests on
+    isolated branches when the task requires it. NOT in the canonical gate
+    process. When code changes are made, L-GATE_VALIDATE by team_90 required
+    before merge to main (cross-engine Iron Rule). Sibling to team_98 (mobile
+    Dispatch) and team_200 (Desktop Project Cowork); all three share the
+    OUT_OF_GATE_ISOLATED pattern — isolated environment separates them from
+    general development workflows.
+  gate_authority:
+    L-GATE_SPEC: awareness_only
+    L-GATE_BUILD: delegated
+    L-GATE_VALIDATE: awareness_only
+    L-GATE_ELIGIBILITY: awareness_only
+  writes_to:
+  - _COMMUNICATION/team_99/
+  - _COMMUNICATION/team_99/*/
+  - feature branches (for code changes, isolated)
+  - server infrastructure (systemd, cron, docker, DB)
+  iron_rules:
+  - Primary scope is infrastructure/ops — environment, data, timers, maintenance.
+  - All destructive operations (restart, delete, redeploy) require Team 00 approval.
+  - SSH credentials and server secrets never in artifacts or commits.
+  - Deployment and operation logs captured in `_COMMUNICATION/team_99/`.
+  - 'Multi-domain universal: serve all projects equally — no domain favoritism.'
+  - Code changes work on feature branch only — never direct commit to main.
+  - Self-tests required before requesting canonical validation for code changes.
+  - Canonical validation (L-GATE_VALIDATE) by team_90 required before merging code changes.
+  - Identity header mandatory on all output artifacts.
+  - Production changes require rollback plan documented before execution.
+  - API-only mutations when DB online (Iron Rule #7 / ADR034).
+  mandatory_reads:
+  - core/definition.yaml
+  - methodology/AOS_CONCEPT_AND_PRINCIPLES.md  # for OUT_OF_GATE_ISOLATED section
+  - Always verify service health after any change (`/server --status`)
+  - Never expose internal IPs, ports, or paths in public-facing artifacts
+  mandatory_reads:
+  - core/definition.yaml
+  - _aos/roadmap.yaml
+
+domains:
+- id: "01JK8AOSV3DOMAIN00000001"
+  slug: agents_os
+  display_name: Agents OS
+  default_variant: TRACK_FOCUSED
+  doc_team_id:
+  is_active: 1
+- id: "01JK8AOSV3DOMAIN00000002"
+  slug: tiktrack
+  display_name: TikTrack
+  default_variant: TRACK_FULL
+  doc_team_id:
+  is_active: 1
+
+gates:
+- id: GATE_0
+  sequence_order: 0
+  name: "Gate 0 — Entry Validation"
+  is_human_gate: 0
+  description: LOD200 review, system integration check
+- id: GATE_1
+  sequence_order: 1
+  name: "Gate 1 — Detailed Specification"
+  is_human_gate: 0
+  description: LOD300 mockups then LOD400, architectural review
+- id: GATE_2
+  sequence_order: 2
+  name: "Gate 2 — Work Planning & Mandate Preparation"
+  is_human_gate: 0
+  description: Mandates, team assignment, environment prep, QA by team_10
+- id: GATE_3
+  sequence_order: 3
+  name: "Gate 3 — Implementation"
+  is_human_gate: 0
+  description: Build and QA during development
+- id: GATE_4
+  sequence_order: 4
+  name: "Gate 4 — Validation & Approval"
+  is_human_gate: 1
+  description: Tier 1 validation, Tier 2 architecture, Tier 3 human approval
+- id: GATE_5
+  sequence_order: 5
+  name: "Gate 5 — Documentation & Closure"
+  is_human_gate: 0
+  description: LOD500 as-built, archive, cleanup
+
+phases:
+- id: "0.1"
+  gate_id: GATE_0
+  sequence_order: 1
+  name: Initialize
+  allow_auto: 0
+  display_in_ui: 1
+- id: "1.1_lod200"
+  gate_id: GATE_1
+  sequence_order: 1
+  name: LOD200 Concept
+  allow_auto: 0
+  display_in_ui: 1
+- id: "1.2_lod300_mockup"
+  gate_id: GATE_1
+  sequence_order: 2
+  name: LOD300 + Mockup
+  allow_auto: 0
+  display_in_ui: 1
+- id: "1.3_lod400"
+  gate_id: GATE_1
+  sequence_order: 3
+  name: LOD400 Execution Spec
+  allow_auto: 0
+  display_in_ui: 1
+- id: "2.1_work_plan"
+  gate_id: GATE_2
+  sequence_order: 1
+  name: Work Plan & Mandates
+  allow_auto: 0
+  display_in_ui: 1
+- id: "2.2_qa_review"
+  gate_id: GATE_2
+  sequence_order: 2
+  name: Independent QA Review
+  allow_auto: 0
+  display_in_ui: 1
+  required_verdicts:
+    required_team: "team_10"
+    verdict_type: "PASS"
+- id: "3.1"
+  gate_id: GATE_3
+  sequence_order: 1
+  name: Gate 3 — primary phase
+  allow_auto: 0
+  display_in_ui: 1
+- id: "4.1_tier1_qa"
+  gate_id: GATE_4
+  sequence_order: 1
+  name: Tier 1 — QA Validation
+  allow_auto: 0
+  display_in_ui: 1
+  required_verdicts:
+    required_team: "team_50"
+    verdict_type: "PASS"
+- id: "4.2_tier2_arch"
+  gate_id: GATE_4
+  sequence_order: 2
+  name: Tier 2 — Architecture Review
+  allow_auto: 0
+  display_in_ui: 1
+  required_verdicts:
+    required_team: "team_90"
+    verdict_type: "PASS"
+- id: "4.3_tier3_human"
+  gate_id: GATE_4
+  sequence_order: 3
+  name: Tier 3 — Human Approval
+  allow_auto: 0
+  display_in_ui: 1
+- id: "5.1"
+  gate_id: GATE_5
+  sequence_order: 1
+  name: Gate 5 — primary phase
+  allow_auto: 0
+  display_in_ui: 1
+
+pipeline_roles:
+- id: "01JK8AOSV3ROLE0000000001"
+  name: ORCHESTRATOR
+  display_name: Orchestrator
+  description: "Domain gateway team: team_10 (tiktrack) or team_10 (agents_os). Coordinates
+    spec writing, routes to implementation teams per process variant (TRACK_FULL/TRACK_FOCUSED),
+    and submits QA packages. Does not implement directly. Active from GATE_1 onward."
+  can_block_gate: 0
+  is_seeded: 1
+- id: "01JK8AOSV3ROLE0000000002"
+  name: CONSTITUTIONAL_VALIDATOR
+  display_name: Constitutional Validator (GATE_0)
+  description: "Team 90 — entry quality gate. Validates spec completeness and constitutional
+    compliance before a WP enters the pipeline. Domain-agnostic (same team for tiktrack
+    and agents_os). Binary gate: PASS advances to GATE_1, FAIL rejects entry (run=FAILED,
+    WP reset to PLANNED)."
+  can_block_gate: 1
+  is_seeded: 1
+- id: "01JK8AOSV3ROLE0000000003"
+  name: SPEC_AUTHOR
+  display_name: Spec Author (GATE_1 phase 1.1)
+  description: "Team 100 — produces LOD200/LOD400 specifications at GATE_1/1.1. Domain-agnostic.
+    Delivers structured spec with ACs, constraints, and team assignments to _COMMUNICATION/team_100/
+    with [GATE_1-SPEC] header."
+  can_block_gate: 0
+  is_seeded: 1
+- id: "01JK8AOSV3ROLE0000000004"
+  name: ARCH_APPROVER
+  display_name: Architecture Approver (GATE_2)
+  description: "Architecture approval authority at GATE_2. The approver is the architect
+    who authored the LOD200/LOD400 spec. Naming rule — Domain Architect (universal)
+    domain: team_110 (Domain Architect). AOS domain: team_110 (Domain Architect).
+    System fallback (when domain architect inactive): team_100. team_00 acts ONLY
+    when Nimrod explicitly overrides — never a system default. Determines 'האם אנחנו
+    מאשרים לבנות את זה?'"
+  can_block_gate: 0
+  is_seeded: 1
+- id: IDEA_STATUS_AUTHORITY
+  name: IDEA_STATUS_AUTHORITY
+  display_name: Idea status authority (Tier 2 delegation)
+  description: Delegated idea pipeline status transitions (Authority Model 
+    v1.0.0)
+  can_block_gate: 0
+  is_seeded: 1
+
+# gate_role_authorities — per-gate blocking authority registry.
+# Both conditions must be true for fail_run() to produce GATE_FAILED_BLOCKING:
+#   1. pipeline_roles.can_block_gate = 1
+#   2. gate_role_authorities row exists with may_block_verdict = 1
+# This table was never seeded → all fail_run() calls were producing GATE_FAILED_ADVISORY.
+gate_role_authorities:
+  # GATE_0 — CONSTITUTIONAL_VALIDATOR has global blocking authority (entry gate, binary PASS/FAIL)
+- id: "01JK8AOSV3GRA00000000001"
+  gate_id: GATE_0
+  phase_id:
+  domain_id:                                 # global — both domains
+  role_id: "01JK8AOSV3ROLE0000000002"       # CONSTITUTIONAL_VALIDATOR → team_90
+  may_block_verdict: 1
+  # GATE_1/1.2 — CONSTITUTIONAL_VALIDATOR has blocking authority (spec constitutional review)
+- id: "01JK8AOSV3GRA00000000002"
+  gate_id: GATE_1
+  phase_id: "1.2_lod300_mockup"
+  domain_id:                                 # global — both domains
+  role_id: "01JK8AOSV3ROLE0000000002"       # CONSTITUTIONAL_VALIDATOR → team_90
+  may_block_verdict: 1
+
+policies:
+- id: "01JK8AOSV3POL00000000001"
+  scope_type: GLOBAL
+  domain_id:
+  gate_id:
+  phase_id:
+  policy_key: max_correction_cycles
+  policy_value_json: '{"max":5}'
+  priority: 100
+- id: "01JK8AOSV3POL00000000002"
+  scope_type: DOMAIN
+  domain_id: "01JK8AOSV3DOMAIN00000001"     # agents_os
+  gate_id:
+  phase_id:
+  policy_key: default_process_variant
+  policy_value_json: '{"variant":"TRACK_FOCUSED"}'
+  priority: 50
+- id: "01JK8AOSV3POL00000000003"
+  scope_type: DOMAIN
+  domain_id: "01JK8AOSV3DOMAIN00000002"     # tiktrack
+  gate_id:
+  phase_id:
+  policy_key: default_process_variant
+  policy_value_json: '{"variant":"TRACK_FULL"}'
+  priority: 50
+- id: "01JK8AOSV3POL00000000004"
+  scope_type: GATE
+  domain_id:
+  gate_id: GATE_4
+  phase_id:
+  policy_key: gate_type
+  policy_value_json: '{"is_human_gate":true,"requires_principal":"team_00"}'
+  priority: 100
+
+# GATE_0 routing — required for UC-01 InitiateRun (routing_rules → role_id → assignment team)
+# GATE_0 actor: team_90 (Constitutional Validator) — domain-agnostic, both domains
+routing_rules:
+- id: "01JK8AOSV3RR0000000001"
+  gate_id: GATE_0
+  phase_id:
+  domain_id: "01JK8AOSV3DOMAIN00000001"     # agents_os
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000002"       # CONSTITUTIONAL_VALIDATOR → team_90
+  priority: 10
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000002"
+  gate_id: GATE_0
+  phase_id:
+  domain_id: "01JK8AOSV3DOMAIN00000002"     # tiktrack
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000002"       # CONSTITUTIONAL_VALIDATOR → team_90
+  priority: 10
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000003"
+  gate_id: GATE_0
+  phase_id:
+  domain_id:                                 # global fallback
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000002"       # CONSTITUTIONAL_VALIDATOR → team_90
+  priority: 100
+  resolve_from_state_key:
+  # GATE_1-5 tiktrack domain
+  # GATE_1/1.1: SPEC_AUTHOR → team_100 (writes LOD200/LOD400 spec)
+- id: "01JK8AOSV3RR0000000010"
+  gate_id: GATE_1
+  phase_id: "1.1_lod200"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000003"      # SPEC_AUTHOR → team_100
+  priority: 10
+  resolve_from_state_key:
+  # GATE_1/1.2 for tiktrack: covered by global fallback 01JK8AOSV3RR0000000025 → CONSTITUTIONAL_VALIDATOR
+  # GATE_2/2.1: ARCH_APPROVER → team_00 (Principal approval for tiktrack)
+- id: "01JK8AOSV3RR0000000011"
+  gate_id: GATE_2
+  phase_id: "2.1_work_plan"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000004"      # ARCH_APPROVER → team_00 for tiktrack
+  priority: 10
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000012"
+  gate_id: GATE_3
+  phase_id: "3.1"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000001"      # ORCHESTRATOR → team_10
+  priority: 10
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000013"
+  gate_id: GATE_4
+  phase_id: "4.1_tier1_qa"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000001"      # ORCHESTRATOR → team_10
+  priority: 10
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000014"
+  gate_id: GATE_5
+  phase_id: "5.1"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000001"      # ORCHESTRATOR → team_10
+  priority: 10
+  resolve_from_state_key:
+  # GATE_1-5 agents_os domain
+  # GATE_1/1.1: SPEC_AUTHOR → team_100
+- id: "01JK8AOSV3RR0000000015"
+  gate_id: GATE_1
+  phase_id: "1.1_lod200"
+  domain_id: "01JK8AOSV3DOMAIN00000001"     # agents_os
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000003"      # SPEC_AUTHOR → team_100
+  priority: 10
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000027"
+  gate_id: GATE_1
+  phase_id: "1.3_lod400"
+  domain_id:
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000002"      # CONSTITUTIONAL_VALIDATOR → team_90 (LOD400 execution spec)
+  priority: 50
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000028"
+  gate_id: GATE_2
+  phase_id: "2.2_qa_review"
+  domain_id:
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000001"      # ORCHESTRATOR → team_10 (QA review coordination)
+  priority: 10
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000029"
+  gate_id: GATE_4
+  phase_id: "4.2_tier2_arch"
+  domain_id:
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000001"      # ORCHESTRATOR → team_10
+  priority: 10
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000030"
+  gate_id: GATE_4
+  phase_id: "4.3_tier3_human"
+  domain_id:
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000001"      # ORCHESTRATOR → team_10 (human approval routed via UI)
+  priority: 10
+  resolve_from_state_key:
+  # GATE_1/1.2 for agents_os: covered by global fallback 01JK8AOSV3RR0000000025 → CONSTITUTIONAL_VALIDATOR
+  # GATE_2/2.1: ARCH_APPROVER → team_100 (delegated for agents_os)
+- id: "01JK8AOSV3RR0000000016"
+  gate_id: GATE_2
+  phase_id: "2.1_work_plan"
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000004"      # ARCH_APPROVER → team_100 for agents_os
+  priority: 10
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000017"
+  gate_id: GATE_3
+  phase_id: "3.1"
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000001"      # ORCHESTRATOR → team_10
+  priority: 10
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000018"
+  gate_id: GATE_4
+  phase_id: "4.1_tier1_qa"
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000001"      # ORCHESTRATOR → team_10
+  priority: 10
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000019"
+  gate_id: GATE_5
+  phase_id: "5.1"
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000001"      # ORCHESTRATOR → team_10
+  priority: 10
+  resolve_from_state_key:
+  # GATE_1-5 global fallbacks (domain=null, priority=100 — catches any unlisted domain / test domains)
+- id: "01JK8AOSV3RR0000000020"
+  gate_id: GATE_1
+  phase_id:
+  domain_id:
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000003"      # SPEC_AUTHOR → team_100 (global fallback for 1.1)
+  priority: 100
+  resolve_from_state_key:
+  # GATE_1/1.2 global fallback
+- id: "01JK8AOSV3RR0000000025"
+  gate_id: GATE_1
+  phase_id: "1.2_lod300_mockup"
+  domain_id:
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000002"      # CONSTITUTIONAL_VALIDATOR → team_90
+  priority: 100
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000021"
+  gate_id: GATE_2
+  phase_id:
+  domain_id:
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000004"      # ARCH_APPROVER → team_00 for tiktrack, team_100 for AOS
+  priority: 100
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000022"
+  gate_id: GATE_3
+  phase_id:
+  domain_id:
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000001"
+  priority: 100
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000023"
+  gate_id: GATE_4
+  phase_id:
+  domain_id:
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000001"
+  priority: 100
+  resolve_from_state_key:
+- id: "01JK8AOSV3RR0000000024"
+  gate_id: GATE_5
+  phase_id:
+  domain_id:
+  variant:
+  role_id: "01JK8AOSV3ROLE0000000001"
+  priority: 100
+  resolve_from_state_key:
+
+# Active prompt template for GATE_0 / phase 0.1 (GET /api/runs/{id}/prompt smoke)
+templates:
+- id: "01JK8AOSV3TPL0000000001"
+  gate_id: GATE_0
+  phase_id:
+  domain_id:
+  name: Gate 0 — Entry Quality Gate (Constitutional Validation)
+  body_markdown: |
+    # Entry Quality Gate — GATE_0
+    You are **Team 90 — Constitutional Validator**.
+
+    **Your role:** Binary entry gate. You do NOT coordinate work — you VALIDATE the incoming spec.
+    This is an ADVERSARIAL review. Assume the spec is incomplete until proven otherwise.
+
+    **Validation criteria (all must pass):**
+    1. WP spec exists and is at LOD200 minimum: clear domain, scope, deliverables stated
+    2. All acceptance criteria are measurable and unambiguous (no "should", "may", "as needed")
+    3. No Iron Rule violations (financial precision NUMERIC(20,8), single human, cross-engine validation)
+    4. Domain and process variant are correctly identified in the WP
+    5. Spec is sufficient for an implementation team to begin GATE_1 without requesting clarification
+
+    **If PASS** — submit via `POST /api/runs/{run_id}/advance` with verdict=pass.
+    The WP enters GATE_1; the ORCHESTRATOR takes over.
+
+    **If FAIL** — submit via `POST /api/runs/{run_id}/reject-entry` with a precise reason.
+    The run is terminated immediately (status=FAILED). The WP returns to PLANNED.
+    The authoring architect must produce a revised spec and resubmit the WP.
+
+    Iron Rule: **GATE_0 BLOCK stops all downstream work. No correction cycles. No second chances.**
+
+    ## TRIGGER PROTOCOL
+
+    PASS: `POST /api/runs/{run_id}/advance` with `{"verdict": "pass", "summary": "Entry validated — all 5 criteria PASS"}`
+    FAIL (terminal): `POST /api/runs/{run_id}/reject-entry` with `{"reason": "<precise actionable reason>"}`
+
+    Identity header format: `# GATE_0 — team_90 | Run {run_id} | WP: {work_package_id}`
+  version: 4
+  is_active: 1
+- id: "01JK8AOSV3TPL0000000002"
+  gate_id: GATE_1
+  phase_id: "1.1_lod200"
+  domain_id:
+  name: Gate 1 Phase 1.1 — Spec Production (Team 100)
+  body_markdown: |
+    **Canonical GATE_1 phases:** `1.1_lod200`, `1.2_lod300_mockup`, `1.3_lod400`
+
+    # L1 — Task: Specification Production (GATE_1 / Phase 1.1)
+    You are **Team 100 — Spec & Governance**.
+
+    **Your role:** Produce the LOD200/LOD400 specification for this work package.
+    You write the spec. You do NOT route or coordinate other teams.
+
+    **Deliverables (ALL required before advancing):**
+    1. Spec document stored in `_COMMUNICATION/team_100/` with identity header `[GATE_1-SPEC]`
+    2. **Scope:** domain (tiktrack / agents_os), feature boundaries, what is explicitly excluded
+    3. **Acceptance criteria:** measurable and unambiguous — no "should", "may", "as needed"
+    4. **Architecture constraints:** Iron Rules applicable to this WP (NUMERIC(20,8), status model, etc.)
+    5. **Team assignments for GATE_3:** domain-aware
+       - Full track: Team 10 (backend+frontend implementation), Team 40 (assets), Team 50 (QA)
+       - Agents OS domain (TRACK_FOCUSED): Team 60 (full-stack), Team 50 (QA)
+    6. **Open questions:** any CLARIFICATION_REQUIRED items flagged for Team 00 before advancing
+
+    **If CLARIFICATION_REQUIRED items exist:** do NOT advance — flag and await Team 00 response.
+
+    **Advance when:** spec is complete, all items above present, no open clarifications.
+    Submit: `POST /api/runs/{run_id}/advance` with `{"verdict": "pass", "summary": "Spec complete"}`
+
+    The spec advances to Phase 1.2 (Team 90 validation).
+
+    ## TRIGGER PROTOCOL
+
+    Preferred (CANONICAL_AUTO / Mode A):
+    ```
+    POST /api/runs/{run_id}/feedback
+    X-Actor-Team-Id: team_100
+    {"detection_mode": "CANONICAL_AUTO", "structured_json": {"schema_version": "1", "verdict": "PASS", "confidence": "HIGH", "summary": "Spec complete", "blocking_findings": [], "route_recommendation": null}}
+    ```
+    Legacy: `POST /api/runs/{run_id}/advance` with `{"verdict": "pass", "summary": "Spec complete"}`
+    FAIL: `POST /api/runs/{run_id}/fail` with findings. `route_recommendation`: `"doc"` | `"impl"` | `"arch"`.
+  version: 4
+  is_active: 1
+- id: "01JK8AOSV3TPL0000000007"
+  gate_id: GATE_1
+  phase_id: "1.2_lod300_mockup"
+  domain_id:
+  name: Gate 1 Phase 1.2 — Spec Validation (Team 90)
+  body_markdown: |
+    # L1 — Task: Spec Validation (GATE_1 / Phase 1.2)
+    You are **Team 90 — Constitutional Validator**.
+
+    **Your role:** ADVERSARIAL review of the spec produced at Phase 1.1 by Team 100.
+    Independence is MANDATORY — do not review other architects' conclusions before your own validation.
+
+    **Validation criteria (ALL must pass):**
+    1. Spec exists at LOD200 minimum: scope, domain, deliverables clearly stated
+    2. All ACs are measurable and unambiguous (no "should", "may", "as needed")
+    3. No Iron Rule violations (NUMERIC(20,8), single human principal, cross-engine validation)
+    4. Implementation team assignments are correct (TRACK_FULL / TRACK_FOCUSED per domain)
+    5. Spec is self-sufficient — GATE_3 implementation teams can begin without requesting clarification
+
+    **If PASS:**
+    Submit: `POST /api/runs/{run_id}/advance` with `{"verdict": "pass", "summary": "Spec validated"}`
+    Run advances to GATE_2 for architecture approval.
+
+    **If FAIL (blocking findings):**
+    Submit: `POST /api/runs/{run_id}/fail` with blocking findings listed precisely.
+    The run enters CORRECTION mode — spec returns to Team 100 for revision.
+    Iron Rule: every FAIL report MUST include a `route_recommendation` field.
+
+    ## TRIGGER PROTOCOL
+
+    Preferred (CANONICAL_AUTO / Mode A):
+    ```
+    POST /api/runs/{run_id}/feedback
+    X-Actor-Team-Id: team_90
+    {"detection_mode": "CANONICAL_AUTO", "structured_json": {"schema_version": "1", "verdict": "PASS", "confidence": "HIGH", "summary": "Spec validated — all 5 criteria PASS", "blocking_findings": [], "route_recommendation": null}}
+    ```
+    Legacy PASS: `POST /api/runs/{run_id}/advance` with `{"verdict": "pass", "summary": "Spec validated"}`
+    FAIL: `POST /api/runs/{run_id}/fail`. `route_recommendation`: `"doc"` | `"impl"` | `"arch"` (NOT "full").
+  version: 2
+  is_active: 1
+- id: "01JK8AOSV3TPL0000000008"
+  gate_id: GATE_1
+  phase_id: "1.3_lod400"
+  domain_id:
+  name: Gate 1 Phase 1.3 — LOD400 Execution Spec (Team 90)
+  body_markdown: |
+    # L1 — Task: LOD400 Execution Spec (GATE_1 / Phase 1.3)
+    You are **Team 90 — Constitutional Validator**.
+
+    Validate that the execution-ready LOD400 spec is complete before L-GATE_SPEC closure.
+  version: 1
+  is_active: 1
+- id: "01JK8AOSV3TPL0000000003"
+  gate_id: GATE_2
+  phase_id: "2.1_work_plan"
+  domain_id:
+  name: Gate 2 — Architecture Approval
+  body_markdown: |
+    # L1 — Task: Architecture Approval (GATE_2 / Phase 2.1)
+
+    **The approver is the architect who authored the LOD200/LOD400 spec (see L4 current_actor).**
+
+    **Actor resolution (GATE_2 — Architecture Approver, universal per Iron Rule #9):**
+    - **Domain Architect** → team_110. System fallback: team_100 (Chief Architect).
+    - team_00 acts ONLY when Nimrod explicitly overrides — never a system default.
+    - `is_human_gate = 0` — ADVANCE button (not APPROVE). Human approval is NOT required.
+
+    ---
+
+    ## Validation checklist (ALL must pass before advancing)
+
+    ### Layer 1 — Strategic alignment
+    1. Spec aligns with the active Stage and approved roadmap program
+    2. All ACs are achievable within the current Stage constraints (no out-of-scope scope creep)
+
+    ### Layer 2 — Architectural integrity
+    3. No Iron Rule violations (NUMERIC(20,8), single human principal, 4-state status model, cross-engine validation)
+    4. No architectural anti-patterns (no per-entity customization, no bundler, no direct DB write outside ORM)
+
+    ### Layer 3 — Execution readiness
+    5. Implementation team assignments are correct for the domain and process variant:
+       - TRACK_FULL: Team 10 (backend+frontend implementation) + Team 40 (assets) + Team 50 (QA)
+       - TRACK_FOCUSED (AOS): Team 60 (full-stack) + Team 50 (QA)
+    6. LOD200/LOD400 sufficiency — GATE_3 implementation team can begin without requesting clarification
+
+    ### Layer 4 — AOS-specific (agents_os domain only)
+    7. Gate model compliance — spec correctly describes gate interactions, phase structure, and actor assignments
+    8. TRACK_FOCUSED adherence — only Team 60 + Team 50 assigned (no TRACK_FULL teams)
+
+    ---
+
+    **If PASS (all 8 checks GREEN):**
+    Use the **ADVANCE** button in the pipeline UI, or:
+    `POST /api/runs/{run_id}/advance` with `{"verdict": "pass", "summary": "Architecture approved — [brief reason]"}`
+
+    **If FAIL (any blocking finding):**
+    `POST /api/runs/{run_id}/fail` with `{"verdict": "fail", "summary": "...", "route_recommendation": "team_100"}`
+    Spec returns to Team 100 for revision (Correction Cycle). `route_recommendation` is MANDATORY on every FAIL.
+
+    ## TRIGGER PROTOCOL
+
+    Preferred (CANONICAL_AUTO / Mode A):
+    ```
+    POST /api/runs/{run_id}/feedback
+    X-Actor-Team-Id: {actor_team_id}
+    {"detection_mode": "CANONICAL_AUTO", "structured_json": {"schema_version": "1", "verdict": "PASS", "confidence": "HIGH", "summary": "Architecture approved — [brief reason]", "blocking_findings": [], "route_recommendation": null}}
+    ```
+    Legacy PASS: `POST /api/runs/{run_id}/advance` with `{"verdict": "pass", "summary": "Architecture approved — [brief reason]"}`
+    FAIL: `POST /api/runs/{run_id}/fail`. `route_recommendation`: `"doc"` | `"impl"` | `"arch"` (NOT "full").
+  version: 5
+  is_active: 1
+- id: "01JK8AOSV3TPL0000000009"
+  gate_id: GATE_2
+  phase_id: "2.2_qa_review"
+  domain_id:
+  name: Gate 2 Phase 2.2 — Independent QA Review (Team 10)
+  body_markdown: |
+    # GATE_2 / Phase 2.2 — Independent QA Review
+    Team 10 QA verdict required before GATE_2 can close.
+  version: 1
+  is_active: 1
+- id: "01JK8AOSV3TPL0000000004"
+  gate_id: GATE_3
+  phase_id: "3.1"
+  domain_id:
+  name: Gate 3 — Implementation Coordination
+  body_markdown: |
+    # L1 — Task: Implementation Coordination (GATE_3)
+    You are the **ORCHESTRATOR** for the work package in L4.
+
+    **Your role:** Coordinate implementation. You do NOT implement directly.
+    Team assignments depend on the process variant (see L4).
+
+    **TRACK_FULL (tiktrack default):**
+    - Generate mandates for: Team 10 (backend+frontend implementation), Team 40 (UI assets),
+      Team 60 (DevOps) — as applicable per WP scope
+    - Route QA package to Team 50 for full E2E acceptance testing
+    - Advance when: Team 50 E2E PASS + all GATE_2 ACs confirmed met
+
+    **TRACK_FOCUSED (agents_os default):**
+    - Generate mandate for Team 60 (full-stack implementation, all layers)
+    - Route QA package to Team 50 for E2E acceptance testing
+    - Advance when: Team 50 E2E PASS + all GATE_2 ACs confirmed met
+
+    Iron Rule: Full test suite must pass (0 failures) before submitting QA package.
+  version: 2
+  is_active: 1
+- id: "01JK8AOSV3TPL0000000005"
+  gate_id: GATE_4
+  phase_id: "4.1_tier1_qa"
+  domain_id:
+  name: Gate 4 — UX / Vision Sign-off (Human Gate)
+  body_markdown: |
+    # L1 — Awaiting Human Approval (GATE_4)
+    **This is a HITL (Human-In-The-Loop) gate.**
+
+    The Principal (Nimrod / Team 00) reviews the implementation directly in browser
+    and approves or rejects via the **APPROVE** button in the Agents OS pipeline UI.
+
+    Agents **do not advance this gate**. Await operator action.
+
+    Reviewing criteria:
+    - UX/vision alignment with original LOD200 intent
+    - All GATE_3 acceptance criteria verified in browser
+    - No functional regressions introduced
+    - Iron Rule adherence (financial precision, status model, page template)
+  version: 2
+  is_active: 1
+- id: "01JK8AOSV3TPL0000000010"
+  gate_id: GATE_4
+  phase_id: "4.2_tier2_arch"
+  domain_id:
+  name: Gate 4 Phase 4.2 — Tier 2 Architecture Review
+  body_markdown: |
+    # GATE_4 / Phase 4.2 — Tier 2 Architecture Review (Team 90)
+    Cannot start until 4.1_tier1_qa PASS.
+  version: 1
+  is_active: 1
+- id: "01JK8AOSV3TPL0000000011"
+  gate_id: GATE_4
+  phase_id: "4.3_tier3_human"
+  domain_id:
+  name: Gate 4 Phase 4.3 — Tier 3 Human Approval
+  body_markdown: |
+    # GATE_4 / Phase 4.3 — Tier 3 Human Approval (Team 00)
+    Cannot start until 4.2_tier2_arch PASS.
+  version: 1
+  is_active: 1
+- id: "01JK8AOSV3TPL0000000006"
+  gate_id: GATE_5
+  phase_id: "5.1"
+  domain_id:
+  name: Gate 5 — Lifecycle Closure
+  body_markdown: |
+    # L1 — Task: Lifecycle Closure (GATE_5)
+    You are the **ORCHESTRATOR** for the work package in L4.
+
+    **Your role:** Coordinate documentation closure and registry updates.
+
+    **Actions:**
+    1. Route documentation closure mandate to the domain documentation team:
+       - tiktrack domain → Team 70 (Documentation)
+       - agents_os domain → Team 70 (AOS Documentation)
+    2. Route validation to Team 90 (Dev Validator) — confirms all artifacts committed
+       and all AS_MADE documentation is complete
+    3. Update program registry entries (PHOENIX_PROGRAM_REGISTRY) with final status
+    4. Emit final WORK_PACKAGE_CLOSED event
+    5. Advance when: documentation committed and signed off, Team 90 validates,
+       registry updated, no open blocking items remain
+  version: 2
+  is_active: 1
+
+# ---------------------------------------------------------------------------
+# Work Packages
+# ---------------------------------------------------------------------------
+# Bootstrap: AOS smoke-test placeholder (keep for run smoke-tests)
+# TikTrack roadmap: all 21 programs from PHOENIX_PROGRAM_REGISTRY, seeded 2026-03-29
+#   id = work_package_id in canonical 3-level format: S{NNN}-P{NNN}-WP{NNN}
+#   Even single-WP programs must use WP001 suffix — never use program-level IDs as WP IDs.
+#   Directive: ARCHITECT_DIRECTIVE_WP_ID_NAMING_CONVENTION_v1.0.0.md
+#   stage_id = Milestone (S001-S006 per PHOENIX_PORTFOLIO_ROADMAP)
+#   status: COMPLETE | ACTIVE | PLANNED
+# ---------------------------------------------------------------------------
+work_packages:
+- id: "01JK8AOSV3WP0000000001"
+  label: "Bootstrap work package (seed)"
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  status: PLANNED
+  linked_run_id:
+  stage_id:
+  program_id:
+
+  # ── S001 — Foundations Sealed ─────────────────────────────────────────────
+- id: "S001-P002-WP001"
+  label: "Alerts POC (D34 widget)"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: ACTIVE
+  linked_run_id:
+  stage_id: "S001"
+  program_id: "S001-P002"
+
+  # ── S002 — Core Pipeline (TikTrack lane) ──────────────────────────────────
+- id: "S002-P002-WP001"
+  label: "MCP-QA Transition (Full Pipeline Orchestrator)"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: COMPLETE
+  linked_run_id:
+  stage_id: "S002"
+  program_id: "S002-P002"
+
+- id: "S002-P003-WP001"
+  label: "TikTrack Alignment (D22 + D33 + D34 + D35)"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: COMPLETE
+  linked_run_id:
+  stage_id: "S002"
+  program_id: "S002-P003"
+
+- id: "S002-P004-WP001"
+  label: "Admin Review S002"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S002"
+  program_id: "S002-P004"
+
+  # ── S003 — Essential Data ─────────────────────────────────────────────────
+- id: "S003-P003-WP001"
+  label: "System Settings (D39 Preferences + D40 System Mgmt + D41 User Mgmt)"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: COMPLETE
+  linked_run_id:
+  stage_id: "S003"
+  program_id: "S003-P003"
+
+- id: "S003-P004-WP001"
+  label: "User Tickers (D33) — live price display, display_name Iron Rule"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: ACTIVE
+  linked_run_id:
+  stage_id: "S003"
+  program_id: "S003-P004"
+
+- id: "S003-P005-WP001"
+  label: "Watch Lists (D26) — CRUD watchlists + live prices"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S003"
+  program_id: "S003-P005"
+
+- id: "S003-P006-WP001"
+  label: "Admin Review S003"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S003"
+  program_id: "S003-P006"
+
+  # ── S004 — Financial Execution ────────────────────────────────────────────
+- id: "S004-P004-WP001"
+  label: "Executions (D36)"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S004"
+  program_id: "S004-P004"
+
+- id: "S004-P005-WP001"
+  label: "Data Import (D37) — Delta-Reset policy (Option B)"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S004"
+  program_id: "S004-P005"
+
+- id: "S004-P006-WP001"
+  label: "Admin Review S004"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S004"
+  program_id: "S004-P006"
+
+- id: "S004-P007-WP001"
+  label: "Indicators Infrastructure (ATR/MA/CCI, ticker_indicators table)"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S004"
+  program_id: "S004-P007"
+
+  # ── S005 — Complex Entities (requires AOS Completion Gate) ────────────────
+- id: "S005-P002-WP001"
+  label: "Trade Entities (D29 Trades + D24 Trade Plans)"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S005"
+  program_id: "S005-P002"
+
+- id: "S005-P003-WP001"
+  label: "Market Intelligence (D27 Ticker Dashboard + D25 AI Analysis)"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S005"
+  program_id: "S005-P003"
+
+- id: "S005-P004-WP001"
+  label: "Journal & History (D28 Trading Journal + D31 Trade History)"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S005"
+  program_id: "S005-P004"
+
+- id: "S005-P005-WP001"
+  label: "Admin Review S005"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S005"
+  program_id: "S005-P005"
+
+  # ── S006 — Advanced Analytics ─────────────────────────────────────────────
+- id: "S006-P001-WP001"
+  label: "Portfolio State (D32)"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S006"
+  program_id: "S006-P001"
+
+- id: "S006-P002-WP001"
+  label: "Analysis & Closure (D30)"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S006"
+  program_id: "S006-P002"
+
+- id: "S006-P003-WP001"
+  label: "Level-1 Dashboards"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S006"
+  program_id: "S006-P003"
+
+- id: "S006-P004-WP001"
+  label: "Admin Review S006 FINAL"
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S006"
+  program_id: "S006-P004"
+
+  # ---------------------------------------------------------------------------
+  # Lean Kit + Methodology Portability WPs
+  # Ref: ARCHITECT_DIRECTIVE_METHODOLOGY_DEPLOYMENT_SPLIT_v1.0.0.md
+  # Stage assignment (2026-04-02): WP001 → S003-P017; WP002-WP004 → S004+ (future)
+  # Program S003-P017: agents-os repo initialization + Lean Kit content build
+  # ---------------------------------------------------------------------------
+
+  # S003-P017-WP001: agents-os repo initialization (Team 191)
+- id: "S003-P017-WP001"
+  label: "INIT_AGENTS_OS_REPO — Initialize agents-os repository at github.com/WaldNimrod/agents-os
+    with correct directory structure, core/ from agents_os, governance files, and
+    CLAUDE.md"
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S003"
+  program_id: "S003-P017"
+  notes: "Executor: Team 191. Mandate: TEAM_100_TO_TEAM_191_S003_P017_WP001_AGENTS_OS_REPO_INIT_MANDATE_v1.0.0.md.
+    GitHub repo created 2026-04-02 by Nimrod."
+
+  # S003-P017-WP002: Lean Kit content (Team 170)
+- id: "S003-P017-WP002"
+  label: "BUILD_LEAN_KIT_CONTENT — Create lean-kit/ folder content: LOD templates
+    (5 levels), role definitions (5 types), L-GATE checklists (4+1), roadmap.yaml
+    + team_assignments.yaml templates, example project"
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S003"
+  program_id: "S003-P017"
+  notes: "Executor: Team 170. Mandate: TEAM_100_TO_TEAM_170_S003_P017_WP002_LEAN_KIT_CONTENT_MANDATE_v1.0.0.md.
+    Depends on S003-P017-WP001 (repo must exist first)."
+
+  # Conceptual WP IDs (kept for roadmap tracking; canonical S003 IDs above)
+- id: "LEAN-KIT-WP001"
+  label: "BUILD_LEAN_KIT_REPO — canonical concept ID; executed as S003-P017-WP001+WP002"
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  status: PLANNED
+  linked_run_id:
+  stage_id: "S003"
+  program_id: "S003-P017"
+  notes: "Concept WP for tracking. Execution split: WP001=Team191(repo init), WP002=Team170(content).
+    Ref: ARCHITECT_DIRECTIVE_METHODOLOGY_DEPLOYMENT_SPLIT_v1.0.0.md §3"
+
+- id: "LEAN-KIT-WP002"
+  label: "BUILD_LEAN_KIT_GENERATOR — Python script that auto-generates lean-kit snapshot
+    from AOS SSoT (definition.yaml + LOD Standard)"
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  status: PLANNED
+  linked_run_id:
+  stage_id:         # S004+ — depends on S003-P017 completion
+  program_id:
+  notes: "Depends on S003-P017 (LEAN-KIT-WP001 complete). SSoT principle: no manual
+    copy maintenance."
+
+- id: "LEAN-KIT-WP003"
+  label: "BUILD_LEAN_TO_AOS_UPGRADE — Migration tool: roadmap.yaml → AOS DB (enables
+    L0→L2 upgrade path)"
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  status: PLANNED
+  linked_run_id:
+  stage_id:         # S004+ — depends on S003-P017 completion
+  program_id:
+  notes: "roadmap.yaml schema mirrors AOS DB; import script populates work_packages
+    table."
+
+- id: "LEAN-KIT-WP004"
+  label: "BUILD_PROJECT_SCAFFOLDING_CLI — New project creation CLI for both L0 (Lean)
+    and L2 (AOS v3); automates PROJECT_CREATION_PROCEDURE_v1.0.0.md"
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  status: PLANNED
+  linked_run_id:
+  stage_id:         # S004+ — depends on LEAN-KIT-WP001+WP002
+  program_id:
+  notes: "Depends on S003-P017 (LEAN-KIT-WP001+WP002). Makes new project creation
+    ~5 minutes for both profiles."
+
+# ---------------------------------------------------------------------------
+# V2 → V3 Migration: Ideas
+# Seeded 2026-03-29 by Team 00 (Nimrod).
+#
+# DOMAIN IDs:
+#   tiktrack   = 01JK8AOSV3DOMAIN00000002
+#   agents_os  = 01JK8AOSV3DOMAIN00000001
+#
+# TikTrack ideas (status: NEW) — feature requirements, accurate and transferred as-is.
+# AOS ideas (status: DEFERRED) — from v2; marked [V2_LEGACY]; require separate discussion.
+# ---------------------------------------------------------------------------
+ideas:
+
+  # ── Domain-specific ──────────────────────────────────────────────────────
+
+- id: "IDEA-023"
+  title: "Manual/Visual approval checkpoint closure verification"
+  description: "Approval UX completeness check — Batch 3 readiness. Visual approval
+    steps need explicit closure verification mechanism in the UI."
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  idea_type: "FEATURE"
+  status: "NEW"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "Migrated from v2 CARRY-001. Owner: Team 40+10."
+
+- id: "IDEA-024"
+  title: "Cash Flows response schema verification status closure"
+  description: "D-CashFlows backend schema accuracy verification. Response schema
+    fields need alignment confirmation before batch 3."
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  idea_type: "FEATURE"
+  status: "NEW"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "Migrated from v2 CARRY-002. Owner: Team 20."
+
+- id: "IDEA-025"
+  title: "Data loader update for currency_conversions"
+  description: "currency_conversions data loader fix — Batch 3 readiness. Loader needs
+    update to handle currency conversion data correctly."
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  idea_type: "FEATURE"
+  status: "NEW"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "Migrated from v2 CARRY-003. Owner: Team 30."
+
+- id: "IDEA-026"
+  title: "D22 Tickers: data-integrity widget + integration completion"
+  description: "D22 admin page data-integrity widget implementation. Widget shows
+    data health, highlights missing/stale ticker data."
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  idea_type: "FEATURE"
+  status: "NEW"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "Migrated from v2 CARRY-004. Owner: Team 30+20."
+
+- id: "IDEA-027"
+  title: "D23 Data Dashboard: template/draft to functional scope"
+  description: "D23 needs full implementation beyond current template. Functional
+    dashboard with real data, charts, and summary panels."
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  idea_type: "FEATURE"
+  status: "NEW"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "Migrated from v2 CARRY-005. Owner: Team 30."
+
+- id: "IDEA-028"
+  title: "D24 Trade Plans: implementation planning and execution gate"
+  description: "D24 Trade Plans full spec + build. Page for creating, editing, and
+    managing trade plans before execution."
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  idea_type: "FEATURE"
+  status: "NEW"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "Migrated from v2 CARRY-006. Batch 5. Owner: Team 31+30+20."
+
+- id: "IDEA-029"
+  title: "D25 AI Analysis: detailed spec before build"
+  description: "D25 AI Analysis requires detailed spec (S005-P003 scope). Page for
+    AI-driven trade analysis, pattern recognition, recommendations."
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  idea_type: "FEATURE"
+  status: "NEW"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "Migrated from v2 CARRY-007. Batch 5/6. Owner: Team 31+30+70."
+
+- id: "IDEA-031"
+  title: "D27 Ticker Dashboard: spec + historical data dependencies"
+  description: "D27 Ticker Dashboard requires historical data infrastructure. Per-ticker
+    page with price history, technicals, linked trades."
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  idea_type: "FEATURE"
+  status: "NEW"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "Migrated from v2 CARRY-009. Batch 6. Owner: Team 31+30+20."
+
+- id: "IDEA-032"
+  title: "D28 Trading Journal: spec + implementation plan"
+  description: "D28 Trading Journal — rich-text per-trade notes with date, mood, lessons-learned
+    fields."
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  idea_type: "FEATURE"
+  status: "NEW"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "Migrated from v2 CARRY-010. Batch 6. Owner: Team 31+30."
+
+- id: "IDEA-033"
+  title: "D30-D32 advanced research pages: full specs"
+  description: "D30 Analysis & Closure, D31 Trade History, D32 Portfolio State — all
+    require full specs before build. Advanced analytics layer."
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  idea_type: "FEATURE"
+  status: "NEW"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "Migrated from v2 CARRY-011. Batch 6. Owner: Team 31+30+70."
+
+- id: "IDEA-034"
+  title: "D37 Data Import: Delta-Reset policy locked (Option B)"
+  description: "D37 Data Import — Option B (Delta-Reset via enhanced D37 import) locked
+    per ARCHITECT_DIRECTIVE_PL_RECONCILIATION_POLICY. Import CSV/broker data with
+    P&L reconciliation."
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  idea_type: "FEATURE"
+  status: "NEW"
+  priority: "MEDIUM"
+  submitted_by: "team_00"
+  decision_notes: "Migrated from v2 CARRY-012. Batch 4. Owner: Team 31+30+20. Policy
+    locked: Option B (Delta-Reset). Option C (Direct Broker API) deferred to S006+."
+
+- id: "IDEA-035"
+  title: "D38 Tag Management: spec + implementation (S005)"
+  description: "D38 Tag Management (route: /tag_management) — system-wide tag registry
+    page. Admin page for creating, editing, deleting tag definitions across all entity
+    types."
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  idea_type: "FEATURE"
+  status: "NEW"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "Scope updated 2026-03-29: D39 (User Preferences) is COMPLETE (S003-P003
+    GATE_8 PASS). D40 admin settings tracked in IDEA-054. This idea = D38 only. D38
+    is deferred to S005 — depends on D29/D30/D36 existing so tags can be applied to
+    trade entities. Owner: Team 31+30+70."
+  target_program_id: "S005"
+
+- id: "IDEA-054"
+  title: "D40 System Management: complete sections 4-7"
+  description: "D40 System Management page (route: /system_management) — sections
+    4-7 completion. S003-P003 delivered sections 1-3 (Market Data Settings, Background
+    Jobs, Feature Flags). Sections 4-7 have skeleton HTML, no backend: (4) Alert Conditions
+    Config, (5) System Health, (6) Recent Activity, (7) Active System Configuration."
+  domain_id: "01JK8AOSV3DOMAIN00000002"
+  idea_type: "FEATURE"
+  status: "NEW"
+  priority: "MEDIUM"
+  submitted_by: "team_00"
+  decision_notes: "NEW 2026-03-29. Distinct from D39 (User Preferences = personal
+    per-user settings, COMPLETE) and D38 (Tag Management, S005). D40 = admin-level
+    system configuration. Section 4 needs alert rule CRUD API; Section 5 needs health
+    check aggregation endpoint; Section 6 uses job_run_log + system_settings.updated_by/at
+    (no new table); Section 7 is display-only overview of system_settings. Stage TBD
+    — candidate for S004 or S003-P003 extension WP."
+
+  # ── AOS domain — V2_LEGACY ──────────────────────────────────────────────
+  # All items below came from AOS v2 pipeline. Transferred as-is for information.
+  # Each requires SEPARATE DISCUSSION and RE-EVALUATION against AOS v3 design.
+  # DO NOT act on these items without explicit Team 00 + Team 100 session decision.
+
+- id: "IDEA-001"
+  title: "Standalone PIPELINE_HELP.html — dedicated help page (Option B)"
+  description: "Dedicated help/documentation page for the AOS pipeline UI, separate
+    from the dashboard modal. Option A (modal upgrade) was handled in v2. Option B
+    = standalone page."
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  idea_type: "FEATURE"
+  status: "DEFERRED"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "[V2_LEGACY] Requires separate discussion and re-evaluation for
+    AOS v3. Original fate_target: S003-P007 (now MERGED into S003-P011, COMPLETE).
+    The standalone help page concept may apply to v3 UI but scope/approach must be
+    reassessed for v3 architecture."
+
+- id: "IDEA-007"
+  title: "Ideas Pipeline Phase 2 — grooming automation, UI fate-decision interface"
+  description: "Phase 2 of the ideas pipeline: automated grooming (idea_groom.sh),
+    UI fate-decision interface in dashboard, dedup warnings, registry auto-integration."
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  idea_type: "FEATURE"
+  status: "DEFERRED"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "[V2_LEGACY] Requires separate discussion. Original: S002-P005-WP004
+    candidate in v2. v3 has ideas table in DB — Phase 2 automation concept is valid
+    but must be scoped against v3 REST API (POST /api/ideas, PUT /api/ideas/{id})
+    rather than v2 bash scripts."
+
+- id: "IDEA-008"
+  title: "Help modal 4-tab upgrade — Option A immediate (context banner, Three Modes,
+    domain section)"
+  description: "Upgrade the pipeline dashboard help modal to 4 tabs: (1) Context Banner,
+    (2) Three Operating Modes, (3) Domain Section, (4) Quick Reference."
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  idea_type: "IMPROVEMENT"
+  status: "DEFERRED"
+  priority: "HIGH"
+  submitted_by: "team_00"
+  decision_notes: "[V2_LEGACY] Requires re-evaluation. v3 has a new UI (portfolio.html,
+    config.html, runs.html). The 4-tab help modal concept may apply to v3 dashboard
+    but needs scope assessment against v3 UI structure. Do not implement against v2
+    modal."
+
+- id: "IDEA-018"
+  title: "Pipeline stage transitions + roadmap management UI"
+  description: "Stage transition scripts and management UI: ability to open/close
+    stages, view stage history, manage the roadmap from within the AOS dashboard."
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  idea_type: "FEATURE"
+  status: "DEFERRED"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "[V2_LEGACY] Requires re-evaluation. Was S004 candidate in v2 (stage
+    transition scripts + management UI). v3 REST API has /api/work-packages and /api/runs
+    but no stage-management endpoints. Full scope assessment needed before WP assignment."
+
+- id: "IDEA-021"
+  title: "Model B file structure definition (ADR-031 Stage B)"
+  description: "Define the Model B file output structure for the AOS command bridge
+    — how model outputs are structured, validated, and consumed."
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  idea_type: "TECH_DEBT"
+  status: "DEFERRED"
+  priority: "LOW"
+  submitted_by: "team_00"
+  decision_notes: "[V2_LEGACY] Requires re-evaluation. Original fate_target: S003-P007
+    (ADR-031 Stage B, now MERGED into S003-P011, COMPLETE). Model B file structure
+    concept may be relevant to v3 Operator Handoff design (FIP modes, feedback ingestion).
+    Needs reassessment against v3 FeedbackIngestor architecture."
+
+- id: "IDEA-043"
+  title: "WP Lifecycle Manager: init/hold/resume/cancel/close as CLI + Dashboard UI"
+  description: "WP lifecycle management: CLI commands for init/hold/resume/cancel/close
+    work packages, and a dashboard panel for lifecycle control."
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  idea_type: "FEATURE"
+  status: "DEFERRED"
+  priority: "HIGH"
+  submitted_by: "team_00"
+  decision_notes: "[V2_LEGACY] Partially addressed by v3 REST API (POST /api/runs
+    creates WP, PUT /api/runs/{id} updates, DELETE cancels). However, CLI wrapper
+    (pipeline_run.sh equivalent) and dashboard lifecycle panel are not yet built.
+    Requires v3-specific scoping: which lifecycle operations are needed beyond the
+    existing REST API?"
+
+- id: "IDEA-051"
+  title: "AOS Scheduler reclassification + research-based architecture direction"
+  description: "Reclassify and define the AOS scheduler architecture. Should it be
+    APScheduler, Celery, a DB-polling loop, or something else? Research-based decision
+    needed."
+  domain_id: "01JK8AOSV3DOMAIN00000001"
+  idea_type: "RESEARCH"
+  status: "DEFERRED"
+  priority: "HIGH"
+  submitted_by: "team_00"
+  decision_notes: "[V2_LEGACY] Architectural decision still pending. v3 currently
+    uses APScheduler for background tasks. Team 190 research report exists: TEAM_190_TO_TEAM_100_IDEA_051_AOS_SCHEDULER_RESEARCH_REPORT_v1.0.0.md.
+    Requires Team 100 architecture direction before any scheduler changes."
