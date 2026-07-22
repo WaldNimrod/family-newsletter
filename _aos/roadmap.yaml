@@ -84,41 +84,49 @@ work_packages:
 
   - id: "FNL-S001-P001-WP002"
     label: "Commit the uncommitted 10.5 FTP-path fix (env_compat/settings/.env.example) + add data/ to .gitignore"
-    status: PLANNED
+    status: COMPLETE
     track: A
-    current_lean_gate: L-GATE_ELIGIBILITY
-    lod_status: LOD100
+    current_lean_gate: COMPLETE
+    lod_status: LOD500
     assigned_builder: "familynewsletter_build"
     assigned_validator: "familynewsletter_val"
     created_at: "2026-07-22"
     milestone_ref: "S001"
     stage_mapping: "Build"
-    spec_ref: "TBD"
+    spec_ref: "_aos/work_packages/FNL-S001-P001-WP002-003_ASBUILT.md"
     gate_history:
       - gate: L-GATE_ELIGIBILITY
         result: PASS
         date: "2026-07-22"
         notes: ""
-    notes: "CLASS=EXPRESS. REVIVAL_PLAN §4 Phase-A step 1."
+      - gate: L-GATE_BUILD
+        result: PASS
+        date: "2026-07-22"
+        notes: "EXPRESS git-op. Commit 16fe36e (env_compat public-URL derivation + config/settings.json + .env.example path fix + blanket data/ gitignore). Pushed via cutover runbook step 6. As-built recorded."
+    notes: "CLASS=EXPRESS. REVIVAL_PLAN §4 Phase-A step 1. DONE — commit 16fe36e; as-built _aos/work_packages/FNL-S001-P001-WP002-003_ASBUILT.md. Synced PLANNED->COMPLETE 2026-07-22 (team_100)."
 
   - id: "FNL-S001-P001-WP003"
-    label: "Archive dead code (poc.py, m2_scanner, m3_normalizer, m6_feedback, config/sources.json) -> archive/legacy/; extract _fetch_weather/_format_hebrew_date/_build_neo shapes"
-    status: PLANNED
+    label: "Archive dead standalone poc.py -> archive/legacy/ (PARTIAL: m2_scanner/m3_normalizer/m6_feedback + config/sources.json archive + _fetch_weather/_format_hebrew_date/_build_neo shape-extraction DEFERRED to FNL-S001-P002-WP006)"
+    status: COMPLETE
     track: A
-    current_lean_gate: L-GATE_ELIGIBILITY
-    lod_status: LOD100
+    current_lean_gate: COMPLETE
+    lod_status: LOD500
     assigned_builder: "familynewsletter_build"
     assigned_validator: "familynewsletter_val"
     created_at: "2026-07-22"
     milestone_ref: "S001"
     stage_mapping: "Build"
-    spec_ref: "TBD"
+    spec_ref: "_aos/work_packages/FNL-S001-P001-WP002-003_ASBUILT.md"
     gate_history:
       - gate: L-GATE_ELIGIBILITY
         result: PASS
         date: "2026-07-22"
         notes: ""
-    notes: "CLASS=EXPRESS. REVIVAL_PLAN §3 keep/drop/replace table + §4 step 2."
+      - gate: L-GATE_BUILD
+        result: PASS
+        date: "2026-07-22"
+        notes: "Partial per as-built: git mv poc.py -> archive/legacy/poc.py (commit 2a4a0de). m2_scanner/m3_normalizer/m6_feedback + config/sources.json are still imported by orchestrator -> their archive DEFERRED to FNL-S001-P002-WP006 (orchestrator rewire), together with extracting _fetch_weather/_format_hebrew_date/_build_neo shapes from m3."
+    notes: "CLASS=EXPRESS. REVIVAL_PLAN §3 keep/drop/replace table + §4 step 2. DONE (partial) — poc.py archived; remainder deferred to WP006. Synced PLANNED->COMPLETE 2026-07-22 (team_100)."
 
   # --- P002: New pipeline (CLASS=STANDARD; ANY code write/edit -> full LOD400 + cross-engine validate) ---
 
@@ -234,7 +242,7 @@ work_packages:
         result: PASS
         date: "2026-07-22"
         notes: ""
-    notes: "CLASS=STANDARD. Edits kept code (orchestrator, m5) -> LOD400 required."
+    notes: "CLASS=STANDARD. Edits kept code (orchestrator, m5) -> LOD400 required. ABSORBS WP003 deferral: archive m2_scanner/m3_normalizer/m6_feedback + config/sources.json to archive/legacy/ and extract _fetch_weather/_format_hebrew_date/_build_neo shapes from m3 during the rewire."
 
   # --- P003: WhatsApp + server (CLASS=OPS; runbook + deploy-verify) ---
 
