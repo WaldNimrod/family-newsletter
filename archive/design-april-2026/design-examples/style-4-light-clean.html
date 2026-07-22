@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>הניוזלטר המשפחתי - בן-צבי ולד</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: #f5f3ef;
+    color: #3a3a3a;
+    line-height: 1.75;
+    direction: rtl;
+    padding: 12px;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.06);
+  }
+
+  /* --- Header --- */
+  .header {
+    background: linear-gradient(135deg, #e8f0e4 0%, #d4e4cf 100%);
+    padding: 32px 24px 28px;
+    text-align: center;
+  }
+  .header .logo {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #6b8f5e;
+    margin-bottom: 6px;
+  }
+  .header h1 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #2d3a28;
+    margin-bottom: 4px;
+  }
+  .header .date {
+    font-size: 13px;
+    color: #6b8f5e;
+  }
+  .header .greeting {
+    font-size: 15px;
+    color: #4a6343;
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* --- Sections --- */
+  .section {
+    padding: 20px 24px 24px;
+    border-bottom: 1px solid #f0ede8;
+  }
+  .section:last-of-type { border-bottom: none; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .section-header .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #3a3a3a;
+  }
+  .section-header .subtitle {
+    font-size: 12px;
+    color: #999;
+    font-weight: 400;
+  }
+
+  /* --- Family Content --- */
+  .family .icon { background: #fef3e2; }
+  .family-card {
+    background: #fefbf6;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-right: 3px solid #f0c873;
+  }
+  .family-card .who {
+    font-size: 12px;
+    font-weight: 600;
+    color: #c8942a;
+    margin-bottom: 2px;
+  }
+  .family-card p {
+    font-size: 14px;
+    color: #555;
+  }
+
+  /* --- Member Colors --- */
+  .nimrod .icon { background: #e6f0fa; }
+  .nimrod .cat { color: #3b7dd8; }
+  .nimrod .card { border-right-color: #3b7dd8; }
+
+  .michal .icon { background: #e6f5ed; }
+  .michal .cat { color: #2d8e5e; }
+  .michal .card { border-right-color: #2d8e5e; }
+
+  .shaked .icon { background: #ece6f5; }
+  .shaked .cat { color: #6b3fa0; }
+  .shaked .card { border-right-color: #6b3fa0; }
+
+  .maayan .icon { background: #fce8ec; }
+  .maayan .cat { color: #c4304a; }
+  .maayan .card { border-right-color: #c4304a; }
+
+  .tzlil .icon { background: #fef3e2; }
+  .tzlil .cat { color: #b8860b; }
+  .tzlil .card { border-right-color: #b8860b; }
+
+  /* --- Article Card --- */
+  .card {
+    background: #fafaf8;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-right: 3px solid #ddd;
+    transition: background 0.15s;
+  }
+  .card:hover { background: #f5f4f0; }
+  .card .cat {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  .card h3 a {
+    color: #3a3a3a;
+    text-decoration: none;
+  }
+  .card h3 a:hover { text-decoration: underline; }
+  .card .excerpt {
+    font-size: 13px;
+    color: #777;
+    line-height: 1.6;
+  }
+  .card .meta {
+    margin-top: 6px;
+    font-size: 11px;
+    color: #aaa;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .lang-tag {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: #eee;
+    color: #888;
+  }
+
+  /* --- Discovery --- */
+  .discovery .icon { background: #f0e6fa; }
+  .discovery-card {
+    background: #faf7fd;
+    border-radius: 12px;
+    padding: 14px 16px;
+    border: 1px dashed #d4c0ea;
+  }
+  .discovery-card .bridge {
+    font-size: 12px;
+    font-weight: 600;
+    color: #7c50a8;
+    margin-bottom: 6px;
+  }
+  .discovery-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .discovery-card .excerpt {
+    font-size: 13px;
+    color: #777;
+  }
+
+  /* --- Trivia --- */
+  .trivia .icon { background: #fef3e2; }
+  .trivia-box {
+    background: #fefbf6;
+    border-radius: 12px;
+    padding: 16px;
+    border-right: 3px solid #daa520;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.8;
+  }
+
+  /* --- Feedback --- */
+  .feedback {
+    background: #f9f8f5;
+    padding: 28px 24px;
+    text-align: center;
+    border-top: 1px solid #f0ede8;
+  }
+  .feedback h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #3a3a3a;
+    margin-bottom: 4px;
+  }
+  .feedback .sub {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 16px;
+  }
+  .rating-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .rate-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid #e8e6e1;
+    transition: all 0.15s;
+  }
+  .rate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border-color: #d0cdc6;
+  }
+  .rate-btn .emoji { font-size: 26px; }
+  .rate-btn .label { font-size: 10px; color: #aaa; font-weight: 600; }
+
+  /* --- Footer --- */
+  .footer {
+    padding: 16px 24px;
+    text-align: center;
+    font-size: 11px;
+    color: #bbb;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">Famely Neuslettr</div>
+    <h1>בוקר טוב, משפחת בן-צבי ולד!</h1>
+    <div class="date">יום רביעי, 8 באפריל 2026</div>
+    <div class="greeting">"הרוח טובה היום - זמן לצאת למים" ⛵</div>
+  </div>
+
+  <!-- FAMILY CONTENT -->
+  <div class="section family">
+    <div class="section-header">
+      <div class="icon">📸</div>
+      <h2>מהמשפחה שלנו</h2>
+    </div>
+    <div class="family-card">
+      <div class="who">מיכל שיתפה</div>
+      <p>הילדים בחוף אתמול אחרי סשן קייט של אבא - שקד אפילו הסכים לצאת מהספר 😄</p>
+    </div>
+    <div class="family-card">
+      <div class="who">נימרוד שיתף</div>
+      <p>מצאתי אזור סקי מטורף באוסטריה - חייבים לתכנן לחורף הבא! 🏔️</p>
+    </div>
+  </div>
+
+  <!-- NIMROD -->
+  <div class="section nimrod">
+    <div class="section-header">
+      <div class="icon">⛵</div>
+      <div>
+        <h2>הפינה של נימרוד</h2>
+        <div class="subtitle">שייט · קייט · קיימות · גידול מזון</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cat">שייט</div>
+      <h3><a href="#">מסע שייט של 30 יום במפרצי יוון - יומן סקיפר</a></h3>
+      <div class="excerpt">סקיפר ישראלי מתעד מסע עם משפחתו דרך האיים הקיקלאדיים, כולל טיפים לעגינה, מזג אוויר ואוכל מקומי.</div>
+      <div class="meta">Sailing Today <span>·</span> לפני 5 שעות</div>
+    </div>
+
+    <div class="card">
+      <div class="cat">קייט</div>
+      <h3><a href="#">ציוד קייט 2026 - מה באמת שווה?</a></h3>
+      <div class="excerpt">סקירה של הקייטים החדשים לעונה, עם דגש על כנפיות foil ופויל בורד לרוח קלה.</div>
+      <div class="meta">TheKiteMag <span>·</span> לפני 8 שעות <span class="lang-tag">EN</span></div>
+    </div>
+
+    <div class="card">
+      <div class="cat">קיימות</div>
+      <h3><a href="#">איך מגדלים ירקות לכל השנה בגינה של 20 מ"ר</a></h3>
+      <div class="excerpt">מדריך פרמקלצ'ר מעשי לגידול מזון ביתי - כולל לוח זריעה ושיטת ערוגות מורמות.</div>
+      <div class="meta">Permaculture Magazine <span>·</span> לפני יום</div>
+    </div>
+
+    <div class="card">
+      <div class="cat">AI למפתחים</div>
+      <h3><a href="#">Claude Code gets multi-agent orchestration</a></h3>
+      <div class="excerpt">עדכון קטן אבל משמעותי - עכשיו אפשר לנהל כמה אייג'נטים במקביל מתוך Claude Code.</div>
+      <div class="meta">Anthropic Blog <span>·</span> לפני 3 שעות <span class="lang-tag">EN</span></div>
+    </div>
+  </div>
+
+  <!-- MICHAL -->
+  <div class="section michal">
+    <div class="section-header">
+      <div class="icon">🌿</div>
+      <div>
+        <h2>הפינה של מיכל</h2>
+        <div class="subtitle">אדריכלות ירוקה · קפוארה · מיינדפולנס</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cat">אדריכלות ירוקה</div>
+      <h3><a href="#">בית טיט חדש בגליל - שילוב של מסורת וחדשנות</a></h3>
+      <div class="excerpt">פרויקט בנייה טבעית שמשלב טכניקות בנייה מסורתיות עם מערכות אנרגיה מתקדמות. ראיון עם האדריכלית.</div>
+      <div class="meta">ArchDaily <span>·</span> לפני 6 שעות</div>
+    </div>
+
+    <div class="card">
+      <div class="cat">מיינדפולנס</div>
+      <h3><a href="#">5 דקות בבוקר שישנו לכם את היום</a></h3>
+      <div class="excerpt">תרגיל נשימה פשוט שמבוסס על מחקר חדש - מתאים גם לבוקר עמוס של אמא לשלושה.</div>
+      <div class="meta">Mindful.org <span>·</span> לפני יום</div>
+    </div>
+
+    <div class="card">
+      <div class="cat">קפוארה</div>
+      <h3><a href="#">Capoeira Angola Festival in Bahia - Recap 2026</a></h3>
+      <div class="excerpt">סיכום הפסטיבל השנתי בבאהיה, כולל סדנאות מסטרס מובילים ומוזיקה מדהימה.</div>
+      <div class="meta">Capoeira Connection <span>·</span> לפני 2 ימים <span class="lang-tag">EN</span></div>
+    </div>
+  </div>
+
+  <!-- SHAKED -->
+  <div class="section shaked">
+    <div class="section-header">
+      <div class="icon">⚗️</div>
+      <div>
+        <h2>Shaked's Corner</h2>
+        <div class="subtitle">Sci-Fi · Chemistry · The Weird Stuff</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cat">CHEMISTRY</div>
+      <h3><a href="#">New Catalyst Breaks Water Into Hydrogen at Room Temperature</a></h3>
+      <div class="excerpt">ETH Zurich researchers developed a novel catalyst that could revolutionize green hydrogen production — no extreme heat required.</div>
+      <div class="meta">Nature Chemistry <span>·</span> 4h ago <span class="lang-tag">EN</span></div>
+    </div>
+
+    <div class="card">
+      <div class="cat">WEB FICTION</div>
+      <h3><a href="#">Royal Road Rising Stars: This Week's Breakout Serials</a></h3>
+      <div class="excerpt">A hard sci-fi progression fantasy about a chemist trapped in a simulated universe is trending at #3. Also: new Dungeon Crawler Carl chapter dropped.</div>
+      <div class="meta">Royal Road <span>·</span> 12h ago <span class="lang-tag">EN</span></div>
+    </div>
+  </div>
+
+  <!-- MAAYAN -->
+  <div class="section maayan">
+    <div class="section-header">
+      <div class="icon">🎪</div>
+      <div>
+        <h2>הפינה של מעיין</h2>
+        <div class="subtitle">קרקס · אקרובטיקה · ביצוע</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cat">קרקס</div>
+      <h3><a href="#">בית ספר לקרקס CNAC בצרפת פותח הרשמה לתוכנית 2027</a></h3>
+      <div class="excerpt">אחת מתוכניות ההכשרה המובילות בעולם מחפשת אומנים צעירים. הרשמה מ-16+, אודישנים ביולי.</div>
+      <div class="meta">CircusTalk <span>·</span> לפני יום</div>
+    </div>
+
+    <div class="card">
+      <div class="cat">אומנויות אוויר</div>
+      <h3><a href="#">אומנית טרפז ישראלית מופיעה בפסטיבל אדינבורו</a></h3>
+      <div class="excerpt">נועה, 22, בוגרת תוכנית הקרקס של ESAC בבלגיה, מציגה סולו טרפז שזכה לביקורות נלהבות.</div>
+      <div class="meta">Timeout <span>·</span> לפני 2 ימים</div>
+    </div>
+  </div>
+
+  <!-- TZLIL -->
+  <div class="section tzlil">
+    <div class="section-header">
+      <div class="icon">🧮</div>
+      <div>
+        <h2>הפינה של צליל</h2>
+        <div class="subtitle">מתמטיקה · היסטוריה · כלכלה · ידע כללי</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cat">חידת היום 🧩</div>
+      <h3>שלושה מתגים ושלוש נורות</h3>
+      <div class="excerpt">בחדר אחד 3 מתגים, בחדר שני 3 נורות. אפשר להיכנס לחדר הנורות פעם אחת בלבד. איך יודעים איזה מתג שולט על איזו נורה? (תשובה מחר!)</div>
+    </div>
+
+    <div class="card">
+      <div class="cat">כלכלה</div>
+      <h3><a href="#">למה גלידה עולה יותר בקיץ? לא מהסיבה שחשבתם</a></h3>
+      <div class="excerpt">מעבר להיצע וביקוש, יש סיפור מרתק על עלות אנרגיה, שרשרת קירור ומשחקי מחיר של סופרמרקטים.</div>
+      <div class="meta">Numberphile <span>·</span> לפני 3 ימים</div>
+    </div>
+
+    <div class="card">
+      <div class="cat">היסטוריה</div>
+      <h3><a href="#">איך הומצא הכסף? הסיפור המפתיע של מטבעות לידיה</a></h3>
+      <div class="excerpt">לפני 2,600 שנה, מלך עשיר במיוחד (קראו: קרואזוס) המציא את המטבע הראשון. איך זה שינה את העולם?</div>
+      <div class="meta">TED-Ed <span>·</span> לפני שבוע</div>
+    </div>
+  </div>
+
+  <!-- DISCOVERY -->
+  <div class="section discovery">
+    <div class="section-header">
+      <div class="icon">💡</div>
+      <h2>גילוי היום</h2>
+    </div>
+    <div class="discovery-card">
+      <div class="bridge">מיכל → נימרוד: "תראה מה מצאתי!"</div>
+      <h3>סירת מפרש בנויה כולה מחומרים ממוחזרים חוצה את האטלנטי</h3>
+      <div class="excerpt">פרויקט שמשלב את עולם השייט עם אדריכלות ירוקה - סירה מ-100% חומרים ממוחזרים סיימה הפלגה של 40 יום.</div>
+    </div>
+  </div>
+
+  <!-- TRIVIA -->
+  <div class="section trivia">
+    <div class="section-header">
+      <div class="icon">📅</div>
+      <h2>היום בהיסטוריה</h2>
+    </div>
+    <div class="trivia-box">
+      ב-8 באפריל 1911 הגיע הולנדי <strong>הייק קמרלינג אונס</strong> לגילוי מפתיע: כשהוא קירר כספית לטמפרטורה קרובה לאפס המוחלט, ההתנגדות החשמלית שלה נעלמה לחלוטין. כך התגלתה <strong>העל-מוליכות</strong> - תופעה שמשנה את עולם הפיזיקה עד היום.<br><br>
+      <strong>שאלה למשפחה:</strong> מה הטמפרטורה הכי נמוכה שאפשר להגיע אליה? (רמז: זה לא מינוס אינסוף... 🥶)
+    </div>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div class="feedback" id="feedback">
+    <h3>איך היה היום?</h3>
+    <div class="sub">ביחד נעשה את הניוזלטר טוב יותר</div>
+    <div class="rating-row">
+      <a href="#" class="rate-btn"><span class="emoji">😍</span><span class="label">מעולה</span></a>
+      <a href="#" class="rate-btn"><span class="emoji">😊</span><span class="label">טוב</span></a>
+      <a href="#" class="rate-btn"><span class="emoji">😐</span><span class="label">ככה ככה</span></a>
+      <a href="#" class="rate-btn"><span class="emoji">👎</span><span class="label">לשפר</span></a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Famely Neuslettr © 2026 · נבנה עם ❤️ למשפחת בן-צבי ולד<br>
+    <small>מותאם אישית לכל אחד מכם · ⛵ 🌿 ⚗️ 🎪 🧮</small>
+  </div>
+
+</div>
+</body>
+</html>

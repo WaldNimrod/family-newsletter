@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Famely Neuslettr — LOD400 Implementation Spec</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #f8f9fa; color: #1a1a2e; line-height: 1.7; direction: rtl; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  .doc-header { background: linear-gradient(135deg, #1a0a2e, #2d1b5e); color: white; padding: 40px 32px; border-radius: 16px; margin-bottom: 32px; }
+  .doc-header h1 { font-size: 26px; margin-bottom: 8px; }
+  .doc-header .sub { font-size: 15px; opacity: 0.8; }
+  .doc-header .meta { margin-top: 16px; font-size: 12px; opacity: 0.6; display: flex; gap: 16px; flex-wrap: wrap; }
+  .section { background: white; border-radius: 16px; padding: 32px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+  .section h2 { font-size: 20px; margin-bottom: 6px; color: #1a1a2e; display: flex; align-items: center; gap: 10px; }
+  .section h2 .num { background: #2d1b5e; color: white; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .section .desc { color: #666; font-size: 13px; margin-bottom: 16px; }
+  h3 { font-size: 16px; margin: 20px 0 8px; color: #333; }
+  h4 { font-size: 13px; margin: 14px 0 6px; color: #555; font-weight: 600; }
+  .diagram { background: #f8f9fa; border-radius: 12px; padding: 20px; margin: 12px 0; font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.5; white-space: pre; overflow-x: auto; direction: ltr; text-align: left; border: 1px solid #e9ecef; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12.5px; }
+  th { background: #f1f3f5; padding: 6px 10px; text-align: right; font-weight: 600; border-bottom: 2px solid #dee2e6; }
+  td { padding: 6px 10px; border-bottom: 1px solid #f1f3f5; vertical-align: top; }
+  tr:hover { background: #f8f9fa; }
+  code { background: #f1f3f5; padding: 1px 5px; border-radius: 4px; font-size: 11.5px; font-family: 'Courier New', monospace; direction: ltr; display: inline-block; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+  .badge-p1 { background: #d1fae5; color: #047857; } .badge-p2 { background: #dbeafe; color: #1d4ed8; }
+  .note { background: #fff8e1; border-right: 3px solid #f59e0b; padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 12.5px; }
+  .note strong { color: #b45309; }
+  .note-red { background: #fef2f2; border-right: 3px solid #ef4444; padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 12.5px; }
+  .note-red strong { color: #dc2626; }
+  .note-blue { background: #e8f4fd; border-right: 3px solid #3b82f6; padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 12.5px; }
+  .note-blue strong { color: #1d4ed8; }
+  .note-green { background: #ecfdf5; border-right: 3px solid #059669; padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 10px 0; font-size: 12.5px; }
+  .note-green strong { color: #047857; }
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { padding: 5px 0; font-size: 13px; display: flex; align-items: flex-start; gap: 8px; }
+  .checklist li::before { content: '☐'; font-size: 14px; flex-shrink: 0; }
+  .file-tree { background: #f8f9fa; border-radius: 12px; padding: 20px; margin: 12px 0; font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.6; direction: ltr; text-align: left; border: 1px solid #e9ecef; }
+  .mockup-link { display: inline-block; padding: 8px 16px; background: #2d1b5e; color: white; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 600; margin: 8px 4px; }
+  .mockup-link:hover { background: #3d2b6e; }
+  .prompt-box { background: #1a1a2e; color: #e0e0e0; border-radius: 12px; padding: 16px; margin: 12px 0; font-family: 'Courier New', monospace; font-size: 11.5px; line-height: 1.6; direction: ltr; text-align: left; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="doc-header">
+  <h1>Famely Neuslettr — LOD400 Implementation Spec</h1>
+  <div class="sub">Phase 1 · מפרט ביצוע · אפס עמימות · "מה בדיוק צריך לבנות?"</div>
+  <div class="meta">
+    <span>lod_target: LOD400</span>
+    <span>lod_status: DRAFT</span>
+    <span>track: B</span>
+    <span>parent_lod300: architecture-lod300.html v1.1.0</span>
+    <span>date: 2026-04-09</span>
+    <span>version: v1.0.0</span>
+    <span>scope: Phase 1 only</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 1. SCOPE -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">1</span> Scope — Phase 1</h2>
+  <div class="desc">מה נבנה, מה לא. אפס עמימות.</div>
+
+  <p>Phase 1 בונה pipeline מלא מקצה לקצה: סריקת מקורות → ניקוד → תמהיל → סיכומי AI → HTML איכותי → FTP upload ל-nimrod.bio → שליחת WhatsApp (או email fallback) → סקר WhatsApp יומי → קליטת ידיעות משפחתיות.</p>
+
+  <h3>IN SCOPE (Phase 1)</h3>
+  <table>
+    <tr><th>Module</th><th>מה נבנה</th></tr>
+    <tr><td>M1</td><td>family.json + sources.json + settings.json — config files, read-only by modules</td></tr>
+    <tr><td>M2</td><td>RSS fetcher + web scraper + YouTube metadata fetcher. Output: NCI[]</td></tr>
+    <tr><td>M3</td><td>Dedup + scoring + curation + Claude API summaries/headlines/greeting/puzzle + merge submissions + archive to SQLite + JSON</td></tr>
+    <tr><td>M4</td><td>Jinja2 template → HTML with inline CSS. Style 4 light clean design.</td></tr>
+    <tr><td>M5</td><td>FTP upload to nimrod.bio + WhatsApp template messages (or email fallback)</td></tr>
+    <tr><td>M6 partial</td><td>WhatsApp webhook: receive submissions + survey responses. Daily survey (varied questions). No analytics, no auto-learning.</td></tr>
+  </table>
+
+  <h3>OUT OF SCOPE (explicit — Phase 2)</h3>
+  <table>
+    <tr><td>M7 Dashboard</td><td>No web UI in Phase 1. All management via Cowork + JSON files.</td></tr>
+    <tr><td>Click tracking / UTM / read pixels</td><td>No tracking infrastructure. Static HTML only.</td></tr>
+    <tr><td>Automated learning loop</td><td>No auto profile adjustments. Manual only via Cowork.</td></tr>
+    <tr><td>Semantic dedup (embeddings)</td><td>Content hash dedup only. No sentence-transformers.</td></tr>
+    <tr><td>OG image generation</td><td>HTML only. No dynamic image generation.</td></tr>
+  </table>
+
+  <h3>Mockups</h3>
+  <p>
+    <a href="mockups/newsletter-mockup.html" class="mockup-link">📰 Newsletter HTML Mockup</a>
+    <a href="#mockup-whatsapp" class="mockup-link">💬 WhatsApp Message Mockups ↓</a>
+  </p>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 2. PROJECT STRUCTURE -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">2</span> Project Structure</h2>
+  <div class="file-tree">
+famely-neuslettr/
+├── config/
+│   ├── family.json              ← member profiles, interests, sources
+│   ├── sources.json             ← content source definitions
+│   └── settings.json            ← schedule, thresholds, API config
+├── .env                         ← secrets (NOT in git)
+│   ANTHROPIC_API_KEY=sk-...
+│   FTP_HOST=ftp.upress.co.il
+│   FTP_USER=...
+│   FTP_PASS=...
+│   FTP_PATH=/newsletter
+│   WHATSAPP_PROVIDER=twilio     ← or "meta" or "email_only"
+│   TWILIO_SID=...
+│   TWILIO_TOKEN=...
+│   TWILIO_FROM=whatsapp:+...
+│   SMTP_HOST=...                ← email fallback
+│   SMTP_USER=...
+│   SMTP_PASS=...
+│   SMTP_FROM=famely@nimrod.bio
+│   WEBHOOK_SECRET=...           ← for WhatsApp webhook verification
+├── src/
+│   ├── models.py                ← NCI, NEO, FamilySubmission, FeedbackEvent dataclasses
+│   ├── m1_profiles.py           ← load/validate profiles + sources
+│   ├── m2_scanner.py            ← RSS, web, YouTube fetchers → NCI[]
+│   ├── m3_normalizer.py         ← dedup, score, curate, generate (Claude), archive
+│   ├── m4_renderer.py           ← Jinja2 → HTML
+│   ├── m5_distributor.py        ← FTP + WhatsApp/Email send
+│   ├── m6_feedback.py           ← webhook handler + survey sender
+│   ├── orchestrator.py          ← CLI entry: daily-build, daily-send, daily-survey
+│   ├── db.py                    ← SQLite helpers (init, insert, query)
+│   └── token_tracker.py         ← wraps Claude API, logs tokens
+├── templates/
+│   └── newsletter.html.j2       ← Jinja2 template
+├── data/
+│   ├── famely.db                ← SQLite (created on first run)
+│   ├── submissions/             ← downloaded media
+│   └── archive/
+│       ├── raw/                 ← daily NCI[] JSON snapshots
+│       ├── editions/            ← daily NEO JSON snapshots
+│       └── html/                ← rendered newsletters
+├── tests/
+│   ├── test_m2_scanner.py
+│   ├── test_m3_normalizer.py
+│   ├── test_m4_renderer.py
+│   └── test_mock_data.json
+├── run.sh                       ← shell wrapper for cron
+├── requirements.txt
+├── .gitignore
+└── README.md
+  </div>
+
+  <h3>requirements.txt</h3>
+  <div class="diagram">
+feedparser>=6.0
+httpx>=0.25
+playwright>=1.40
+jinja2>=3.1
+anthropic>=0.40
+python-dotenv>=1.0
+twilio>=9.0            # if WhatsApp via Twilio
+  </div>
+
+  <h3>settings.json (exact)</h3>
+  <div class="diagram">
+{
+  "schedule": {
+    "build_time": "09:00",
+    "send_time": "12:00",
+    "survey_time": "21:00",
+    "timezone": "Asia/Jerusalem",
+    "submission_cutoff_minutes_before_build": 30
+  },
+  "content": {
+    "max_items_total": 15,
+    "discovery_ratio": 0.2,
+    "duplicate_threshold_days": 30,
+    "min_relevance_score": 30,
+    "max_topic_ratio_per_member": 0.6
+  },
+  "newsletter": {
+    "url_base": "https://nimrod.bio/newsletter",
+    "family_name": "משפחת בן-צבי ולד",
+    "family_name_en": "Ben-Tzvi Wald Family"
+  },
+  "ftp": {
+    "remote_path": "/newsletter",
+    "retry_count": 3,
+    "retry_delay_seconds": 10
+  },
+  "distribution": {
+    "primary_channel": "whatsapp",
+    "fallback_channel": "email",
+    "whatsapp_provider": "twilio"
+  },
+  "ai": {
+    "summary_model": "claude-sonnet-4-6",
+    "summary_max_tokens": 200,
+    "headline_max_tokens": 50,
+    "greeting_max_tokens": 100,
+    "puzzle_max_tokens": 150,
+    "submission_edit_max_tokens": 300,
+    "survey_max_tokens": 100,
+    "bridge_max_tokens": 100
+  },
+  "budget": {
+    "daily_alert_usd": 0.50,
+    "monthly_alert_usd": 10.00
+  }
+}
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 3. M1 PROFILES -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">3</span> M1 · Profiles — מפרט מלא</h2>
+  <div class="desc">Config loader. No AI, no DB writes. Read-only.</div>
+
+  <h3>What to implement</h3>
+  <p><code>m1_profiles.py</code> — a module that loads and validates family.json, sources.json, settings.json. Returns typed Python objects. No business logic — just loading + validation.</p>
+
+  <h3>Functions</h3>
+  <div class="diagram">
+def load_profiles(config_dir: str = "config/") -> FamilyConfig:
+    """Load and validate family.json. Raises ConfigError if invalid."""
+
+def load_sources(config_dir: str = "config/") -> list[SourceConfig]:
+    """Load and validate sources.json. Raises ConfigError if invalid."""
+
+def load_settings(config_dir: str = "config/") -> Settings:
+    """Load and validate settings.json. Raises ConfigError if invalid."""
+
+def get_member_by_id(family: FamilyConfig, member_id: str) -> MemberProfile:
+    """Return member profile or raise MemberNotFound."""
+
+def get_scan_rules(family: FamilyConfig, sources: list[SourceConfig]) -> list[ScanRule]:
+    """Combine sources with member interests to produce scan rules.
+    Each rule = source + list of keywords from linked members' interests."""
+  </div>
+
+  <h3>Dataclasses (models.py)</h3>
+  <div class="diagram">
+@dataclass
+class Interest:
+    topic: str
+    topic_en: str
+    subtopics: list[str]  # keywords for matching
+    priority: str         # "high" | "medium" | "low"
+
+@dataclass
+class MemberProfile:
+    id: str
+    name: str
+    name_en: str
+    nickname: str
+    nickname_newsletter: str  # display name in newsletter ("יויו", "Shaked")
+    role: str                 # "parent" | "child"
+    phone: str | None
+    email: str | None
+    language_preference: str  # "he" | "en" | "both"
+    interests: list[Interest]
+    max_items_per_day: int
+    preferred_format: str     # "summary" | "headline"
+
+@dataclass
+class SourceConfig:
+    id: str               # unique key
+    name: str
+    type: str             # "rss" | "web" | "youtube" | "api"
+    url: str
+    trust_score: float    # 0.0–1.0
+    status: str           # "active" | "degraded" | "disabled"
+    linked_members: list[str]  # member IDs this source serves
+    schedule: str         # "daily" | "weekly"
+    fail_count: int
+
+@dataclass
+class ScanRule:
+    source: SourceConfig
+    keywords: list[str]   # combined from all linked members' subtopics
+    language: str         # expected content language
+
+@dataclass
+class FamilyConfig:
+    family_name: str
+    family_name_en: str
+    shared_interests: dict
+    members: list[MemberProfile]
+
+@dataclass
+class Settings:
+    schedule: dict
+    content: dict
+    newsletter: dict
+    ftp: dict
+    distribution: dict
+    ai: dict
+    budget: dict
+  </div>
+
+  <h3>Validation Rules</h3>
+  <table>
+    <tr><th>Check</th><th>Error if fails</th></tr>
+    <tr><td>family.json exists and is valid JSON</td><td><code>ConfigError("family.json not found or invalid JSON")</code></td></tr>
+    <tr><td>At least 1 member defined</td><td><code>ConfigError("No members defined in family.json")</code></td></tr>
+    <tr><td>Every member has: id, name, language_preference</td><td><code>ConfigError("Member {id} missing required field: {field}")</code></td></tr>
+    <tr><td>sources.json exists, every source has: id, name, type, url</td><td><code>ConfigError("Source {id} missing required field: {field}")</code></td></tr>
+    <tr><td>settings.json exists with all required sections</td><td><code>ConfigError("Settings missing section: {section}")</code></td></tr>
+  </table>
+
+  <h3>Acceptance Criteria</h3>
+  <ul class="checklist">
+    <li>AC-M1-01: load_profiles() returns valid FamilyConfig with all 5 members</li>
+    <li>AC-M1-02: load_sources() returns list of SourceConfig objects, only "active" sources</li>
+    <li>AC-M1-03: get_scan_rules() returns keywords combined from linked members' interests</li>
+    <li>AC-M1-04: Invalid JSON → raises ConfigError with descriptive message</li>
+    <li>AC-M1-05: Missing required field → raises ConfigError naming the field</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 4. M2 SCANNER -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">4</span> M2 · Scanner — מפרט מלא</h2>
+  <div class="desc">Fetches content from sources, returns NCI[]. No AI. No DB writes (M3 handles archive).</div>
+
+  <h3>Functions</h3>
+  <div class="diagram">
+async def scan_all(scan_rules: list[ScanRule], settings: Settings) -> list[NCI]:
+    """Run all fetchers, return combined NCI list.
+    Skips disabled/degraded sources. Timeout per source: 30s.
+    Never raises — individual source failures are logged and skipped."""
+
+async def fetch_rss(source: SourceConfig, keywords: list[str]) -> list[NCI]:
+    """Parse RSS feed, extract items, convert to NCI.
+    Uses feedparser. Returns empty list on failure."""
+
+async def fetch_web(source: SourceConfig, keywords: list[str]) -> list[NCI]:
+    """Scrape web page for content items.
+    Phase 1: use httpx + basic HTML parsing (BeautifulSoup).
+    Future: Playwright for JS-rendered pages."""
+
+async def fetch_youtube(source: SourceConfig, keywords: list[str]) -> list[NCI]:
+    """Fetch latest videos from YouTube channel/playlist.
+    Uses YouTube RSS feed (no API key needed):
+    https://www.youtube.com/feeds/videos.xml?channel_id={ID}"""
+
+def create_nci(title, url, source, published_at, raw_text, tags, language, image_url=None) -> NCI:
+    """Factory function. Generates id (SHA256 of URL) and content_hash."""
+  </div>
+
+  <h3>NCI Dataclass (exact)</h3>
+  <div class="diagram">
+@dataclass
+class NCI:
+    id: str               # SHA256(url)[:16]
+    url: str
+    title: str
+    source_name: str
+    source_type: str      # "rss" | "web" | "youtube" | "family_submission"
+    source_url: str
+    source_trust: float
+    published_at: str     # ISO8601
+    fetched_at: str       # ISO8601
+    language: str         # "he" | "en"
+    raw_text: str         # summary/excerpt, max 5000 chars
+    tags: list[str]
+    image_url: str | None
+    content_hash: str     # SHA256(title + raw_text)[:16]
+    is_submission: bool   # always False in M2 (True only from M6)
+    submitted_by: str | None  # always None in M2
+  </div>
+
+  <h3>Error Handling</h3>
+  <table>
+    <tr><th>Error Case</th><th>Behavior</th><th>User-visible message</th></tr>
+    <tr><td>Source timeout (>30s)</td><td>Log warning, skip source, continue</td><td>None (background process)</td></tr>
+    <tr><td>RSS parse error</td><td>Log error with source name, skip, continue</td><td>None</td></tr>
+    <tr><td>HTTP 4xx/5xx</td><td>Log error, increment source fail_count, skip</td><td>None</td></tr>
+    <tr><td>All sources failed</td><td>Log CRITICAL, return empty list. M3 will handle (build with submissions only or skip).</td><td>Admin WhatsApp alert</td></tr>
+    <tr><td>Network unreachable</td><td>Log CRITICAL, return empty list</td><td>Admin WhatsApp alert</td></tr>
+  </table>
+
+  <h3>Acceptance Criteria</h3>
+  <ul class="checklist">
+    <li>AC-M2-01: RSS fetcher parses standard RSS/Atom feeds and returns NCI[] with title, url, summary, published_at</li>
+    <li>AC-M2-02: Each NCI has valid id (16-char hex), content_hash (16-char hex), fetched_at (ISO8601)</li>
+    <li>AC-M2-03: Source failure → logged + skipped, other sources continue</li>
+    <li>AC-M2-04: Disabled sources are not fetched</li>
+    <li>AC-M2-05: Total scan completes within 5 minutes (all sources combined)</li>
+    <li>AC-M2-06: YouTube fetcher works via RSS feed (no API key needed)</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 5. M3 NORMALIZER -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">5</span> M3 · Normalizer — מפרט מלא</h2>
+  <div class="desc">The brain. Dedup, score, curate, generate summaries (Claude API), merge submissions, archive. Consumes most tokens.</div>
+
+  <h3>Pipeline (exact order)</h3>
+  <div class="diagram">
+def build_edition(ncis: list[NCI], family: FamilyConfig, settings: Settings, db: Database) -> NEO:
+    """Main pipeline function. Steps:
+    1. dedup(ncis, db)           → filtered NCI[] (no duplicates from last 30 days)
+    2. score(ncis, family)       → scored NCI[] per member
+    3. load_submissions(db)      → pending FamilySubmission[]
+    4. curate(scored, family, settings) → selected items per member
+    5. generate_content(curated, submissions, settings) → AI headlines, summaries, greeting, puzzle, bridges, edited submissions
+    6. build_neo(...)            → complete NEO object
+    7. archive(neo, db)         → save to SQLite + JSON
+    8. return neo
+    """
+  </div>
+
+  <h3>Step 1: Dedup</h3>
+  <div class="diagram">
+def dedup(ncis: list[NCI], db: Database) -> list[NCI]:
+    """Remove items whose content_hash exists in content_archive from last 30 days.
+    SQL: SELECT content_hash FROM content_archive
+         WHERE fetched_at > date('now', '-30 days')
+    Filter: keep NCI where nci.content_hash NOT IN existing_hashes"""
+  </div>
+
+  <h3>Step 2: Score</h3>
+  <div class="diagram">
+def score(ncis: list[NCI], family: FamilyConfig) -> dict[str, list[ScoredNCI]]:
+    """Score each NCI for each member. Returns {member_id: [ScoredNCI]}.
+
+    Algorithm per (nci, member):
+      keyword_match = count of member subtopics found in (title + raw_text + tags)
+                      normalized to 0-1 by dividing by max possible matches
+      priority_weight = {"high": 1.0, "medium": 0.6, "low": 0.3}[matched_topic.priority]
+      source_trust = nci.source_trust  (0.0-1.0)
+      freshness = 1.0 if age < 24h, 0.7 if < 48h, 0.5 if < 7d, 0.1 if older
+
+      score = keyword_match * priority_weight * source_trust * freshness * 100
+
+    Language filter:
+      - Shaked (language_preference="en"): only score NCI where language="en"
+      - Others: score both, but he gets +0.1 bonus
+    """
+
+@dataclass
+class ScoredNCI:
+    nci: NCI
+    member_id: str
+    score: float        # 0-100
+    matched_topic: str  # which topic matched
+    matched_priority: str
+  </div>
+
+  <h3>Step 3: Load Submissions</h3>
+  <div class="diagram">
+def load_pending_submissions(db: Database, cutoff_time: str) -> list[FamilySubmission]:
+    """SELECT * FROM family_submissions
+       WHERE status IN ('received', 'edit_failed')
+       AND timestamp < {cutoff_time}
+       ORDER BY timestamp ASC"""
+  </div>
+
+  <h3>Step 4: Curate</h3>
+  <div class="diagram">
+def curate(scored: dict[str, list[ScoredNCI]], family: FamilyConfig, settings: Settings) -> dict[str, list[ScoredNCI]]:
+    """Select top items per member.
+
+    For each member:
+      1. Sort by score DESC
+      2. Take top N (member.max_items_per_day)
+      3. Enforce topic balance: no more than 60% from one topic
+      4. Reserve 20% of slots for discovery (from another member's top items)
+      5. Total across all members: max 15 unique NCIs
+
+    Discovery selection:
+      For each member, pick 1 item from another member's top-scored items
+      that the receiving member scored LOW on (surprising cross-pollination).
+      Generate bridge_text in step 5.
+    """
+  </div>
+
+  <h3>Step 5: Generate Content (Claude API calls)</h3>
+  <div class="diagram">
+async def generate_content(curated, submissions, settings, token_tracker) -> GeneratedContent:
+    """All Claude API calls happen here. Each call is wrapped by token_tracker.
+
+    Calls (in order):
+
+    1. GREETING (1 call):
+       Prompt: "Generate a warm Hebrew family greeting for {date}.
+               Include a fun fact about today. 1-2 sentences. Casual, warm."
+       Model: sonnet, max_tokens: 100
+
+    2. PUZZLE for צליל (1 call):
+       Prompt: "Create a hard math puzzle for a very smart 13-year-old.
+               Competition level. Include yesterday's puzzle answer: {prev_answer}.
+               Hebrew. Format: puzzle text + (תשובה מחר!)"
+       Model: sonnet, max_tokens: 150
+
+    3. SUMMARIES + HEADLINES (batched, 1 call per 3-4 articles):
+       Prompt per batch:
+         "For each article below, generate:
+          1. A catchy headline (max 15 words)
+          2. A 2-sentence summary
+          Language: {member.language_preference}
+
+          Articles:
+          [title]: [raw_text]..."
+       Model: sonnet, max_tokens: 200 per article
+
+    4. SUBMISSION EDITING (1 call per submission):
+       Prompt: "You are a professional newspaper editor for a family newsletter.
+               A family member ({name}) sent this content:
+               Type: {message_type}
+               Text: {content_text}
+               [Link: {link_url}]
+
+               Create:
+               1. An engaging headline (max 10 words, Hebrew)
+               2. A brief edited summary (2-3 sentences, keep the original intent)
+
+               Be warm, family-friendly. This WILL be published."
+       Model: sonnet, max_tokens: 300
+
+    5. DISCOVERY BRIDGES (1 call per bridge):
+       Prompt: "Write a short bridge text (1 sentence, Hebrew) explaining why
+               {from_member} would recommend this {topic} article to {to_member}.
+               Casual, fun, family tone."
+       Model: sonnet, max_tokens: 100
+
+    6. SURVEY QUESTION (1 call):
+       Prompt: "Generate a varied daily survey question for a family newsletter.
+               Today's main topics were: {topic_list}.
+               Don't repeat yesterday's question style ({prev_question_type}).
+               Hebrew. Short. Engaging. Should feel like a fun family conversation."
+       Model: sonnet, max_tokens: 100
+    """
+  </div>
+
+  <h3>Step 6: Build NEO</h3>
+  <div class="diagram">
+@dataclass
+class NEO:
+    date: str                    # YYYY-MM-DD
+    family_name: str
+    greeting: str                # from step 5.1
+    family_content: list[dict]   # edited submissions
+    member_sections: list[dict]  # per-member curated articles with headlines/summaries
+    discovery: list[dict]        # cross-member items with bridge text
+    trivia: dict                 # {puzzle, answer, history}
+    survey_question: str         # for M5 to send at 21:00
+    metadata: dict               # {items_fetched, items_selected, sources_scanned,
+                                 #  submissions_count, tokens_used: {input, output, cost_usd},
+                                 #  build_duration_ms}
+  </div>
+
+  <h3>Step 7: Archive</h3>
+  <div class="diagram">
+def archive(neo: NEO, ncis: list[NCI], db: Database):
+    """
+    1. INSERT all fetched NCIs into content_archive (ON CONFLICT IGNORE for dedup)
+    2. INSERT newsletter row: date, status='ready', greeting, puzzle, metadata
+    3. INSERT newsletter_items: one row per (member, article) pairing
+    4. UPDATE family_submissions: status='published', edition_date=today
+    5. Save JSON: archive/editions/{date}.json = full NEO
+    6. Save JSON: archive/raw/{date}.json = all NCIs
+    7. Save HTML copy: archive/html/{date}.html (after M4 renders)
+    """
+  </div>
+
+  <h3>Error Handling</h3>
+  <table>
+    <tr><th>Error Case</th><th>Behavior</th></tr>
+    <tr><td>Claude API error (single call)</td><td>Retry 3x with exponential backoff (2s, 4s, 8s)</td></tr>
+    <tr><td>Claude API error (after retries)</td><td>Title-only mode: use NCI.title as headline, first 100 chars of raw_text as summary. Log warning.</td></tr>
+    <tr><td>Claude API fully down</td><td>All summaries in title-only mode. Greeting = "בוקר טוב, {family_name}!". No puzzle. Log CRITICAL.</td></tr>
+    <tr><td>No items after dedup</td><td>If submissions exist: build edition with submissions only. If no submissions: status='build_failed', alert admin.</td></tr>
+    <tr><td>SQLite write error</td><td>CRITICAL. Abort pipeline. Alert admin. HTML still saved locally as fallback.</td></tr>
+    <tr><td>Submission edit fails</td><td>Set submission status='edit_failed', retry_count++. If retry_count >= 3: publish with raw text, no AI editing.</td></tr>
+  </table>
+
+  <h3>Acceptance Criteria</h3>
+  <ul class="checklist">
+    <li>AC-M3-01: Dedup removes items with matching content_hash from last 30 days</li>
+    <li>AC-M3-02: Scoring produces 0-100 score per (member, article) pair</li>
+    <li>AC-M3-03: Shaked gets only English articles; others get Hebrew preferred</li>
+    <li>AC-M3-04: Every edition has a math puzzle for צליל</li>
+    <li>AC-M3-05: Submissions always included regardless of score (mandatory publish)</li>
+    <li>AC-M3-06: Token usage logged for every Claude API call</li>
+    <li>AC-M3-07: NEO archived to SQLite + JSON after build</li>
+    <li>AC-M3-08: Claude API failure → graceful degradation to title-only mode</li>
+    <li>AC-M3-09: Discovery items present (at least 1 cross-member recommendation)</li>
+    <li>AC-M3-10: Topic balance enforced (no more than 60% from one topic per member)</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 6. M4 RENDERER -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">6</span> M4 · Renderer — מפרט מלא</h2>
+  <div class="desc">Jinja2 template → static HTML. No AI. No DB. Pure rendering.</div>
+
+  <h3>What to implement</h3>
+  <div class="diagram">
+def render(neo: NEO, template_path: str = "templates/newsletter.html.j2") -> str:
+    """Render NEO to HTML string using Jinja2 template.
+    Returns HTML string. Also saves to archive/html/{date}.html."""
+
+def save_html(html: str, date: str, output_dir: str = "data/archive/html/") -> str:
+    """Save HTML to disk. Returns file path."""
+  </div>
+
+  <h3>Template Structure (newsletter.html.j2)</h3>
+  <p>See <a href="mockups/newsletter-mockup.html" class="mockup-link">📰 Newsletter Mockup</a> for the exact visual output.</p>
+
+  <h3>Design Spec (exact values)</h3>
+  <table>
+    <tr><th>Property</th><th>Value</th></tr>
+    <tr><td>Max width</td><td>600px</td></tr>
+    <tr><td>Direction</td><td>RTL (Hebrew). LTR for Shaked's section only.</td></tr>
+    <tr><td>Font</td><td>-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif</td></tr>
+    <tr><td>Background</td><td>#f5f3ef (page), #fff (container)</td></tr>
+    <tr><td>Header gradient</td><td>linear-gradient(135deg, #e8f0e4, #d4e4cf)</td></tr>
+    <tr><td>Header text</td><td>Logo: #6b8f5e · Title: #2d3a28 · Date: #6b8f5e</td></tr>
+    <tr><td>Nimrod color</td><td>#3b7dd8 (border, category, icon bg: #e6f0fa)</td></tr>
+    <tr><td>Michal color</td><td>#2d8e5e (border, category, icon bg: #e6f5ed)</td></tr>
+    <tr><td>Shaked color</td><td>#6b3fa0 (border, category, icon bg: #ece6f5)</td></tr>
+    <tr><td>יויו color</td><td>#c4304a (border, category, icon bg: #fce8ec)</td></tr>
+    <tr><td>Tzlil color</td><td>#b8860b (border, category, icon bg: #fef3e2)</td></tr>
+    <tr><td>Card background</td><td>#fafaf8, border-right: 3px solid {member_color}</td></tr>
+    <tr><td>Discovery</td><td>#faf7fd bg, dashed border #d4c0ea, bridge text #7c50a8</td></tr>
+    <tr><td>Trivia</td><td>#fefbf6 bg, border-right: 3px solid #daa520</td></tr>
+    <tr><td>Family submissions</td><td>#fefbf6 bg, border-right: 3px solid #f0c873</td></tr>
+  </table>
+
+  <h3>Section Order in HTML (exact)</h3>
+  <table>
+    <tr><th>#</th><th>Section</th><th>Condition</th></tr>
+    <tr><td>1</td><td>Header (logo, greeting, date)</td><td>Always</td></tr>
+    <tr><td>2</td><td>ידיעות מהמשפחה (Family submissions)</td><td>Only if neo.family_content is non-empty</td></tr>
+    <tr><td>3</td><td>הפינה של נימרוד</td><td>Always (icon: ⛵)</td></tr>
+    <tr><td>4</td><td>הפינה של מיכל</td><td>Always (icon: 🌿)</td></tr>
+    <tr><td>5</td><td>Shaked's Corner (LTR, English)</td><td>Always (icon: ⚗️)</td></tr>
+    <tr><td>6</td><td>הפינה של יויו</td><td>Always (icon: 🎪). Name: "יויו" NEVER "מעיין"</td></tr>
+    <tr><td>7</td><td>הפינה של צליל</td><td>Always (icon: 🧮). Must include puzzle.</td></tr>
+    <tr><td>8</td><td>גילוי היום (Discovery)</td><td>Only if discovery items exist</td></tr>
+    <tr><td>9</td><td>היום בהיסטוריה (Trivia)</td><td>Always</td></tr>
+    <tr><td>10</td><td>Footer</td><td>Always. Text: "Famely Neuslettr · powered by AI with ❤️ · גליון #{edition_number}"</td></tr>
+  </table>
+
+  <h3>Each Article Card (exact HTML structure)</h3>
+  <div class="diagram">
+&lt;div class="card"&gt;
+  &lt;div class="cat"&gt;{category}&lt;/div&gt;
+  &lt;h3&gt;&lt;a href="{url}"&gt;{headline}&lt;/a&gt;&lt;/h3&gt;
+  &lt;div class="excerpt"&gt;{summary}&lt;/div&gt;
+  &lt;div class="meta"&gt;
+    {source_name} &lt;span&gt;·&lt;/span&gt; {time_ago}
+    {%- if language == "en" and member.language != "en" %}
+      &lt;span class="lang-tag"&gt;EN&lt;/span&gt;
+    {%- endif %}
+  &lt;/div&gt;
+&lt;/div&gt;
+  </div>
+
+  <h3>Acceptance Criteria</h3>
+  <ul class="checklist">
+    <li>AC-M4-01: Output is valid HTML with &lt;!DOCTYPE html&gt;, size > 1KB</li>
+    <li>AC-M4-02: All CSS is inline (no external stylesheets)</li>
+    <li>AC-M4-03: Shaked's section renders in LTR with English content</li>
+    <li>AC-M4-04: יויו appears as "יויו" in section header (never "מעיין")</li>
+    <li>AC-M4-05: Family submissions section appears only when content exists</li>
+    <li>AC-M4-06: Mobile-responsive (max-width: 600px, readable on phones)</li>
+    <li>AC-M4-07: Puzzle section for צליל is present with "חידת היום 🧩" label</li>
+    <li>AC-M4-08: Visual output matches mockup</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 7. M5 DISTRIBUTOR -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">7</span> M5 · Distributor — מפרט מלא</h2>
+  <div class="desc">FTP upload (mandatory) + WhatsApp/Email send. Also sends daily survey at 21:00.</div>
+
+  <h3>Functions</h3>
+  <div class="diagram">
+def distribute(html_path: str, neo: NEO, family: FamilyConfig, settings: Settings) -> DistributionResult:
+    """Main function. Steps:
+    1. FTP upload HTML to nimrod.bio
+    2. Verify public URL is live (HTTP GET, expect 200)
+    3. Send personalized message to each member (WhatsApp or email)
+    4. Return DistributionResult with per-member status"""
+
+def ftp_upload(html_path: str, date: str, settings: Settings) -> str:
+    """Upload HTML to FTP server. Returns public URL.
+    Remote path: {ftp.remote_path}/{YYYY-MM-DD}/index.html
+    Retry: 3x with 10s delay.
+    Raises FTPUploadError after all retries fail."""
+
+def send_whatsapp(member: MemberProfile, neo: NEO, public_url: str) -> bool:
+    """Send personalized WhatsApp template message.
+    Returns True on success, False on failure."""
+
+def send_email(member: MemberProfile, neo: NEO, public_url: str) -> bool:
+    """Fallback: send email with same personalized content.
+    Uses SMTP settings from .env. Returns True/False."""
+
+def send_survey(family: FamilyConfig, neo: NEO, settings: Settings) -> list[dict]:
+    """Send daily survey at 21:00. Uses neo.survey_question.
+    Returns [{member_id, status, channel}]."""
+  </div>
+
+  <h3 id="mockup-whatsapp">WhatsApp Message — Exact Text</h3>
+  <div class="note-green">
+    <strong>Hebrew member (נימרוד, מיכל, יויו, צליל):</strong><br>
+    <code style="white-space:pre-wrap; font-size:13px; background:#fff; display:block; padding:12px; border-radius:8px; margin-top:8px;">
+שלום {nickname}! 🌅
+{greeting}
+
+📰 הנה מה שחיכה לך היום:
+• {headline_1}
+• {headline_2}
+• {headline_3}
+
+👉 לקריאה: {public_url}
+    </code>
+  </div>
+
+  <div class="note-green">
+    <strong>English member (Shaked):</strong><br>
+    <code style="white-space:pre-wrap; font-size:13px; background:#fff; display:block; padding:12px; border-radius:8px; margin-top:8px;">
+Hey Shaked! 🌅
+{greeting_en}
+
+📰 Today for you:
+• {headline_1}
+• {headline_2}
+
+👉 Read: {public_url}
+    </code>
+  </div>
+
+  <div class="note-green">
+    <strong>Daily Survey (21:00, varied daily):</strong><br>
+    <code style="white-space:pre-wrap; font-size:13px; background:#fff; display:block; padding:12px; border-radius:8px; margin-top:8px;">
+📊 Famely Neuslettr — סקר יומי
+
+{survey_question}
+
+(שלחו תשובה בחופשיות 🙂)
+    </code>
+  </div>
+
+  <div class="note-green">
+    <strong>Survey for Shaked (21:00, English):</strong><br>
+    <code style="white-space:pre-wrap; font-size:13px; background:#fff; display:block; padding:12px; border-radius:8px; margin-top:8px;">
+📊 Famely Neuslettr — Daily Check-in
+
+{survey_question_en}
+
+(Reply freely 🙂)
+    </code>
+  </div>
+
+  <h3>Email Fallback — Exact Format</h3>
+  <table>
+    <tr><th>Field</th><th>Value</th></tr>
+    <tr><td>Subject</td><td><code>📰 הניוזלטר המשפחתי — {date_hebrew}</code></td></tr>
+    <tr><td>From</td><td><code>Famely Neuslettr &lt;{SMTP_FROM}&gt;</code></td></tr>
+    <tr><td>Body</td><td>Same text as WhatsApp message, wrapped in simple HTML email template</td></tr>
+  </table>
+
+  <h3>Error Handling</h3>
+  <table>
+    <tr><th>Error Case</th><th>Behavior</th><th>User-visible</th></tr>
+    <tr><td>FTP upload fails (after 3 retries)</td><td>Edition status → 'send_failed'. No messages sent. Alert admin.</td><td>Admin gets WhatsApp: "⚠️ FTP upload failed for {date}. Newsletter not distributed."</td></tr>
+    <tr><td>WhatsApp send fails for one member</td><td>Try email fallback. Log failure. Continue to next member.</td><td>Member gets email instead</td></tr>
+    <tr><td>Both WhatsApp + email fail for member</td><td>Log error. Continue to others. Alert admin.</td><td>Admin gets list of failed members</td></tr>
+    <tr><td>Public URL returns non-200 after upload</td><td>Retry FTP upload once. If still fails → send_failed.</td><td>Admin alert</td></tr>
+  </table>
+
+  <h3>Acceptance Criteria</h3>
+  <ul class="checklist">
+    <li>AC-M5-01: FTP uploads HTML to nimrod.bio/{YYYY-MM-DD}/index.html</li>
+    <li>AC-M5-02: Public URL returns 200 after upload</li>
+    <li>AC-M5-03: Each member receives personalized message with their headlines</li>
+    <li>AC-M5-04: Shaked's message is fully in English</li>
+    <li>AC-M5-05: WhatsApp failure → automatic email fallback, no user action needed</li>
+    <li>AC-M5-06: FTP failure → no messages sent (no broken links)</li>
+    <li>AC-M5-07: Survey sent at 21:00 with varied question based on today's content</li>
+    <li>AC-M5-08: Survey for Shaked in English</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 8. M6 FEEDBACK (Phase 1) -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">8</span> M6 · Feedback + Submissions (Phase 1) — מפרט מלא</h2>
+  <div class="desc">WhatsApp webhook: receive family submissions + survey responses. No analytics, no auto-learning.</div>
+
+  <h3>Functions</h3>
+  <div class="diagram">
+# FastAPI webhook endpoint
+@app.post("/webhook/whatsapp")
+async def whatsapp_webhook(request: Request) -> Response:
+    """Receives all incoming WhatsApp messages.
+    Must respond 200 within 5 seconds.
+    Routes to handle_submission() or handle_survey_response()."""
+
+async def handle_submission(member_id: str, message: WhatsAppMessage, db: Database):
+    """Process family submission:
+    1. Download media if present (image/video/PDF)
+    2. Save to data/submissions/{YYYY-MM-DD}/
+    3. INSERT into family_submissions table (status='received')
+    4. Send confirmation reply via WhatsApp"""
+
+async def handle_survey_response(member_id: str, message: WhatsAppMessage, db: Database):
+    """Process survey response:
+    1. INSERT into feedback table (type='survey', value=message text)
+    2. Send thank-you reply"""
+
+def identify_sender(phone: str, family: FamilyConfig) -> str | None:
+    """Match phone number to member_id. Returns None if unknown."""
+
+def is_survey_response(member_id: str, message: str, db: Database) -> bool:
+    """True if: survey was sent to this member in last 6 hours
+    AND message is short (< 50 chars) or numeric."""
+  </div>
+
+  <h3>Routing Logic (exact)</h3>
+  <div class="diagram">
+1. Extract sender phone from webhook payload
+2. member_id = identify_sender(phone)
+   - None → log "Unknown sender: {phone}", respond 200, ignore
+3. if is_survey_response(member_id, message_text, db):
+       handle_survey_response(member_id, message)
+   else:
+       handle_submission(member_id, message)
+  </div>
+
+  <h3>Submission Confirmation Messages (exact text)</h3>
+  <div class="note-green">
+    <strong>Hebrew (all except Shaked):</strong><br>
+    <code>התקבל! 📰 יפורסם בגליון הקרוב.</code>
+  </div>
+  <div class="note-green">
+    <strong>English (Shaked):</strong><br>
+    <code>Got it! 📰 Will be published in the next edition.</code>
+  </div>
+  <div class="note-green">
+    <strong>Survey thank-you (Hebrew):</strong><br>
+    <code>תודה על המשוב! 🙏</code>
+  </div>
+  <div class="note-green">
+    <strong>Unknown sender:</strong><br>
+    No reply. Log only.
+  </div>
+  <div class="note-green">
+    <strong>Media too large:</strong><br>
+    <code>הקובץ גדול מדי 😅 ניתן לשלוח עד 16MB תמונות, 64MB וידאו, 32MB PDF.</code>
+  </div>
+
+  <h3>FamilySubmission Dataclass (exact)</h3>
+  <div class="diagram">
+@dataclass
+class FamilySubmission:
+    id: str               # UUID
+    member_id: str
+    timestamp: str        # ISO8601
+    message_type: str     # "text" | "image" | "video" | "document" | "link"
+    content_text: str | None
+    media_local_path: str | None
+    media_mime_type: str | None
+    media_size_bytes: int | None
+    link_url: str | None
+    status: str           # "received" | "editing" | "published" | "rejected" | "edit_failed"
+    edited_headline: str | None
+    edited_summary: str | None
+    edition_date: str | None
+    retry_count: int
+  </div>
+
+  <h3>Acceptance Criteria</h3>
+  <ul class="checklist">
+    <li>AC-M6-01: Webhook responds 200 within 5 seconds for any message</li>
+    <li>AC-M6-02: Known sender + non-survey → creates FamilySubmission with status='received'</li>
+    <li>AC-M6-03: Media downloaded and saved to data/submissions/{date}/</li>
+    <li>AC-M6-04: Confirmation reply sent within 10 seconds of receiving submission</li>
+    <li>AC-M6-05: Unknown sender → no reply, logged as unknown</li>
+    <li>AC-M6-06: Survey response saved to feedback table with type='survey'</li>
+    <li>AC-M6-07: Media over size limit → friendly rejection message, no DB entry</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 9. DATABASE -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">9</span> Database — Exact DDL</h2>
+
+  <div class="diagram">
+-- db.py: init_database() creates all tables on first run
+
+CREATE TABLE IF NOT EXISTS content_archive (
+    id              TEXT PRIMARY KEY,
+    url             TEXT UNIQUE NOT NULL,
+    title           TEXT NOT NULL,
+    source_name     TEXT,
+    source_type     TEXT,
+    source_url      TEXT,
+    source_trust    REAL DEFAULT 0.7,
+    published_at    TEXT,
+    fetched_at      TEXT NOT NULL,
+    language        TEXT NOT NULL CHECK(language IN ('he', 'en')),
+    raw_text        TEXT,
+    tags            TEXT,  -- JSON array
+    image_url       TEXT,
+    content_hash    TEXT NOT NULL,
+    is_submission   INTEGER NOT NULL DEFAULT 0,
+    submitted_by    TEXT,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS newsletters (
+    date            TEXT PRIMARY KEY,  -- YYYY-MM-DD
+    status          TEXT NOT NULL DEFAULT 'building'
+                    CHECK(status IN ('building','ready','build_failed',
+                          'distributed','send_failed','feedback_collecting','completed')),
+    greeting        TEXT,
+    puzzle          TEXT,
+    puzzle_answer   TEXT,
+    survey_question TEXT,
+    html_path       TEXT,
+    public_url      TEXT,
+    items_fetched   INTEGER,
+    items_selected  INTEGER,
+    sources_scanned INTEGER,
+    submissions_count INTEGER DEFAULT 0,
+    build_duration_ms INTEGER,
+    neo_json        TEXT,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS newsletter_items (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    newsletter_date TEXT NOT NULL REFERENCES newsletters(date),
+    member_id       TEXT NOT NULL,
+    content_id      TEXT NOT NULL REFERENCES content_archive(id),
+    headline        TEXT,
+    summary         TEXT,
+    category        TEXT,
+    score           REAL,
+    position        INTEGER,
+    is_discovery    INTEGER DEFAULT 0,
+    is_submission   INTEGER DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS family_submissions (
+    id              TEXT PRIMARY KEY,
+    member_id       TEXT NOT NULL,
+    timestamp       TEXT NOT NULL,
+    message_type    TEXT NOT NULL CHECK(message_type IN ('text','image','video','document','link')),
+    content_text    TEXT,
+    media_local_path TEXT,
+    media_mime_type TEXT,
+    media_size_bytes INTEGER,
+    link_url        TEXT,
+    status          TEXT NOT NULL DEFAULT 'received'
+                    CHECK(status IN ('received','editing','published','rejected','edit_failed')),
+    edited_headline TEXT,
+    edited_summary  TEXT,
+    edition_date    TEXT,
+    retry_count     INTEGER DEFAULT 0,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS feedback (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    member_id       TEXT NOT NULL,
+    timestamp       TEXT NOT NULL,
+    type            TEXT NOT NULL CHECK(type IN ('survey', 'text')),
+    newsletter_date TEXT,
+    value           TEXT,
+    article_id      TEXT,
+    source_detail   TEXT
+);
+
+CREATE TABLE IF NOT EXISTS token_usage (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    timestamp       TEXT NOT NULL,
+    module          TEXT NOT NULL,
+    operation       TEXT NOT NULL,
+    model           TEXT NOT NULL,
+    input_tokens    INTEGER NOT NULL,
+    output_tokens   INTEGER NOT NULL,
+    cost_usd        REAL NOT NULL,
+    newsletter_date TEXT
+);
+
+CREATE TABLE IF NOT EXISTS scan_log (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    date            TEXT NOT NULL,
+    source_id       TEXT NOT NULL,
+    items_found     INTEGER DEFAULT 0,
+    items_new       INTEGER DEFAULT 0,
+    errors          TEXT,
+    duration_ms     INTEGER,
+    http_status     INTEGER
+);
+
+-- Indexes
+CREATE INDEX IF NOT EXISTS idx_content_hash ON content_archive(content_hash);
+CREATE INDEX IF NOT EXISTS idx_content_date ON content_archive(fetched_at);
+CREATE INDEX IF NOT EXISTS idx_items_date ON newsletter_items(newsletter_date, member_id);
+CREATE INDEX IF NOT EXISTS idx_feedback_date ON feedback(newsletter_date, member_id);
+CREATE INDEX IF NOT EXISTS idx_submissions_status ON family_submissions(status);
+CREATE INDEX IF NOT EXISTS idx_token_date ON token_usage(timestamp);
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 10. ORCHESTRATOR + CRON -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">10</span> Orchestrator + Cron</h2>
+
+  <h3>CLI Commands</h3>
+  <div class="diagram">
+# orchestrator.py — CLI entry points
+
+python -m src.orchestrator daily-build
+    → M1.load → M2.scan → M3.build_edition → M4.render
+    → status: 'ready'
+
+python -m src.orchestrator daily-send
+    → M5.distribute (FTP + WhatsApp/Email)
+    → status: 'distributed'
+
+python -m src.orchestrator daily-survey
+    → M5.send_survey
+    → status: 'feedback_collecting'
+
+python -m src.orchestrator health-check
+    → verify DB exists, last newsletter status, source health, disk space
+  </div>
+
+  <h3>run.sh</h3>
+  <div class="diagram">
+#!/bin/bash
+set -e
+cd /opt/famely-neuslettr
+source venv/bin/activate
+python -m src.orchestrator "$@" 2>&1 | tee -a logs/famely.log
+  </div>
+
+  <h3>Cron (exact, IST timezone)</h3>
+  <div class="diagram">
+# /etc/cron.d/famely
+TZ=Asia/Jerusalem
+0  9 * * *  famely  /opt/famely-neuslettr/run.sh daily-build
+0 12 * * *  famely  /opt/famely-neuslettr/run.sh daily-send
+0 21 * * *  famely  /opt/famely-neuslettr/run.sh daily-survey
+  </div>
+
+  <h3>Webhook (separate process)</h3>
+  <div class="diagram">
+# systemd service: famely-webhook.service
+# Runs: uvicorn src.m6_feedback:app --host 0.0.0.0 --port 8443
+# Always running (receives submissions 24/7)
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 11. TOKEN TRACKER -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">11</span> Token Tracker</h2>
+
+  <div class="diagram">
+# token_tracker.py
+
+class TokenTracker:
+    """Wraps Anthropic client. Logs every API call to token_usage table."""
+
+    def __init__(self, db: Database, api_key: str):
+        self.client = anthropic.Anthropic(api_key=api_key)
+        self.db = db
+
+    async def generate(self, module: str, operation: str,
+                       prompt: str, max_tokens: int,
+                       model: str = "claude-sonnet-4-6",
+                       newsletter_date: str = None) -> str:
+        """Call Claude API and log usage.
+        Returns: response text.
+        Logs to token_usage: timestamp, module, operation, model,
+               input_tokens, output_tokens, cost_usd."""
+
+    def calculate_cost(self, model: str, input_tokens: int, output_tokens: int) -> float:
+        """Calculate USD cost based on current Anthropic pricing.
+        Sonnet: $3/M input, $15/M output
+        Opus: $15/M input, $75/M output"""
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 12. ERROR HANDLING SUMMARY -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">12</span> Error Handling — Full Matrix</h2>
+
+  <table>
+    <tr><th>Module</th><th>Error</th><th>System Behavior</th><th>User-facing Message</th></tr>
+    <tr><td>M1</td><td>Config file missing/invalid</td><td>Abort pipeline. Log CRITICAL.</td><td>Admin WhatsApp: "⚠️ Config error: {detail}"</td></tr>
+    <tr><td>M2</td><td>Single source timeout</td><td>Skip source, continue. Log warning.</td><td>None</td></tr>
+    <tr><td>M2</td><td>All sources failed</td><td>Continue with submissions only (if any). Log CRITICAL.</td><td>Admin: "⚠️ All sources failed. Edition may be empty."</td></tr>
+    <tr><td>M3</td><td>Claude API temporary error</td><td>Retry 3x (2s, 4s, 8s backoff)</td><td>None</td></tr>
+    <tr><td>M3</td><td>Claude API fully down</td><td>Title-only mode. Static greeting. No puzzle.</td><td>Admin: "⚠️ Claude API down. Title-only mode."</td></tr>
+    <tr><td>M3</td><td>SQLite write error</td><td>Abort. Save HTML locally as fallback.</td><td>Admin: "⚠️ DB write failed. Pipeline aborted."</td></tr>
+    <tr><td>M3</td><td>Submission edit fails 3x</td><td>Publish with raw text (no AI editing)</td><td>None (published anyway)</td></tr>
+    <tr><td>M4</td><td>Template error</td><td>Abort. Log CRITICAL.</td><td>Admin: "⚠️ Template render failed."</td></tr>
+    <tr><td>M4</td><td>HTML < 1KB</td><td>Abort. Something is very wrong.</td><td>Admin: "⚠️ HTML too small ({size}B). Aborting."</td></tr>
+    <tr><td>M5</td><td>FTP fails 3x</td><td>Edition → 'send_failed'. No messages sent.</td><td>Admin: "⚠️ FTP failed. Newsletter not published."</td></tr>
+    <tr><td>M5</td><td>WhatsApp fails for member</td><td>Try email. Log failure.</td><td>Member gets email instead</td></tr>
+    <tr><td>M5</td><td>Both WhatsApp+Email fail</td><td>Log, continue to others.</td><td>Admin: "⚠️ Could not reach {member_name}."</td></tr>
+    <tr><td>M6</td><td>Webhook receives unknown sender</td><td>Log, ignore, respond 200.</td><td>No reply to sender</td></tr>
+    <tr><td>M6</td><td>Media download fails</td><td>Save submission without media. Log warning.</td><td>"התקבל! (ללא מדיה — נסו שוב)"</td></tr>
+    <tr><td>M6</td><td>Media over size limit</td><td>Reject submission.</td><td>"הקובץ גדול מדי 😅 ..."</td></tr>
+  </table>
+
+  <div class="note">
+    <strong>Admin Alerts:</strong> Phase 1 — admin alerts sent via same WhatsApp channel to Nimrod's phone. If WhatsApp unavailable → email to nimrod@mezoo.co.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 13. TEST REQUIREMENTS -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">13</span> Test Requirements</h2>
+
+  <table>
+    <tr><th>Scope</th><th>What to test</th><th>How</th></tr>
+    <tr><td>Unit: M1</td><td>Config loading, validation, error messages</td><td>Pytest with valid/invalid JSON fixtures</td></tr>
+    <tr><td>Unit: M2</td><td>RSS parsing, NCI creation, hash generation</td><td>Pytest with sample RSS XML fixtures</td></tr>
+    <tr><td>Unit: M3</td><td>Scoring algorithm, dedup, curation logic, topic balance</td><td>Pytest with mock NCIs and profiles</td></tr>
+    <tr><td>Unit: M4</td><td>Template renders valid HTML, all sections present</td><td>Pytest: render mock NEO, check HTML structure</td></tr>
+    <tr><td>Integration: M2→M3→M4</td><td>Full pipeline with mock data produces valid HTML</td><td>End-to-end test with --mock flag</td></tr>
+    <tr><td>Integration: M5</td><td>FTP upload + message send (with test server)</td><td>Integration test against FTP test server</td></tr>
+    <tr><td>Mock mode</td><td>CLI runs with --mock flag using sample data, no external calls</td><td><code>python -m src.orchestrator daily-build --mock</code></td></tr>
+  </table>
+
+  <div class="note-red">
+    <strong>Cross-Engine Validation (Iron Rule):</strong> LOD500 validation at L-GATE_V MUST use a different engine than the builder. Builder: Claude (Team 110). Validator: must be Team 190 (OpenAI Codex) or equivalent.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 14. CONSUMING TEAM SIGN-OFF -->
+<!-- ═══════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">14</span> Consuming Team Sign-off</h2>
+
+  <blockquote style="background:#f8f9fa; padding:16px; border-radius:8px; border-right:3px solid #2d1b5e; font-size:14px;">
+    I confirm this spec is executable and unambiguous. All open questions are resolved.<br><br>
+    <strong>Signature:</strong> ____________ | Date: ____________
+  </blockquote>
+</div>
+
+<!-- Footer -->
+<div style="text-align: center; padding: 32px; color: #aaa; font-size: 12px;">
+  Famely Neuslettr LOD400 Implementation Spec · v1.0.0 Draft · April 2026<br>
+  Phase 1 · Track B · parent_lod300: architecture-lod300.html v1.1.0
+</div>
+
+</div>
+</body>
+</html>

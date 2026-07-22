@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Famely Neuslettr - 2026-04-10</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #f5f3ef; color: #3a3a3a; line-height: 1.75; direction: rtl; padding: 12px; }
+  .container { max-width: 620px; margin: 0 auto; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 32px rgba(0,0,0,0.08); }
+
+  /* Header — rich gradient with family identity */
+  .header { background: linear-gradient(135deg, #e8f0e4 0%, #c9ddc3 50%, #b8d4af 100%); padding: 36px 24px 30px; text-align: center; position: relative; }
+  .header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #3b7dd8, #2d8e5e, #6b3fa0, #c4304a, #b8860b); }
+  .header .logo { font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #6b8f5e; margin-bottom: 6px; }
+  .header h1 { font-size: 26px; font-weight: 800; color: #2d3a28; margin-bottom: 2px; }
+  .header .date { font-size: 14px; color: #6b8f5e; font-weight: 500; margin-bottom: 4px; }
+  .header .edition { font-size: 11px; color: #8aad7e; letter-spacing: 1px; }
+  .header .greeting { font-size: 15px; color: #4a6343; margin-top: 12px; font-style: italic; line-height: 1.6; }
+
+  /* Sections */
+  .section { padding: 22px 24px 26px; border-bottom: 1px solid #f0ede8; }
+  .section:last-of-type { border-bottom: none; }
+  .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .section-header .icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .section-header h2 { font-size: 17px; font-weight: 700; color: #3a3a3a; }
+
+  /* Family submissions */
+  .family .icon { background: #fef3e2; }
+  .family-card { background: #fefbf6; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; border-right: 4px solid #f0c873; }
+  .family-card .who { font-size: 12px; font-weight: 700; color: #c8942a; margin-bottom: 4px; letter-spacing: 0.3px; }
+  .family-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .family-card p { font-size: 14px; color: #555; }
+
+  /* Member colors */
+  .nimrod .icon { background: #e6f0fa; } .nimrod .cat { color: #3b7dd8; } .nimrod .card { border-right-color: #3b7dd8; }
+  .michal .icon { background: #e6f5ed; } .michal .cat { color: #2d8e5e; } .michal .card { border-right-color: #2d8e5e; }
+  .shaked .icon { background: #ece6f5; } .shaked .cat { color: #6b3fa0; } .shaked .card { border-right-color: #6b3fa0; }
+  .maayan .icon { background: #fce8ec; } .maayan .cat { color: #c4304a; } .maayan .card { border-right-color: #c4304a; }
+  .tzlil .icon { background: #fef3e2; } .tzlil .cat { color: #b8860b; } .tzlil .card { border-right-color: #b8860b; }
+
+  /* Article card — with image support */
+  .card { background: #fafaf8; border-radius: 12px; padding: 0; margin-bottom: 12px; border-right: 4px solid #ddd; overflow: hidden; }
+  .card:hover { background: #f5f4f0; }
+  .card-img { width: 100%; height: 160px; object-fit: cover; display: block; }
+  .card-body { padding: 14px 16px; }
+  .card .cat { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 4px; }
+  .card h3 { font-size: 15px; font-weight: 700; line-height: 1.45; margin-bottom: 5px; }
+  .card h3 a { color: #3a3a3a; text-decoration: none; }
+  .card h3 a:hover { text-decoration: underline; }
+  .card .excerpt { font-size: 13px; color: #777; line-height: 1.65; }
+  .card .meta { margin-top: 8px; font-size: 11px; color: #aaa; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .lang-tag { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: #eee; color: #888; }
+
+  /* YouTube embed style */
+  .yt-thumb { position: relative; }
+  .yt-thumb::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(255,0,0,0.85); border-radius: 12px; }
+  .yt-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 0; height: 0; border-top: 12px solid transparent; border-bottom: 12px solid transparent; border-left: 20px solid white; z-index: 2; margin-left: 3px; }
+
+  /* Discovery */
+  .discovery .icon { background: #f0e6fa; }
+  .discovery-card { background: linear-gradient(135deg, #faf7fd, #f5f0fa); border-radius: 14px; padding: 16px 18px; border: 1px dashed #d4c0ea; margin-bottom: 12px; }
+  .discovery-card .bridge { font-size: 12px; font-weight: 700; color: #7c50a8; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .discovery-card h3 { font-size: 15px; font-weight: 700; line-height: 1.4; margin-bottom: 4px; }
+  .discovery-card h3 a { color: #3a3a3a; text-decoration: none; }
+  .discovery-card .excerpt { font-size: 13px; color: #777; }
+  .discovery-card .meta { margin-top: 6px; font-size: 11px; color: #aaa; }
+
+  /* Trivia — Today in History */
+  .trivia .icon { background: #fef3e2; }
+  .trivia-card { background: linear-gradient(135deg, #fefbf6, #fdf6ea); border-radius: 14px; padding: 16px 18px; border-right: 4px solid #daa520; }
+  .trivia-card h3 { font-size: 14px; font-weight: 700; color: #b8860b; margin-bottom: 8px; }
+  .trivia-card p { font-size: 14px; color: #555; line-height: 1.75; }
+
+  /* Puzzle */
+  .puzzle-card { background: linear-gradient(135deg, #fefbf6, #fdf6ea); border-radius: 14px; padding: 16px 18px; border-right: 4px solid #b8860b; margin-top: 10px; }
+  .puzzle-card .label { font-size: 13px; font-weight: 700; color: #b8860b; margin-bottom: 6px; }
+  .puzzle-card p { font-size: 14px; color: #555; line-height: 1.75; white-space: pre-line; }
+
+  /* Survey */
+  .survey { background: linear-gradient(135deg, #eef6ff, #e4eefa); }
+  .survey .icon { background: #d6e8ff; }
+  .survey-card { background: #fff; border-radius: 14px; padding: 16px 18px; text-align: center; }
+  .survey-card p { font-size: 15px; font-weight: 600; color: #3a3a3a; line-height: 1.6; }
+  .survey-card .hint { font-size: 12px; color: #999; margin-top: 8px; }
+
+  /* Footer */
+  .footer { padding: 24px; text-align: center; font-size: 12px; color: #bbb; border-top: 1px solid #f0ede8; background: #fafaf8; }
+  .footer .hearts { margin-bottom: 4px; font-size: 14px; }
+
+  /* LTR for English sections */
+  .ltr { direction: ltr; text-align: left; }
+  .ltr .card { border-right: none; border-left: 4px solid #ddd; }
+  .ltr .nimrod .card { border-left-color: #3b7dd8; }
+  .ltr .shaked .card { border-left-color: #6b3fa0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 1. Header -->
+  <div class="header">
+    <div class="logo">Famely Neuslettr</div>
+    <h1>משפחת בן-צבי ולד</h1>
+    <div class="date">יום שישי, 10 באפריל 2026</div>
+    <div class="edition">1 #</div>
+    <div class="greeting">בוקר טוב, משפחת בן-צבי ולד! ☀️ היום ב-9 באפריל 1865 הסתיימה מלחמת האזרחים האמריקנית. יום מצוין לקריאה!</div>
+  </div>
+
+  
+
+  
+
+  <!-- 3-7. Member Sections -->
+  
+  
+  
+  <div class="section nimrod">
+    <div class="section-header">
+      <div class="icon">⛵</div>
+      <h2>הפינה של נימרוד</h2>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1500514966906-fe245eea9344?w=600&amp;h=400&amp;fit=crop" alt="Mediterranean Sailing Routes: 2026 Guide" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">שייט וסקיפרים</div>
+        <h3><a href="https://example.com/sailing-2026">Mediterranean Sailing Routes: 2026 Guide</a></h3>
+        <div class="excerpt">A comprehensive guide to the best sailing routes across the Mediterranean for 2026, including new marinas and anchorages in Greece, Croatia and Turkey.</div>
+        <div class="meta">
+          Yachting World
+          <span>&middot;</span>
+          2026-04-10
+          
+          <span class="lang-tag">EN</span>
+          
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&amp;h=400&amp;fit=crop" alt="New Kite Foil Technology Revolutionizes Racing" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">גלישת קייט</div>
+        <h3><a href="https://example.com/kite-foil">New Kite Foil Technology Revolutionizes Racing</a></h3>
+        <div class="excerpt">The latest hydrofoil technology is changing competitive kiteboarding, with new designs reaching speeds of 40+ knots. Israeli rider Gal Zukerman placed 3rd in the European series.</div>
+        <div class="meta">
+          IKSURFMAG
+          <span>&middot;</span>
+          2026-04-10
+          
+          <span class="lang-tag">EN</span>
+          
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&amp;h=400&amp;fit=crop" alt="Urban Permaculture: Growing Food in Small Spaces" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">קיימות וגידול מזון</div>
+        <h3><a href="https://example.com/permaculture">Urban Permaculture: Growing Food in Small Spaces</a></h3>
+        <div class="excerpt">How families are transforming balconies and small gardens into productive food forests using permaculture principles. A step-by-step guide for Mediterranean climates.</div>
+        <div class="meta">
+          Permaculture Magazine
+          <span>&middot;</span>
+          2026-04-10
+          
+          <span class="lang-tag">EN</span>
+          
+        </div>
+      </div>
+    </div>
+    
+
+    
+  </div>
+  
+  
+  
+  
+  <div class="section michal">
+    <div class="section-header">
+      <div class="icon">🌿</div>
+      <h2>הפינה של מיכל</h2>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=600&amp;h=400&amp;fit=crop" alt="בנייה ירוקה: הפרויקט שמשנה את תל אביב" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">ארכיטקטורה ירוקה</div>
+        <h3><a href="https://example.com/green-build-tlv">בנייה ירוקה: הפרויקט שמשנה את תל אביב</a></h3>
+        <div class="excerpt">פרויקט בנייה ירוקה חדשני בלב תל אביב משלב טכנולוגיות passive house עם עיצוב מקומי ובנייה מעץ. הפרויקט צפוי לחסוך 60% באנרגיה.</div>
+        <div class="meta">
+          ArchDaily
+          <span>&middot;</span>
+          2026-04-10
+          
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&amp;h=400&amp;fit=crop" alt="Dezeen Awards 2026: Sustainable Housing Shortlist" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">ארכיטקטורה ירוקה</div>
+        <h3><a href="https://example.com/dezeen-awards">Dezeen Awards 2026: Sustainable Housing Shortlist</a></h3>
+        <div class="excerpt">The Dezeen Awards shortlist features stunning eco-friendly residential projects from around the world, including a rammed-earth home in Portugal.</div>
+        <div class="meta">
+          Dezeen
+          <span>&middot;</span>
+          2026-04-10
+          
+          <span class="lang-tag">EN</span>
+          
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1545959570-a94084071b5d?w=600&amp;h=400&amp;fit=crop" alt="קפוארה אנגולה: סדנה בינלאומית בישראל" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">קפוארה</div>
+        <h3><a href="https://example.com/capoeira-israel">קפוארה אנגולה: סדנה בינלאומית בישראל</a></h3>
+        <div class="excerpt">סדנת קפוארה בינלאומית תתקיים בחודש הבא עם מאסטרים מברזיל. הסדנה פתוחה לכל הרמות ומתקיימת ביפו.</div>
+        <div class="meta">
+          ABADÁ Capoeira Israel
+          <span>&middot;</span>
+          2026-04-10
+          
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&amp;h=400&amp;fit=crop" alt="Mindfulness for Busy Parents: 5-Minute Practices" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">מיינדפולנס וגוף-נפש</div>
+        <h3><a href="https://example.com/mindfulness-parents">Mindfulness for Busy Parents: 5-Minute Practices</a></h3>
+        <div class="excerpt">Quick mindfulness techniques designed for parents who struggle to find time. Five practices you can do while waiting for the kids.</div>
+        <div class="meta">
+          Mindful.org
+          <span>&middot;</span>
+          2026-04-10
+          
+          <span class="lang-tag">EN</span>
+          
+        </div>
+      </div>
+    </div>
+    
+
+    
+  </div>
+  
+  
+  
+  
+  <div class="section shaked ltr">
+    <div class="section-header">
+      <div class="icon">⚗️</div>
+      <h2>Shaked&#39;s Corner</h2>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=600&amp;h=400&amp;fit=crop" alt="Breakthrough in Organic Synthesis: New Catalyst Design" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">Chemistry &amp; Science</div>
+        <h3><a href="https://example.com/catalyst">Breakthrough in Organic Synthesis: New Catalyst Design</a></h3>
+        <div class="excerpt">Researchers at ETH Zurich have developed a novel asymmetric catalyst that enables previously impossible organic reactions at room temperature, with implications for drug synthesis.</div>
+        <div class="meta">
+          Nature Chemistry
+          <span>&middot;</span>
+          2026-04-10
+          
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=600&amp;h=400&amp;fit=crop" alt="The Hard Problem of Consciousness: A Chemist&#39;s View" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">Chemistry &amp; Science</div>
+        <h3><a href="https://example.com/consciousness-chem">The Hard Problem of Consciousness: A Chemist&#39;s View</a></h3>
+        <div class="excerpt">An essay exploring how molecular neuroscience intersects with philosophy of mind — what can chemistry tell us about the nature of consciousness?</div>
+        <div class="meta">
+          Nature Chemistry
+          <span>&middot;</span>
+          2026-04-10
+          
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1532012197267-da84d127e765?w=600&amp;h=400&amp;fit=crop" alt="Top 10 Progression Fantasy Releases This Month" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">Sci-Fi &amp; Web Fiction</div>
+        <h3><a href="https://example.com/prog-fantasy">Top 10 Progression Fantasy Releases This Month</a></h3>
+        <div class="excerpt">The latest trending progression fantasy novels on Royal Road, including new chapters of Dungeon Crawler Carl and a breakout LitRPG debut.</div>
+        <div class="meta">
+          Royal Road
+          <span>&middot;</span>
+          2026-04-10
+          
+        </div>
+      </div>
+    </div>
+    
+
+    
+  </div>
+  
+  
+  
+  
+  <div class="section maayan">
+    <div class="section-header">
+      <div class="icon">🎪</div>
+      <h2>הפינה של יויו</h2>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1569930784237-ea65a2f40a83?w=600&amp;h=400&amp;fit=crop" alt="Cirque du Soleil Announces New Show: &#39;Elemental&#39;" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">קרקס ואומנויות אוויר</div>
+        <h3><a href="https://example.com/cirque-elemental">Cirque du Soleil Announces New Show: &#39;Elemental&#39;</a></h3>
+        <div class="excerpt">Cirque du Soleil unveils &#39;Elemental&#39; — a breathtaking new production combining aerial acrobatics, contemporary dance, and cutting-edge projection mapping.</div>
+        <div class="meta">
+          Cirque du Soleil
+          <span>&middot;</span>
+          2026-04-10
+          
+          <span class="lang-tag">EN</span>
+          
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&amp;h=400&amp;fit=crop" alt="Aerial Silks: Advanced Drops &amp; Transitions Guide" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">קרקס ואומנויות אוויר</div>
+        <h3><a href="https://example.com/aerial-silks">Aerial Silks: Advanced Drops &amp; Transitions Guide</a></h3>
+        <div class="excerpt">A comprehensive tutorial on advanced aerial silks drops and transitions, with slow-motion breakdowns and safety protocols for intermediate aerialists.</div>
+        <div class="meta">
+          Dance Magazine
+          <span>&middot;</span>
+          2026-04-10
+          
+          <span class="lang-tag">EN</span>
+          
+        </div>
+      </div>
+    </div>
+    
+
+    
+  </div>
+  
+  
+  
+  
+  <div class="section tzlil">
+    <div class="section-header">
+      <div class="icon">🧮</div>
+      <h2>הפינה של צליל</h2>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&amp;h=400&amp;fit=crop" alt="Numberphile: The Unsolved Problem Worth $1 Million" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">מתמטיקה וחידות</div>
+        <h3><a href="https://example.com/numberphile-million">Numberphile: The Unsolved Problem Worth $1 Million</a></h3>
+        <div class="excerpt">Numberphile explores the Riemann Hypothesis — one of the Millennium Prize Problems — and why it has stumped mathematicians for over a century.</div>
+        <div class="meta">
+          Numberphile
+          <span>&middot;</span>
+          2026-04-10
+          
+          <span class="lang-tag">EN</span>
+          
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=600&amp;h=400&amp;fit=crop" alt="TED-Ed: How Ancient Trade Routes Shaped Modern Economy" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">היסטוריה וכלכלה</div>
+        <h3><a href="https://example.com/ted-trade">TED-Ed: How Ancient Trade Routes Shaped Modern Economy</a></h3>
+        <div class="excerpt">Exploring how the Silk Road and other ancient trade routes created the foundations of modern global economics — from spices to digital currencies.</div>
+        <div class="meta">
+          TED-Ed
+          <span>&middot;</span>
+          2026-04-10
+          
+          <span class="lang-tag">EN</span>
+          
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      
+      
+      <img class="card-img" src="https://images.unsplash.com/photo-1509228468518-180dd4864904?w=600&amp;h=400&amp;fit=crop" alt="Veritasium: Why Geometry is Everywhere" loading="lazy">
+      
+      
+      <div class="card-body">
+        <div class="cat">מתמטיקה וחידות</div>
+        <h3><a href="https://example.com/veritasium-geo">Veritasium: Why Geometry is Everywhere</a></h3>
+        <div class="excerpt">A deep dive into how geometric patterns appear throughout nature, from honeycombs to crystal structures, and why hexagons are the bestagons.</div>
+        <div class="meta">
+          Veritasium
+          <span>&middot;</span>
+          2026-04-10
+          
+          <span class="lang-tag">EN</span>
+          
+        </div>
+      </div>
+    </div>
+    
+
+    
+    <!-- Puzzle for Tzlil -->
+    <div class="puzzle-card">
+      <div class="label">חידת היום 🧩</div>
+      <p>חידת היום 🧩
+בכיתה של צליל יש 30 תלמידים. כל תלמיד לוחץ יד לכל תלמיד אחר בדיוק פעם אחת. כמה לחיצות יד בסה&#34;כ?
+
+(רמז: חשבו על צירופים)
+
+תשובת אתמול: 42</p>
+    </div>
+    
+  </div>
+  
+  
+
+  
+  <!-- 8. Discovery -->
+  <div class="section discovery">
+    <div class="section-header">
+      <div class="icon">🔮</div>
+      <h2>גילוי היום</h2>
+    </div>
+    
+    <div class="discovery-card">
+      <div class="bridge">💡 נימרוד חשב שזה יעניין אותך!</div>
+      <h3><a href="https://example.com/cnac-auditions">הקרקס הצרפתי CNAC מכריז על מועדי אודישנים 2027</a></h3>
+      <div class="excerpt">בית הספר הלאומי לאומנויות הקרקס בצרפת פרסם את תאריכי האודישנים לשנת הלימודים 2027. ההרשמה נפתחת בקיץ. מועמדים חייבים להיות בני 16+.</div>
+      <div class="meta">CircusTalk</div>
+    </div>
+    
+  </div>
+  
+
+  <!-- 9. Trivia / Today in History -->
+  
+  <div class="section trivia">
+    <div class="section-header">
+      <div class="icon">📜</div>
+      <h2>היום בהיסטוריה</h2>
+    </div>
+    <div class="trivia-card">
+      <p>[Mock response for history]</p>
+    </div>
+  </div>
+  
+
+  <!-- 10. Survey -->
+  
+  <div class="section survey">
+    <div class="section-header">
+      <div class="icon">💬</div>
+      <h2>שאלת היום</h2>
+    </div>
+    <div class="survey-card">
+      <p>מה הכתבה שהכי הפתיעה אתכם היום? למה?</p>
+      <div class="hint">ענו בוואטסאפ!</div>
+    </div>
+  </div>
+  
+
+  <!-- 11. Footer -->
+  <div class="footer">
+    <div class="hearts">⛵ 🌿 ⚗️ 🎪 🧮</div>
+    Famely Neuslettr &middot; powered by AI with ❤️ &middot; יום שישי, 10 באפריל 2026
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>סגנון 3 - מגזין מודרני</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf9f6;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --muted: #777;
+    --border: #e8e6e1;
+    --accent-nimrod: #2563eb;
+    --accent-michal: #059669;
+    --accent-shaked: #7c3aed;
+    --accent-maayan: #e11d48;
+    --accent-tzlil: #d97706;
+    --accent-family: #ea580c;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f0f0f;
+      --card: #1a1a1a;
+      --text: #e5e5e5;
+      --muted: #888;
+      --border: #2a2a2a;
+    }
+  }
+
+  body {
+    font-family: 'Segoe UI', -apple-system, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    direction: rtl;
+  }
+
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  /* === HEADER === */
+  .header {
+    position: relative;
+    padding: 40px 24px 32px;
+    background: var(--card);
+    text-align: center;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 24px;
+    left: 24px;
+    height: 3px;
+    background: linear-gradient(90deg,
+      var(--accent-nimrod),
+      var(--accent-michal),
+      var(--accent-shaked),
+      var(--accent-maayan),
+      var(--accent-tzlil)
+    );
+    border-radius: 2px;
+  }
+  .header .logo {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .header .date {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .header .greeting {
+    margin-top: 16px;
+    font-size: 15px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* === FAMILY SECTION === */
+  .family-section {
+    background: var(--card);
+    margin-top: 8px;
+    padding: 24px;
+  }
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  .family-section .section-label {
+    color: var(--accent-family);
+    background: rgba(234, 88, 12, 0.08);
+  }
+  .family-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .family-item:last-child { border-bottom: none; }
+  .family-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    background: rgba(234, 88, 12, 0.1);
+  }
+  .family-item .name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-family);
+  }
+  .family-item .text {
+    font-size: 15px;
+    margin-top: 2px;
+  }
+
+  /* === MEMBER SECTION === */
+  .member-section {
+    background: var(--card);
+    margin-top: 8px;
+    padding: 24px;
+  }
+  .member-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .member-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: white;
+    flex-shrink: 0;
+  }
+  .member-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .member-header .subtitle {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* === ARTICLE CARD === */
+  .article {
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+  }
+  .article:first-of-type { border-top: none; }
+
+  .article .category {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .article h3 {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+  .article h3 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .article h3 a:hover {
+    text-decoration: underline;
+  }
+  .article .excerpt {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .article .meta {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .article .meta .dot { color: var(--border); }
+  .article .lang-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: var(--border);
+    color: var(--muted);
+  }
+
+  /* === DISCOVERY === */
+  .discovery-section {
+    background: var(--card);
+    margin-top: 8px;
+    padding: 24px;
+  }
+  .discovery-section .section-label {
+    color: #7c3aed;
+    background: rgba(124, 58, 237, 0.08);
+  }
+  .discovery-card {
+    position: relative;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px dashed #c4b5fd;
+    background: rgba(124, 58, 237, 0.03);
+  }
+  .discovery-card .bridge {
+    font-size: 13px;
+    font-weight: 600;
+    color: #7c3aed;
+    margin-bottom: 8px;
+  }
+  .discovery-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .discovery-card .excerpt {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  /* === TRIVIA === */
+  .trivia-section {
+    background: var(--card);
+    margin-top: 8px;
+    padding: 24px;
+  }
+  .trivia-section .section-label {
+    color: var(--accent-tzlil);
+    background: rgba(217, 119, 6, 0.08);
+  }
+  .trivia-content {
+    font-size: 15px;
+    line-height: 1.8;
+    padding: 16px;
+    border-radius: 12px;
+    background: rgba(217, 119, 6, 0.04);
+    border-right: 3px solid var(--accent-tzlil);
+  }
+
+  /* === FEEDBACK === */
+  .feedback-section {
+    background: var(--card);
+    margin-top: 8px;
+    padding: 32px 24px;
+    text-align: center;
+  }
+  .feedback-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .feedback-section .sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .rating-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .rate-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: var(--bg);
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+  }
+  .rate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .rate-btn .emoji { font-size: 28px; }
+  .rate-btn .label {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  /* === FOOTER === */
+  .footer {
+    background: var(--card);
+    margin-top: 8px;
+    padding: 20px 24px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">Famely Neuslettr</div>
+    <h1>בוקר טוב, משפחת בן-צבי ולד!</h1>
+    <div class="date">יום רביעי, 8 באפריל 2026</div>
+    <div class="greeting">"כל יום מתחיל עם סיפור חדש"</div>
+  </div>
+
+  <!-- FAMILY CONTENT -->
+  <div class="family-section">
+    <div class="section-label">📸 מהמשפחה שלנו</div>
+
+    <div class="family-item">
+      <div class="family-avatar">🤿</div>
+      <div>
+        <div class="name">מיכל שיתפה</div>
+        <div class="text">הילדים בים אתמול - רגע קסום! שקד אפילו הסכים לצאת מהספר שלו 😄</div>
+      </div>
+    </div>
+
+    <div class="family-item">
+      <div class="family-avatar">🔗</div>
+      <div>
+        <div class="name">נימרוד שיתף</div>
+        <div class="text">מצאתי מקום סקי מטורף באוסטריה - חייבים לתכנן לחורף הבא!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NIMROD'S SECTION -->
+  <div class="member-section">
+    <div class="member-header">
+      <div class="member-icon" style="background: var(--accent-nimrod);">💡</div>
+      <div>
+        <h2>הפינה של נימרוד</h2>
+        <div class="subtitle">טכנולוגיה · יזמות · AI</div>
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="category" style="color: var(--accent-nimrod);">AI</div>
+      <h3><a href="#">Anthropic Launches New Agent Framework for Enterprise</a></h3>
+      <div class="excerpt">אנתרופיק השיקה כלי חדש שמאפשר לארגונים לבנות אייג'נטים מותאמים אישית. הכלי כולל תמיכה ב-MCP ואינטגרציה עם כלי עבודה קיימים.</div>
+      <div class="meta">
+        <span>TechCrunch</span>
+        <span class="dot">·</span>
+        <span>לפני 3 שעות</span>
+        <span class="lang-tag">EN</span>
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="category" style="color: var(--accent-nimrod);">סטארטאפ</div>
+      <h3><a href="#">סטארטאפ ישראלי גייס 50M$ לפיתוח AI לבריאות</a></h3>
+      <div class="excerpt">החברה מפתחת פלטפורמה לאבחון רפואי מבוסס בינה מלאכותית, ומתכננת להתרחב לאירופה ולארה"ב.</div>
+      <div class="meta">
+        <span>כלכליסט</span>
+        <span class="dot">·</span>
+        <span>לפני 5 שעות</span>
+        <span class="lang-tag">HE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MICHAL'S SECTION -->
+  <div class="member-section">
+    <div class="member-header">
+      <div class="member-icon" style="background: var(--accent-michal);">🌿</div>
+      <div>
+        <h2>הפינה של מיכל</h2>
+        <div class="subtitle">ארכיטקטורה · מיינדפולנס · טבע</div>
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="category" style="color: var(--accent-michal);">אדריכלות ירוקה</div>
+      <h3><a href="#">הבניין הירוק ביותר בעולם נחנך בקופנהגן</a></h3>
+      <div class="excerpt">בניין חדש בדנמרק מייצר יותר אנרגיה ממה שהוא צורך, עם גינה אנכית של 3,000 מ"ר וחומרים ממוחזרים לחלוטין.</div>
+      <div class="meta">
+        <span>ArchDaily</span>
+        <span class="dot">·</span>
+        <span>לפני 8 שעות</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHAKED'S SECTION -->
+  <div class="member-section">
+    <div class="member-header">
+      <div class="member-icon" style="background: var(--accent-shaked);">⚗️</div>
+      <div>
+        <h2>Shaked's Corner</h2>
+        <div class="subtitle">Sci-Fi · Chemistry · Deep Stuff</div>
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="category" style="color: var(--accent-shaked);">SCIENCE</div>
+      <h3><a href="#">New Breakthrough in Quantum Chemistry Simulation</a></h3>
+      <div class="excerpt">Researchers at ETH Zurich achieved a milestone in simulating complex molecular interactions using quantum computers, potentially revolutionizing drug discovery.</div>
+      <div class="meta">
+        <span>Nature</span>
+        <span class="dot">·</span>
+        <span>6h ago</span>
+        <span class="lang-tag">EN</span>
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="category" style="color: var(--accent-shaked);">SCI-FI</div>
+      <h3><a href="#">Top Progression Fantasy Releases This Week on Royal Road</a></h3>
+      <div class="excerpt">Three new serials breaking the charts this week, including a hard sci-fi take on LitRPG that's getting rave reviews.</div>
+      <div class="meta">
+        <span>Royal Road</span>
+        <span class="dot">·</span>
+        <span>12h ago</span>
+        <span class="lang-tag">EN</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAAYAN'S SECTION -->
+  <div class="member-section">
+    <div class="member-header">
+      <div class="member-icon" style="background: var(--accent-maayan);">🎪</div>
+      <div>
+        <h2>הפינה של מעיין</h2>
+        <div class="subtitle">קרקס · אקרובטיקה · ביצוע</div>
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="category" style="color: var(--accent-maayan);">קרקס</div>
+      <h3><a href="#">קירק דה סוליי חוזרים עם מופע חדש ב-2026</a></h3>
+      <div class="excerpt">המופע החדש משלב טכנולוגיה דיגיטלית עם אקרובטיקה קלאסית, וכולל אומנים צעירים שעלו מתוכניות הכשרה בינלאומיות.</div>
+      <div class="meta">
+        <span>CircusTalk</span>
+        <span class="dot">·</span>
+        <span>לפני יום</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TZLIL'S SECTION -->
+  <div class="member-section">
+    <div class="member-header">
+      <div class="member-icon" style="background: var(--accent-tzlil);">🧮</div>
+      <div>
+        <h2>הפינה של צליל</h2>
+        <div class="subtitle">מתמטיקה · היסטוריה · ידע כללי</div>
+      </div>
+    </div>
+
+    <div class="article">
+      <div class="category" style="color: var(--accent-tzlil);">חידת היום 🧩</div>
+      <h3>יש לך 12 כדורים זהים, אחד מהם שונה במשקלו...</h3>
+      <div class="excerpt">עם מאזניים ו-3 שקילות בלבד, איך מוצאים את הכדור השונה וגם יודעים אם הוא קל או כבד יותר? (תשובה מחר!)</div>
+    </div>
+
+    <div class="article">
+      <div class="category" style="color: var(--accent-tzlil);">כלכלה</div>
+      <h3><a href="#">למה גלידה עולה יותר בקיץ? הסבר כלכלי מפתיע</a></h3>
+      <div class="excerpt">זה לא רק היצע וביקוש - יש סיבה כלכלית מורכבת יותר שקשורה לעלות האנרגיה ולשרשרת האספקה.</div>
+      <div class="meta">
+        <span>Veritasium</span>
+        <span class="dot">·</span>
+        <span>לפני 2 ימים</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCOVERY -->
+  <div class="discovery-section">
+    <div class="section-label">💡 גילוי היום</div>
+    <div class="discovery-card">
+      <div class="bridge">נימרוד → צליל: "צליל, תראי את זה - ממש בשבילך!"</div>
+      <h3>How Math Is Secretly Behind Every AI Model</h3>
+      <div class="excerpt">סרטון של Numberphile שמסביר איך אלגברה לינארית היא הבסיס של כל מודלי ה-AI - חיבור מושלם בין העולמות של אבא וצליל.</div>
+    </div>
+  </div>
+
+  <!-- TRIVIA -->
+  <div class="trivia-section">
+    <div class="section-label">📅 היום בהיסטוריה</div>
+    <div class="trivia-content">
+      ב-8 באפריל 1820 התגלה פסל <strong>ונוס דה מילו</strong> באי מילוס ביוון. הוא נחשב לאחד הפסלים המפורסמים בעולם ומוצג בלובר בפריז.<br><br>
+      <strong>שאלה למשפחה:</strong> כמה שנים קדם הפסל הזה ליצירתו? (רמז: הוא מהתקופה ההלניסטית!) 🏛️
+    </div>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div class="feedback-section" id="feedback">
+    <h3>איך היה היום?</h3>
+    <div class="sub">עזרו לנו לשפר את הניוזלטר</div>
+    <div class="rating-row">
+      <a href="#" class="rate-btn">
+        <span class="emoji">😍</span>
+        <span class="label">מעולה</span>
+      </a>
+      <a href="#" class="rate-btn">
+        <span class="emoji">😊</span>
+        <span class="label">טוב</span>
+      </a>
+      <a href="#" class="rate-btn">
+        <span class="emoji">😐</span>
+        <span class="label">ככה ככה</span>
+      </a>
+      <a href="#" class="rate-btn">
+        <span class="emoji">👎</span>
+        <span class="label">לא טוב</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Famely Neuslettr © 2026 · נבנה עם ❤️ למשפחת בן-צבי ולד<br>
+    <small>הניוזלטר הזה נוצר אוטומטית עם AI ומותאם אישית לכל אחד מכם</small>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Famely Neuslettr — LOD300 System Design</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #f8f9fa; color: #1a1a2e; line-height: 1.7; direction: rtl; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+  /* Header */
+  .doc-header { background: linear-gradient(135deg, #0f172a, #1e3a5f); color: white; padding: 40px 32px; border-radius: 16px; margin-bottom: 32px; }
+  .doc-header h1 { font-size: 28px; margin-bottom: 8px; }
+  .doc-header .sub { font-size: 15px; opacity: 0.8; }
+  .doc-header .meta { margin-top: 16px; font-size: 13px; opacity: 0.6; display: flex; gap: 20px; flex-wrap: wrap; }
+
+  /* Section */
+  .section { background: white; border-radius: 16px; padding: 32px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+  .section h2 { font-size: 22px; margin-bottom: 6px; color: #1a1a2e; display: flex; align-items: center; gap: 10px; }
+  .section h2 .num { background: #1e3a5f; color: white; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .section .desc { color: #666; font-size: 14px; margin-bottom: 20px; }
+  h3 { font-size: 17px; margin: 24px 0 10px; color: #333; }
+  h4 { font-size: 14px; margin: 16px 0 6px; color: #555; font-weight: 600; }
+
+  /* Diagram */
+  .diagram { background: #f8f9fa; border-radius: 12px; padding: 24px; margin: 16px 0; font-family: 'Courier New', monospace; font-size: 12.5px; line-height: 1.5; white-space: pre; overflow-x: auto; direction: ltr; text-align: left; border: 1px solid #e9ecef; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  th { background: #f1f3f5; padding: 8px 12px; text-align: right; font-weight: 600; border-bottom: 2px solid #dee2e6; }
+  td { padding: 8px 12px; border-bottom: 1px solid #f1f3f5; vertical-align: top; }
+  tr:hover { background: #f8f9fa; }
+  code { background: #f1f3f5; padding: 1px 5px; border-radius: 4px; font-size: 12px; font-family: 'Courier New', monospace; direction: ltr; display: inline-block; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .badge-state { background: #dbeafe; color: #1d4ed8; }
+  .badge-trigger { background: #fef3c7; color: #b45309; }
+  .badge-rule { background: #fce7f3; color: #be185d; }
+  .badge-ok { background: #d1fae5; color: #047857; }
+  .badge-err { background: #fee2e2; color: #dc2626; }
+
+  /* Notes */
+  .note { background: #fff8e1; border-right: 3px solid #f59e0b; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 13px; }
+  .note strong { color: #b45309; }
+  .note-blue { background: #e8f4fd; border-right: 3px solid #3b82f6; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 13px; }
+  .note-blue strong { color: #1d4ed8; }
+  .note-green { background: #ecfdf5; border-right: 3px solid #059669; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 13px; }
+  .note-green strong { color: #047857; }
+  .note-red { background: #fef2f2; border-right: 3px solid #ef4444; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 13px; }
+  .note-red strong { color: #dc2626; }
+
+  /* Checklist */
+  .checklist { list-style: none; padding: 0; margin: 12px 0; }
+  .checklist li { padding: 6px 0; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+  .checklist li::before { content: '☐'; font-size: 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ═══════════ HEADER ═══════════ -->
+<div class="doc-header">
+  <h1>Famely Neuslettr — LOD300 System Design</h1>
+  <div class="sub">אפיון התנהגות מערכת · Track B · "איך המערכת צריכה להתנהג?"</div>
+  <div class="meta">
+    <span>lod_target: LOD300</span>
+    <span>lod_status: DRAFT</span>
+    <span>track: B</span>
+    <span>parent_lod200: architecture-lod200.html v3.0</span>
+    <span>date: 2026-04-09</span>
+    <span>version: v1.1.0 (simplified)</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 1. SYSTEM BEHAVIOR OVERVIEW -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">1</span> System Behavior Overview</h2>
+  <div class="desc">תיאור התנהגות ברמת component — לא קוד, אלא מה המערכת עושה.</div>
+
+  <h3>1.1 Daily Edition Lifecycle</h3>
+  <p>כל יום המערכת מבצעת מחזור מלא: איסוף תוכן ממקורות חיצוניים, שילוב ידיעות שנשלחו ע"י בני המשפחה, ניקוד ותמהיל לפי פרופילים אישיים, יצירת סיכומים בעברית/אנגלית, רינדור ל-HTML, העלאה לשרת, והפצה ב-WhatsApp (או אימייל כ-fallback). בסוף היום נשלח סקר WhatsApp קצר עם שאלות מגוונות.</p>
+
+  <div class="note-blue">
+    <strong>עיקרון מנחה — איכות תוכן ועיצוב קודם לכל:</strong> רוב המאמץ מושקע ב-M2 (מקורות איכותיים), M3 (סיכומים חכמים), ו-M4 (עיצוב מרשים). שאר המודולים פשוטים ככל האפשר.
+  </div>
+
+  <h3>1.2 Phase Map</h3>
+  <table>
+    <tr><th>Phase</th><th>מודולים</th><th>מה כלול</th><th>מה לא כלול</th></tr>
+    <tr>
+      <td><strong>Phase 1 — Core</strong></td>
+      <td>M1, M2, M3, M4, M5, M6 (partial)</td>
+      <td>Pipeline מלא → HTML איכותי → FTP → WhatsApp/Email → סקר WhatsApp יומי עם שאלות מגוונות → קליטת ידיעות משפחתיות</td>
+      <td>Click tracking, read pixels, UTM, analytics אוטומטי, learning loop אוטומטי</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 2 — Enhance</strong></td>
+      <td>M7, M6 (full)</td>
+      <td>Dashboard (שרת ביתי), click analytics, learning loop אוטומטי, ניהול מקורות דרך UI, שינוי תזמונים דרך UI</td>
+      <td>—</td>
+    </tr>
+  </table>
+
+  <h3>1.2 Component-Level Behavior</h3>
+  <table>
+    <tr>
+      <th>Component</th>
+      <th>מתי פועל</th>
+      <th>התנהגות</th>
+      <th>כשל</th>
+    </tr>
+    <tr>
+      <td><strong>M1 Profiles</strong></td>
+      <td>Passive — data read on demand</td>
+      <td>מספק פרופילים ו-scan_rules לכל מודול שמבקש. מתעדכן רק כשנכתב אליו (מ-M6, Cowork, Dashboard).</td>
+      <td>אם <code>family.json</code> corrupt — abort pipeline, alert admin</td>
+    </tr>
+    <tr>
+      <td><strong>M2 Scanner</strong></td>
+      <td>CRON 09:00 IST</td>
+      <td>עובר על <code>sources.json</code>, מפעיל fetcher מתאים (RSS/Web/YouTube), מייצר NCI[] לכל מקור. דילוג על מקור שנכשל, המשך לבאים.</td>
+      <td>מקור בודד נכשל: log + skip. כל המקורות נכשלו: abort + alert. Timeout per source: 30s.</td>
+    </tr>
+    <tr>
+      <td><strong>M3 Normalizer</strong></td>
+      <td>Immediately after M2</td>
+      <td>מקבל NCI[] + pending submissions. מבצע: dedup → score → merge submissions → curate → generate (Claude API) → archive. מייצר NEO{}.</td>
+      <td>Claude API fail: retry 3x with backoff. After 3: use title-only mode (no summaries). DB write fail: abort + alert.</td>
+    </tr>
+    <tr>
+      <td><strong>M4 Renderer</strong></td>
+      <td>Immediately after M3</td>
+      <td>מקבל NEO{}, מפעיל Jinja2 template, מייצר HTML עם inline CSS. שומר locally.</td>
+      <td>Template error: abort + alert. Output validation: HTML must be > 1KB.</td>
+    </tr>
+    <tr>
+      <td><strong>M5 Distributor</strong></td>
+      <td>CRON 12:00 IST</td>
+      <td>1. FTP upload ל-nimrod.bio (חובה). 2. בדיקת URL live. 3. שליחת WhatsApp per member (או email כ-fallback). כל הודעה מותאמת אישית.</td>
+      <td>FTP fail: retry 3x — <strong>חוסם, בלי FTP אין הפצה.</strong> WhatsApp fail: fallback to email. Email fail: log + alert.</td>
+    </tr>
+    <tr>
+      <td><strong>M6 Feedback (Phase 1)</strong></td>
+      <td>24/7 webhook + CRON 21:00</td>
+      <td><strong>Webhook:</strong> קולט הודעות WhatsApp — מזהה submissions (ידיעות) vs. תשובות לסקר. <strong>21:00:</strong> שולח סקר WhatsApp יומי עם שאלות מגוונות ורלוונטיות לתוכן היום. <strong>Phase 1 לא כולל:</strong> click tracking, pixels, UTM, analytics אוטומטי.</td>
+      <td>Webhook down: WhatsApp will retry (up to 72h). Survey fail: skip, try tomorrow.</td>
+    </tr>
+    <tr>
+      <td><strong>M7 Dashboard (Phase 2)</strong></td>
+      <td>On-demand (web UI)</td>
+      <td>רץ <strong>על השרת הביתי או מחשב הפיתוח</strong> בלבד. לא על שרת nimrod.bio. מציג: newsletters, feedback, token costs, source health. מאפשר config changes.</td>
+      <td>Read-only mode if DB locked. Config changes validated before save.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 2. COMPONENT INTERACTIONS — SEQUENCE DIAGRAMS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">2</span> Component Interactions</h2>
+  <div class="desc">Sequence diagrams לכל הזרימות. כל חץ מתאר מה עובר בין הרכיבים.</div>
+
+  <h3>2.1 Daily Build + Send (Happy Path)</h3>
+  <div class="diagram">
+CRON 09:00                M1          M2           M3            M4           M5        nimrod.bio   WhatsApp
+    │                      │           │            │             │            │            │           │
+    ├─── trigger ─────────▶│           │            │             │            │            │           │
+    │                      ├── load ──▶│            │             │            │            │           │
+    │                      │ profiles  │            │             │            │            │           │
+    │                      │ + rules   │            │             │            │            │           │
+    │                      │◀──────────┤            │             │            │            │           │
+    │                      │  scan_    │            │             │            │            │           │
+    │                      │  rules    │── fetch ──▶│             │            │            │           │
+    │                      │           │  sources   │             │            │            │           │
+    │                      │           │  (RSS,     │             │            │            │           │
+    │                      │           │   Web,     │             │            │            │           │
+    │                      │           │   YT)      │             │            │            │           │
+    │                      │           │            │             │            │            │           │
+    │                      │           │◀── NCI[] ──┤             │            │            │           │
+    │                      │           │            │             │            │            │           │
+    │                      │           │            ├─ load ─────▶│            │            │           │
+    │                      │           │            │  pending    │            │            │           │
+    │                      │           │            │  submissions│            │            │           │
+    │                      │           │            │  from DB    │            │            │           │
+    │                      │           │            │             │            │            │           │
+    │                      │           │            ├── dedup ───▶│            │            │           │
+    │                      │           │            ├── score ───▶│            │            │           │
+    │                      │           │            ├── curate ──▶│            │            │           │
+    │                      │           │            ├── Claude ──▶│ (summaries)│            │           │
+    │                      │           │            ├── archive ─▶│ (SQLite)   │            │           │
+    │                      │           │            │             │            │            │           │
+    │                      │           │            │◀─── NEO{} ──┤            │            │           │
+    │                      │           │            │             │            │            │           │
+    │                      │           │            │             ├── render ─▶│            │           │
+    │                      │           │            │             │  Jinja2    │            │           │
+    │                      │           │            │             │◀── HTML ───┤            │           │
+    │                      │           │            │             │            │            │           │
+CRON 12:00                 │           │            │             │            │            │           │
+    ├─── trigger ──────────┼───────────┼────────────┼─────────────┼───────────▶│            │           │
+    │                      │           │            │             │            ├── FTP ────▶│           │
+    │                      │           │            │             │            │  upload    │           │
+    │                      │           │            │             │            │◀── 200 ────┤           │
+    │                      │           │            │             │            │            │           │
+    │                      │           │            │             │            ├── verify ─▶│           │
+    │                      │           │            │             │            │  URL live  │           │
+    │                      │           │            │             │            │◀── 200 ────┤           │
+    │                      │           │            │             │            │            │           │
+    │                      │           │            │             │            ├── send ───▶│──────────▶│
+    │                      │           │            │             │            │  per       │  template │
+    │                      │           │            │             │            │  member    │  message  │
+    │                      │           │            │             │            │◀── ack ────┤◀──────────│
+    │                      │           │            │             │            │            │           │
+  </div>
+
+  <h3>2.2 Family Submission Flow</h3>
+  <div class="diagram">
+Family Member      WhatsApp API     M6 Webhook (FastAPI)      SQLite DB        M3 (next build)     M4
+    │                    │                  │                      │                  │              │
+    ├── send message ───▶│                  │                      │                  │              │
+    │   (text/image/     │                  │                      │                  │              │
+    │    video/PDF/link) │                  │                      │                  │              │
+    │                    ├── POST webhook ─▶│                      │                  │              │
+    │                    │   payload        │                      │                  │              │
+    │                    │                  ├── validate sender ──▶│                  │              │
+    │                    │                  │   (phone → member_id)│                  │              │
+    │                    │                  │◀─── member found ────┤                  │              │
+    │                    │                  │                      │                  │              │
+    │                    │                  ├── download media ────┤                  │              │
+    │                    │                  │   (if image/video/   │                  │              │
+    │                    │                  │    PDF)              │                  │              │
+    │                    │                  │                      │                  │              │
+    │                    │                  ├── INSERT submission ▶│                  │              │
+    │                    │                  │   status="received"  │                  │              │
+    │                    │                  │                      │                  │              │
+    │◀── confirmation ───┤◀── send reply ──┤                      │                  │              │
+    │   "התקבל! יפורסם   │                  │                      │                  │              │
+    │    בגליון הקרוב 📰" │                  │                      │                  │              │
+    │                    │                  │                      │                  │              │
+    │                    │          ... next day at 09:00 ...      │                  │              │
+    │                    │                  │                      │                  │              │
+    │                    │                  │                      │◀── SELECT ───────┤              │
+    │                    │                  │                      │   pending        │              │
+    │                    │                  │                      │   submissions    │              │
+    │                    │                  │                      ├── rows ─────────▶│              │
+    │                    │                  │                      │                  │              │
+    │                    │                  │                      │                  ├── Claude ───▶│
+    │                    │                  │                      │                  │   "edit as   │
+    │                    │                  │                      │                  │    newspaper │
+    │                    │                  │                      │                  │    editor"   │
+    │                    │                  │                      │                  │◀── edited ───┤
+    │                    │                  │                      │                  │   headline,  │
+    │                    │                  │                      │                  │   summary    │
+    │                    │                  │                      │                  │              │
+    │                    │                  │                      │◀── UPDATE ───────┤              │
+    │                    │                  │                      │   status=        │              │
+    │                    │                  │                      │   "published"    │              │
+    │                    │                  │                      │   edition_date=  │              │
+    │                    │                  │                      │   today          │              │
+    │                    │                  │                      │                  ├── inject ───▶│
+    │                    │                  │                      │                  │  into NEO    │
+    │                    │                  │                      │                  │  family_     │
+    │                    │                  │                      │                  │  content[]   │
+  </div>
+
+  <h3>2.3 Feedback — WhatsApp Survey (Phase 1, Simplified)</h3>
+  <div class="diagram">
+M3 (build)     M5 (send)      WhatsApp API    Family Member     M6 Webhook     SQLite DB
+    │               │               │               │               │              │
+    │ NEO.metadata  │               │               │               │              │
+    │ + articles ──▶│               │               │               │              │
+    │ (for survey   │               │               │               │              │
+    │  generation)  │               │               │               │              │
+    │               │               │               │               │              │
+    │  CRON 21:00   │               │               │               │              │
+    │               ├── generate ──▶│               │               │              │
+    │               │  daily survey │               │               │              │
+    │               │  (Claude:     │               │               │              │
+    │               │   varied Q's  │               │               │              │
+    │               │   based on    │               │               │              │
+    │               │   today's     │               │               │              │
+    │               │   content)    │               │               │              │
+    │               │               ├── send ──────▶│               │              │
+    │               │               │  "מה הכי      │               │              │
+    │               │               │   עניין אותך  │               │              │
+    │               │               │   היום?"      │               │              │
+    │               │               │               │               │              │
+    │               │               │               ├── reply ─────▶│              │
+    │               │               │               │  "הכתבה על   │              │
+    │               │               │               │   הגלים!"    │              │
+    │               │               │               │               │              │
+    │               │               │               │               ├── INSERT ───▶│
+    │               │               │               │               │  type=       │
+    │               │               │               │               │  "survey"    │
+    │               │               │               │               │  value=      │
+    │               │               │               │               │  free text   │
+    │               │               │               │               │              │
+
+Phase 2 additions (not in Phase 1):
+───────────────────────────────────
+  - Click tracking (UTM params in newsletter links)
+  - Read tracking (pixel in HTML)
+  - Automated analytics (CRON 23:00)
+  - Automated profile adjustments (weekly learning loop)
+  </div>
+
+  <div class="note-green">
+    <strong>סקר WhatsApp מגוון (Phase 1):</strong> במקום "דרגו 1-4" קבוע, המערכת מייצרת שאלות שונות כל יום, רלוונטיות לתוכן הגליון. דוגמאות: "איזה כתבה הכי עניינה?", "מה תרצו לקרוא עליו מחר?", "האם הגליון היום היה ארוך/קצר מדי?", "מישהו גילה תוכן חדש ומעניין?". זה גם feedback וגם engagement.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 3. STATE MODELS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">3</span> State Models</h2>
+  <div class="desc">כל הישויות עם state machine — מצבים, מעברים, טריגרים.</div>
+
+  <h3>3.1 Edition State Machine</h3>
+  <div class="diagram">
+                                    ┌──────────────────┐
+                          CRON 09:00│                  │
+                     ──────────────▶│    BUILDING      │
+                                    │                  │
+                                    └────────┬─────────┘
+                                             │
+                              M2+M3+M4 done  │  M2/M3/M4 fail
+                              (HTML exists)  │  ──────────────┐
+                                             │                │
+                                             ▼                ▼
+                                    ┌──────────────┐  ┌──────────────┐
+                                    │    READY     │  │  BUILD_FAILED│
+                                    │              │  │              │
+                                    └──────┬───────┘  └──────┬───────┘
+                                           │                 │
+                              CRON 12:00   │     Manual retry │
+                              M5 upload+   │     or next day  │
+                              send         │  ────────────────┘
+                                           │
+                                           ▼
+                                    ┌──────────────┐
+                          FTP ok +  │  DISTRIBUTED  │  FTP/WA fail
+                          WA sent   │              │  ──────────────┐
+                                    └──────┬───────┘               │
+                                           │                       ▼
+                              CRON 21:00   │              ┌──────────────┐
+                              survey sent  │              │  SEND_FAILED │
+                                           │              └──────────────┘
+                                           ▼
+                                    ┌──────────────┐
+                                    │  FEEDBACK_   │
+                                    │  COLLECTING  │
+                                    └──────┬───────┘
+                                           │
+                              CRON 23:00   │
+                              analytics    │
+                              processed    │
+                                           ▼
+                                    ┌──────────────┐
+                                    │  COMPLETED   │
+                                    └──────────────┘
+
+  States stored in: newsletters.status column
+  Valid values: building | ready | build_failed | distributed | send_failed | feedback_collecting | completed
+  </div>
+
+  <table>
+    <tr><th>State</th><th>Trigger IN</th><th>Trigger OUT</th><th>Invariants</th></tr>
+    <tr><td><span class="badge badge-state">BUILDING</span></td><td>CRON 09:00</td><td>Pipeline success / failure</td><td>Only one edition in BUILDING at any time</td></tr>
+    <tr><td><span class="badge badge-state">READY</span></td><td>HTML file exists + archived</td><td>CRON 12:00 triggers M5</td><td>HTML > 1KB, NEO archived in DB + JSON</td></tr>
+    <tr><td><span class="badge badge-state">BUILD_FAILED</span></td><td>Any critical error in M2/M3/M4</td><td>Manual retry or auto-retry next day</td><td>Error logged with stack trace, admin alerted</td></tr>
+    <tr><td><span class="badge badge-state">DISTRIBUTED</span></td><td>FTP upload ok + at least 1 WhatsApp sent</td><td>CRON 21:00</td><td>public_url is accessible, send_log has entries</td></tr>
+    <tr><td><span class="badge badge-state">SEND_FAILED</span></td><td>FTP failed after retries</td><td>Manual retry</td><td>HTML still locally available for retry</td></tr>
+    <tr><td><span class="badge badge-state">FEEDBACK_COLLECTING</span></td><td>Survey sent</td><td>CRON 23:00 analytics run</td><td>Survey messages sent to all active members</td></tr>
+    <tr><td><span class="badge badge-state">COMPLETED</span></td><td>Analytics processed</td><td>—</td><td>All feedback for the day processed and logged</td></tr>
+  </table>
+
+  <h3>3.2 Family Submission State Machine</h3>
+  <div class="diagram">
+  WhatsApp           M6 saves            M3 build picks up        M3 publishes
+  message in         to DB                and edits via Claude     in edition
+      │                │                       │                       │
+      ▼                ▼                       ▼                       ▼
+ ┌──────────┐   ┌──────────┐           ┌──────────┐           ┌──────────┐
+ │ INCOMING │──▶│ RECEIVED │──────────▶│ EDITING  │──────────▶│PUBLISHED │
+ └──────────┘   └──────────┘           └──────────┘           └──────────┘
+                     │                       │
+                     │ invalid sender        │ Claude API fail
+                     ▼                       ▼
+                ┌──────────┐           ┌──────────┐
+                │ REJECTED │           │EDIT_FAILED│───── retry next build ──▶ EDITING
+                └──────────┘           └──────────┘
+
+  States stored in: family_submissions.status column
+  Valid values: received | editing | published | rejected | edit_failed
+  </div>
+
+  <div class="note-red">
+    <strong>Business Rule — Mandatory Publish:</strong> Every valid submission (status=received from a known member) MUST reach PUBLISHED state. If EDIT_FAILED, the system retries in the next daily build. A submission may never be silently dropped. If it fails 3 consecutive builds, alert admin for manual resolution.
+  </div>
+
+  <h3>3.3 Content Source State Machine</h3>
+  <div class="diagram">
+                ┌──────────┐
+     config ──▶ │  ACTIVE  │ ◀─── manual reactivate (Cowork/Dashboard)
+                └────┬─────┘
+                     │
+        3 consecutive│ scan failures
+                     │
+                     ▼
+                ┌──────────┐
+                │ DEGRADED │ ──── still scanned, but trust_score -= 0.2
+                └────┬─────┘
+                     │
+        7 more days  │ of failure
+                     │
+                     ▼
+                ┌──────────┐
+                │ DISABLED │ ──── no longer scanned, admin alerted
+                └──────────┘
+
+  States stored in: sources.json → source.status field
+  Valid values: active | degraded | disabled
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 4. INTERFACE CONTRACTS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">4</span> Interface Contracts</h2>
+  <div class="desc">כל ממשק בין components מוגדר: מי מייצר, מי צורך, מה עובר.</div>
+
+  <table>
+    <tr><th>Interface</th><th>Producer</th><th>Consumer</th><th>Contract</th><th>Format</th></tr>
+    <tr>
+      <td><strong>I-01: Scan Rules</strong></td>
+      <td>M1 Profiles</td>
+      <td>M2 Scanner</td>
+      <td><code>sources.json</code> + <code>family.json</code> → list of sources with member linkage, keywords, priority, schedule</td>
+      <td>JSON files on disk</td>
+    </tr>
+    <tr>
+      <td><strong>I-02: Raw Items</strong></td>
+      <td>M2 Scanner</td>
+      <td>M3 Normalizer</td>
+      <td><code>NCI[]</code> — array of Normalized Content Items. Each must have: id, url, title, source, published_at, language, content_hash. Empty array is valid (no new content).</td>
+      <td>Python list of dataclass instances (in-process)</td>
+    </tr>
+    <tr>
+      <td><strong>I-03: Pending Submissions</strong></td>
+      <td>M6 (DB)</td>
+      <td>M3 Normalizer</td>
+      <td>All rows from <code>family_submissions</code> where <code>status IN ('received', 'edit_failed')</code>. M3 reads directly from SQLite.</td>
+      <td>SQLite query result</td>
+    </tr>
+    <tr>
+      <td><strong>I-04: Edition Object</strong></td>
+      <td>M3 Normalizer</td>
+      <td>M4 Renderer</td>
+      <td><code>NEO{}</code> — complete edition object. Must include: date, greeting, member_sections (with articles), family_content, discovery, trivia, metadata (including token usage).</td>
+      <td>Python dataclass instance (in-process)</td>
+    </tr>
+    <tr>
+      <td><strong>I-05: Newsletter HTML</strong></td>
+      <td>M4 Renderer</td>
+      <td>M5 Distributor</td>
+      <td>HTML file path on local disk. File must: exist, be > 1KB, contain valid HTML with <code>&lt;!DOCTYPE html&gt;</code>. Phase 2: include tracking pixel URL.</td>
+      <td>File path string</td>
+    </tr>
+    <tr>
+      <td><strong>I-06: FTP Upload</strong></td>
+      <td>M5 Distributor</td>
+      <td>nimrod.bio server</td>
+      <td>FTP PUT of HTML + media files to <code>/newsletter/YYYY-MM-DD/</code>. Server returns success/failure.</td>
+      <td>FTP protocol</td>
+    </tr>
+    <tr>
+      <td><strong>I-07: WhatsApp/Email Out</strong></td>
+      <td>M5 Distributor</td>
+      <td>WhatsApp Business API / SMTP</td>
+      <td><strong>Primary:</strong> WhatsApp template message per member. <strong>Fallback:</strong> Email with same content (HTML email with link). If WhatsApp not configured yet → email only. See §4.2.</td>
+      <td>HTTP POST to Twilio/Meta API — or — SMTP send</td>
+    </tr>
+    <tr>
+      <td><strong>I-08: WhatsApp In</strong></td>
+      <td>WhatsApp Business API</td>
+      <td>M6 Webhook</td>
+      <td>Incoming messages (text, image, video, document, location). Webhook must respond 200 within 5s. See §4.3.</td>
+      <td>HTTP POST to FastAPI endpoint</td>
+    </tr>
+    <tr>
+      <td><strong>I-09: Profile Adjustments (Phase 2)</strong></td>
+      <td>M6 Feedback</td>
+      <td>M1 Profiles</td>
+      <td><strong>Phase 2 only.</strong> JSON patch: <code>{member_id, adjustments: [{topic, score_delta, reason}]}</code>. Phase 1: profile changes are manual (Cowork session).</td>
+      <td>Python dict (in-process) → JSON file write</td>
+    </tr>
+    <tr>
+      <td><strong>I-10: Dashboard Read</strong></td>
+      <td>SQLite DB</td>
+      <td>M7 Dashboard</td>
+      <td>Read-only access to all tables. Dashboard never writes directly to operational tables — only to config files.</td>
+      <td>SQLite queries via FastAPI backend</td>
+    </tr>
+    <tr>
+      <td><strong>I-11: Claude API</strong></td>
+      <td>M3 Normalizer / M6 Feedback</td>
+      <td>Anthropic API</td>
+      <td>See §4.4 for all Claude API call patterns, models, token limits.</td>
+      <td>HTTP POST to api.anthropic.com</td>
+    </tr>
+  </table>
+
+  <h3>4.1 NCI Full Schema (I-02)</h3>
+  <div class="diagram">
+NCI {
+  id:             string       // SHA256(url)[:16] — deterministic, stable
+  url:            string       // required, must be valid URL or "submission://{submission_id}"
+  title:          string       // required, 1-500 chars
+  source: {
+    name:         string       // e.g. "Yachting World", "יויו (submission)"
+    type:         enum         // "rss" | "web" | "youtube" | "api" | "family_submission"
+    url:          string       // source home URL
+    trust_score:  float        // 0.0–1.0, default 0.7 for external, 1.0 for family
+  }
+  published_at:   ISO8601      // original publish date, or submission timestamp
+  fetched_at:     ISO8601      // when scanner fetched it
+  language:       enum         // "he" | "en" — detected or from source config
+  raw_text:       string       // summary/excerpt, 0-5000 chars
+  tags:           string[]     // extracted or configured tags
+  image_url:      string?      // nullable, must be valid URL if present
+  media: {                     // nullable, for submissions with media
+    type:         enum         // "image" | "video" | "pdf"
+    local_path:   string       // path on home server after download
+    original_url: string       // WhatsApp media URL (temporary)
+    mime_type:    string
+    size_bytes:   int
+  }?
+  content_hash:   string       // SHA256(title + raw_text)[:16] — for dedup
+  is_submission:  boolean      // true if from family member
+  submitted_by:   string?      // member_id if is_submission=true
+}
+  </div>
+
+  <h3>4.2 Distribution Message Contracts (I-07)</h3>
+  <div class="diagram">
+═══════════════════════════════════════════
+A. WhatsApp Template Message (PRIMARY)
+═══════════════════════════════════════════
+template_name: "famely_daily_newsletter"
+language: "he" (or "en" for Shaked)
+
+Parameters:
+  {{1}} = member display name ("נימרוד", "Shaked", "יויו", etc.)
+  {{2}} = greeting (1 line, from NEO.greeting)
+  {{3}} = top headlines (2-4 lines, personalized per member)
+  {{4}} = newsletter URL (https://nimrod.bio/newsletter/YYYY-MM-DD/)
+
+Example (Hebrew):
+─────────────────
+  שלום {{1}}! 🌅
+  {{2}}
+
+  📰 הנה מה שחיכה לך היום:
+  {{3}}
+
+  👉 לקריאה: {{4}}
+
+Example (English, for Shaked):
+──────────────────────────────
+  Hey {{1}}! 🌅
+  {{2}}
+
+  📰 Today for you:
+  {{3}}
+
+  👉 Read: {{4}}
+
+
+═══════════════════════════════════════════
+B. Email Fallback (if WhatsApp unavailable)
+═══════════════════════════════════════════
+Subject: "📰 {family_name} Daily — {date}"
+From: famely-neuslettr@nimrod.bio (or configured SMTP)
+To: member email
+Body: Same content as WhatsApp message, HTML formatted
+  - Greeting
+  - Personalized headlines
+  - Link to newsletter
+  - Link to Google Form for monthly feedback (Phase 1)
+
+Technology: Python smtplib or SendGrid free tier
+
+
+═══════════════════════════════════════════
+C. WhatsApp Daily Survey (21:00)
+═══════════════════════════════════════════
+NOT a fixed "rate 1-4" — generated daily by Claude based on today's content.
+Max tokens per survey: 100.
+
+Example varied questions (one per day, rotating):
+─────────────────────────────────────────────────
+Day 1: "מה הכי עניין אותך בגליון היום? שלחו מספר כתבה או כתבו בחופשיות"
+Day 2: "על מה תרצו לקרוא מחר? שתפו נושא 🙂"
+Day 3: "הגליון היום היה: 1️⃣ קצר מדי  2️⃣ בול  3️⃣ ארוך מדי"
+Day 4: "איזה כתבה הייתם שולחים לחבר? שלחו מספר"
+Day 5: "גילוי מהיום — מעניין או לא? 👍 / 👎"
+Day 6: "מה הדבר הכי מפתיע שלמדתם מהגליון?"
+Day 7: "דרגו 1-5: כמה רלוונטי התוכן היום?"
+
+Survey for Shaked always in English.
+  </div>
+
+  <h3>4.3 WhatsApp Incoming Webhook Contract (I-08)</h3>
+  <div class="diagram">
+POST /webhook/whatsapp
+Content-Type: application/json
+
+Twilio format:
+{
+  "From": "whatsapp:+972XXXXXXXXX",
+  "Body": "...",
+  "NumMedia": "0" | "1",
+  "MediaUrl0": "https://...",          // if media attached
+  "MediaContentType0": "image/jpeg"    // if media attached
+}
+
+Meta Cloud API format:
+{
+  "entry": [{
+    "changes": [{
+      "value": {
+        "messages": [{
+          "from": "972XXXXXXXXX",
+          "type": "text" | "image" | "video" | "document",
+          "text": { "body": "..." },
+          "image": { "id": "...", "mime_type": "...", "caption": "..." },
+          "video": { "id": "...", "mime_type": "..." },
+          "document": { "id": "...", "mime_type": "...", "filename": "..." }
+        }]
+      }
+    }]
+  }]
+}
+
+Response: HTTP 200 (must respond within 5 seconds)
+
+M6 Routing Logic:
+─────────────────
+1. Extract sender phone → match to family.json member_id
+   - No match → ignore (log as unknown sender)
+2. Check context: was a survey sent to this member in last 6 hours?
+   - YES and message is short (< 50 chars or numeric) → route to SURVEY RESPONSE handler
+   - NO or message is long / has media → route to SUBMISSION handler
+3. Survey Response handler:
+   - Save to feedback table (type="survey", value=message text)
+4. Submission handler:
+   - text only → save as text submission
+   - media (image/video/PDF) → download media, save file, create submission
+   - URL detected in text → fetch URL metadata, save as link submission
+  </div>
+
+  <h3>4.4 Claude API Call Patterns (I-11)</h3>
+  <table>
+    <tr><th>Call</th><th>Module</th><th>Model</th><th>Max Tokens (out)</th><th>Purpose</th><th>Estimated calls/day</th></tr>
+    <tr>
+      <td><strong>Generate Summaries</strong></td>
+      <td>M3</td>
+      <td>claude-sonnet-4-6</td>
+      <td>200 per article</td>
+      <td>Summarize article in member's language (he/en)</td>
+      <td>15-25 (per selected article)</td>
+    </tr>
+    <tr>
+      <td><strong>Generate Headlines</strong></td>
+      <td>M3</td>
+      <td>claude-sonnet-4-6</td>
+      <td>50 per article</td>
+      <td>Create engaging headline from title + summary</td>
+      <td>15-25 (batched with summary)</td>
+    </tr>
+    <tr>
+      <td><strong>Edit Submission</strong></td>
+      <td>M3</td>
+      <td>claude-sonnet-4-6</td>
+      <td>300 per submission</td>
+      <td>Act as newspaper editor: write headline + summary from family submission</td>
+      <td>0-3 (when submissions exist)</td>
+    </tr>
+    <tr>
+      <td><strong>Daily Greeting</strong></td>
+      <td>M3</td>
+      <td>claude-sonnet-4-6</td>
+      <td>100</td>
+      <td>Generate daily family greeting with today-in-history and weather</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td><strong>Daily Puzzle</strong></td>
+      <td>M3</td>
+      <td>claude-sonnet-4-6</td>
+      <td>150</td>
+      <td>Generate hard math puzzle for צליל + yesterday's answer</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td><strong>Discovery Bridge</strong></td>
+      <td>M3</td>
+      <td>claude-sonnet-4-6</td>
+      <td>100 per bridge</td>
+      <td>Create bridge text for cross-member content discovery</td>
+      <td>2-4</td>
+    </tr>
+    <tr>
+      <td><strong>Daily Survey Question</strong></td>
+      <td>M5 (at send time)</td>
+      <td>claude-sonnet-4-6</td>
+      <td>100</td>
+      <td>Generate varied survey question based on today's content</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td><strong>Feedback Analysis (Phase 2)</strong></td>
+      <td>M6</td>
+      <td>claude-sonnet-4-6</td>
+      <td>500</td>
+      <td>Phase 2: weekly automated analysis of feedback patterns</td>
+      <td>0.14 (once/week, Phase 2)</td>
+    </tr>
+    <tr>
+      <td><strong>Monthly Insights (Phase 2)</strong></td>
+      <td>M6→M7</td>
+      <td>claude-opus-4-6</td>
+      <td>2000</td>
+      <td>Phase 2: monthly deep analysis, trends, system health</td>
+      <td>0.03 (once/month, Phase 2)</td>
+    </tr>
+  </table>
+
+  <div class="note">
+    <strong>Token Budget Estimate (Phase 1):</strong><br>
+    <strong>יומי:</strong> ~22 calls (15-25 summaries + greeting + puzzle + bridges + survey question + 0-3 submissions) × ~300 avg output tokens = ~6,600 output tokens. Input ~2x = ~13,200. <strong>Cost: ~$0.08-0.12/day</strong> (Sonnet).<br>
+    <strong>שבועי:</strong> ×7 = <strong>~$0.60-0.85</strong>.<br>
+    <strong>חודשי:</strong> ×30 = <strong>~$2.50-3.50</strong>.<br>
+    <strong>Phase 2 additions:</strong> weekly analysis + monthly insights add ~$0.30/month.
+  </div>
+
+  <div class="note-blue">
+    <strong>Token Logging Contract:</strong> Every Claude API call logs to <code>token_usage</code> table: <code>{timestamp, module, operation, model, input_tokens, output_tokens, cost_usd}</code>. Cost calculated using Anthropic pricing at time of call.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 5. DATA MODEL -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">5</span> Data Model</h2>
+  <div class="desc">Entity definitions, relationships, constraints. All in SQLite — single file <code>famely.db</code>.</div>
+
+  <div class="diagram">
+                    ┌─────────────────────┐
+                    │    sources (config)  │
+                    │─────────────────────│
+                    │ id           TEXT PK │
+                    │ name         TEXT    │
+                    │ type         TEXT    │──── "rss"|"web"|"youtube"|"api"
+                    │ url          TEXT    │
+                    │ trust_score  REAL    │──── 0.0–1.0
+                    │ status       TEXT    │──── "active"|"degraded"|"disabled"
+                    │ linked_members TEXT  │──── JSON array of member_ids
+                    │ schedule     TEXT    │──── "daily"|"hourly"|"weekly"
+                    │ last_scan_at TEXT    │
+                    │ fail_count   INT     │
+                    └─────────┬───────────┘
+                              │ 1:N
+                              ▼
+┌───────────────────────────────────────────────────────┐
+│                    content_archive                     │
+│───────────────────────────────────────────────────────│
+│ id              TEXT PK     │ SHA256(url)[:16]        │
+│ url             TEXT UNIQUE │                          │
+│ title           TEXT NN     │                          │
+│ source_id       TEXT FK     │ → sources.id             │
+│ source_name     TEXT        │ denormalized for queries │
+│ source_type     TEXT        │                          │
+│ published_at    TEXT        │ ISO8601                  │
+│ fetched_at      TEXT NN     │ ISO8601                  │
+│ language        TEXT NN     │ "he"|"en"                │
+│ raw_text        TEXT        │                          │
+│ tags            TEXT        │ JSON array               │
+│ image_url       TEXT        │                          │
+│ content_hash    TEXT NN     │ for dedup                │
+│ is_submission   INT NN      │ 0 or 1                   │
+│ submitted_by    TEXT        │ member_id if submission   │
+│ created_at      TEXT NN     │ ISO8601, row insert time │
+└───────────────────┬───────────────────────────────────┘
+                    │ 1:N
+                    ▼
+┌───────────────────────────────────────────────────────┐
+│                   newsletter_items                     │
+│───────────────────────────────────────────────────────│
+│ id              INTEGER PK AUTOINCREMENT              │
+│ newsletter_date TEXT NN     │ FK → newsletters.date    │
+│ member_id       TEXT NN     │ who this was curated for │
+│ content_id      TEXT NN     │ FK → content_archive.id  │
+│ headline        TEXT        │ AI-generated             │
+│ summary         TEXT        │ AI-generated             │
+│ category        TEXT        │ matched topic            │
+│ score           REAL        │ relevance 0-100          │
+│ position        INT         │ display order            │
+│ is_discovery    INT         │ 0 or 1                   │
+│ is_submission   INT         │ 0 or 1                   │
+└───────────────────────────────────────────────────────┘
+                    ▲
+                    │ N:1
+┌───────────────────┴───────────────────────────────────┐
+│                     newsletters                        │
+│───────────────────────────────────────────────────────│
+│ date            TEXT PK     │ YYYY-MM-DD               │
+│ status          TEXT NN     │ see §3.1 state machine   │
+│ greeting        TEXT        │                          │
+│ puzzle          TEXT        │ for צליל                 │
+│ puzzle_answer   TEXT        │ yesterday's answer       │
+│ html_path       TEXT        │ local file path          │
+│ public_url      TEXT        │ nimrod.bio URL           │
+│ items_fetched   INT         │                          │
+│ items_selected  INT         │                          │
+│ sources_scanned INT         │                          │
+│ submissions_count INT       │                          │
+│ build_duration_ms INT       │                          │
+│ neo_json        TEXT        │ full NEO as JSON backup  │
+│ created_at      TEXT NN     │                          │
+│ updated_at      TEXT NN     │                          │
+└───────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────┐
+│                  family_submissions                     │
+│───────────────────────────────────────────────────────│
+│ id              TEXT PK     │ UUID                     │
+│ member_id       TEXT NN     │                          │
+│ timestamp       TEXT NN     │ ISO8601                  │
+│ message_type    TEXT NN     │ "text"|"image"|"video"   │
+│                             │ |"document"|"link"       │
+│ content_text    TEXT        │ message body / caption   │
+│ media_local_path TEXT       │ downloaded file path     │
+│ media_mime_type TEXT        │                          │
+│ media_size_bytes INT        │                          │
+│ link_url        TEXT        │ extracted URL            │
+│ status          TEXT NN     │ see §3.2 state machine   │
+│ edited_headline TEXT        │ AI-edited                │
+│ edited_summary  TEXT        │ AI-edited                │
+│ edition_date    TEXT        │ FK → newsletters.date    │
+│ retry_count     INT DEFAULT 0│                         │
+│ created_at      TEXT NN     │                          │
+│ updated_at      TEXT NN     │                          │
+└───────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────┐
+│                      feedback                          │
+│───────────────────────────────────────────────────────│
+│ id              INTEGER PK AUTOINCREMENT              │
+│ member_id       TEXT NN     │                          │
+│ timestamp       TEXT NN     │ ISO8601                  │
+│ type            TEXT NN     │ Phase 1: "survey"|"text"  │
+│                             │ Phase 2: +"click"|"read" │
+│ newsletter_date TEXT        │ FK → newsletters.date    │
+│ value           TEXT        │ "1"-"4", URL, text, secs │
+│ article_id      TEXT        │ FK → content_archive.id  │
+│ source_detail   TEXT        │ UTM params, etc.         │
+└───────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────┐
+│                member_preferences_log                   │
+│───────────────────────────────────────────────────────│
+│ id              INTEGER PK AUTOINCREMENT              │
+│ member_id       TEXT NN     │                          │
+│ date            TEXT NN     │ YYYY-MM-DD               │
+│ preferences_snapshot TEXT NN│ full JSON snapshot        │
+│ change_reason   TEXT NN     │ "feedback"|"manual"|"auto"│
+│ change_detail   TEXT        │ what changed and why     │
+└───────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────┐
+│                     token_usage                        │
+│───────────────────────────────────────────────────────│
+│ id              INTEGER PK AUTOINCREMENT              │
+│ timestamp       TEXT NN     │ ISO8601                  │
+│ module          TEXT NN     │ "m3"|"m6"                │
+│ operation       TEXT NN     │ "summary"|"headline"|    │
+│                             │ "greeting"|"puzzle"|     │
+│                             │ "edit_submission"|       │
+│                             │ "feedback_analysis"|     │
+│                             │ "monthly_insights"       │
+│ model           TEXT NN     │ "claude-sonnet-4-6" etc. │
+│ input_tokens    INT NN      │                          │
+│ output_tokens   INT NN      │                          │
+│ cost_usd        REAL NN     │ calculated at call time  │
+│ newsletter_date TEXT        │ if associated with edition│
+└───────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────┐
+│                      scan_log                          │
+│───────────────────────────────────────────────────────│
+│ id              INTEGER PK AUTOINCREMENT              │
+│ date            TEXT NN     │ YYYY-MM-DD               │
+│ source_id       TEXT NN     │ FK → sources.id          │
+│ items_found     INT         │                          │
+│ items_new       INT         │ after dedup              │
+│ errors          TEXT        │ error message if failed  │
+│ duration_ms     INT         │                          │
+│ http_status     INT         │ response code            │
+└───────────────────────────────────────────────────────┘
+
+INDEXES:
+  content_archive_hash    ON content_archive(content_hash)
+  content_archive_date    ON content_archive(fetched_at)
+  newsletter_items_date   ON newsletter_items(newsletter_date, member_id)
+  feedback_date           ON feedback(newsletter_date, member_id)
+  submissions_status      ON family_submissions(status)
+  token_usage_date        ON token_usage(timestamp)
+
+CONSTRAINTS:
+  newsletters.status      CHECK(status IN ('building','ready','build_failed',
+                                'distributed','send_failed','feedback_collecting','completed'))
+  family_submissions.status CHECK(status IN ('received','editing','published','rejected','edit_failed'))
+  feedback.type           CHECK(type IN ('survey','text','click','read'))
+  content_archive.language CHECK(language IN ('he','en'))
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 6. BUSINESS RULES -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">6</span> Business Rules</h2>
+  <div class="desc">כל הכללים העסקיים שמנהלים את זרימות המערכת.</div>
+
+  <h3>6.1 Content Scoring (M3)</h3>
+  <table>
+    <tr><th>Rule ID</th><th>Rule</th><th>Formula / Logic</th></tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-01</span></td>
+      <td>Relevance Score</td>
+      <td><code>score = keyword_match × priority_weight × source_trust × freshness × engagement_bonus</code></td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-02</span></td>
+      <td>Priority Weights</td>
+      <td>HIGH = 1.0, MEDIUM = 0.6, LOW = 0.3</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-03</span></td>
+      <td>Freshness Decay</td>
+      <td>Items > 48h old: score × 0.5. Items > 7d: score × 0.1. Items > 30d: excluded.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-04</span></td>
+      <td>Source Trust</td>
+      <td>Initial: 0.7 (external), 1.0 (family). Weekly adjustment ±0.1 based on click rates.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-05</span></td>
+      <td>Engagement Bonus</td>
+      <td>Articles from sources with > 50% click rate in last 14 days get +0.2 bonus.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-06</span></td>
+      <td>Deduplication</td>
+      <td>content_hash match in last 30 days → exclude. Semantic similarity > 0.85 (if embeddings enabled) → exclude.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-07</span></td>
+      <td>Language Routing</td>
+      <td>Shaked: EN only. All others: HE preferred, EN acceptable. Mixed articles: use raw language.</td>
+    </tr>
+  </table>
+
+  <h3>6.2 Curation Rules (M3)</h3>
+  <table>
+    <tr><th>Rule ID</th><th>Rule</th><th>Details</th></tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-10</span></td>
+      <td>Max Items Per Member</td>
+      <td>Configurable per member in <code>family.json</code>. Default: 3-5. Top-N by score after filtering.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-11</span></td>
+      <td>Total Edition Cap</td>
+      <td>Max 15 unique articles per edition (across all members). Shared articles counted once.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-12</span></td>
+      <td>Discovery Ratio</td>
+      <td>20% of each member's items should be "discovery" — content from another member's domain, with bridge text.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-13</span></td>
+      <td>Topic Balance</td>
+      <td>No more than 60% of a member's items from a single topic. Force diversity.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-14</span></td>
+      <td>Family Submission Override</td>
+      <td><strong>Submissions always included</strong>, regardless of score. They don't count toward the per-member cap. They appear in a dedicated "ידיעות מהמשפחה" section.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-15</span></td>
+      <td>Tzlil Puzzle</td>
+      <td>Every edition MUST include a math puzzle for צליל. Difficulty: hard (competition level for age 13-14). Include yesterday's answer.</td>
+    </tr>
+  </table>
+
+  <h3>6.3 Submission Rules (M6 + M3)</h3>
+  <table>
+    <tr><th>Rule ID</th><th>Rule</th><th>Details</th></tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-20</span></td>
+      <td>Mandatory Publish</td>
+      <td>Every valid submission MUST be published in the next edition. No filtering, no scoring. Only AI editing.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-21</span></td>
+      <td>Known Sender Only</td>
+      <td>Only messages from phone numbers in <code>family.json</code> are accepted. Unknown senders: ignored + logged.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-22</span></td>
+      <td>Media Size Limit</td>
+      <td>Images: max 16MB. Video: max 64MB. PDF: max 32MB. Over limit: reject with friendly message.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-23</span></td>
+      <td>Editorial Processing</td>
+      <td>Claude acts as professional newspaper editor: creates headline, writes summary, maintains original intent. Never changes meaning.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-24</span></td>
+      <td>Retry on Edit Failure</td>
+      <td>If Claude API fails during editing: status → edit_failed, retry_count++. Retried next build. After 3 failures: alert admin, publish with raw text (no AI editing).</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-25</span></td>
+      <td>Cutoff Time</td>
+      <td>Submissions received after 08:30 IST go to next day's edition. Before 08:30 → today's edition.</td>
+    </tr>
+  </table>
+
+  <h3>6.4 Distribution Rules (M5)</h3>
+  <table>
+    <tr><th>Rule ID</th><th>Rule</th><th>Details</th></tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-30</span></td>
+      <td>Send Time</td>
+      <td>12:00 IST. Configurable in <code>settings.json</code>.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-31</span></td>
+      <td>FTP Before WhatsApp</td>
+      <td>Always upload HTML first, verify URL is live, THEN send WhatsApp messages. Never send link to non-existent page.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-32</span></td>
+      <td>Personalized Messages</td>
+      <td>Each member gets their own WhatsApp message with headlines relevant to them. Shaked in English.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-33</span></td>
+      <td>Partial Send OK</td>
+      <td>If WhatsApp fails for one member, continue sending to others. Log failure per member.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-34</span></td>
+      <td>Email Fallback</td>
+      <td>If WhatsApp is not configured yet or fails for a member → send email with same personalized content + newsletter link. Email is always available as channel.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-35</span></td>
+      <td>FTP is Blocking</td>
+      <td>FTP upload is mandatory. If FTP fails after 3 retries, edition status → SEND_FAILED, no messages sent (no broken links). Alert admin.</td>
+    </tr>
+  </table>
+
+  <h3>6.5 Feedback Rules (M6)</h3>
+  <table>
+    <tr><th>Rule ID</th><th>Rule</th><th>Phase</th><th>Details</th></tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-40</span></td>
+      <td>Daily WhatsApp Survey</td>
+      <td><span class="badge badge-ok">Phase 1</span></td>
+      <td>Daily at 21:00. <strong>Varied questions</strong> generated by Claude based on today's content. Not a fixed rating scale. Max 1 survey per day per member.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-41</span></td>
+      <td>Survey Response Storage</td>
+      <td><span class="badge badge-ok">Phase 1</span></td>
+      <td>All survey responses stored in feedback table as free text. Used for manual review in Phase 1, automated analysis in Phase 2.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-42</span></td>
+      <td>Click Attribution (UTM)</td>
+      <td><span class="badge badge-state">Phase 2</span></td>
+      <td>UTM params in newsletter links: <code>?utm_source=famely&utm_member={id}&utm_article={content_id}</code>. Requires tracking endpoint on home server.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-43</span></td>
+      <td>Automated Learning Loop</td>
+      <td><span class="badge badge-state">Phase 2</span></td>
+      <td>Weekly: Claude analyzes survey responses + clicks. Adjusts source trust_scores (±0.1 max), suggests topic priority changes.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-44</span></td>
+      <td>Monthly Conversation</td>
+      <td><span class="badge badge-ok">Phase 1</span></td>
+      <td>Recommended (not blocking): conversation session with at least one family member. Manual process — no automation needed.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-45</span></td>
+      <td>Profile Changes (Phase 1)</td>
+      <td><span class="badge badge-ok">Phase 1</span></td>
+      <td>Profile changes are manual only — via Cowork session editing family.json. Every change saved as snapshot. Automated adjustments in Phase 2.</td>
+    </tr>
+  </table>
+
+  <h3>6.6 Token Cost Rules (M3 + M7)</h3>
+  <table>
+    <tr><th>Rule ID</th><th>Rule</th><th>Details</th></tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-50</span></td>
+      <td>Log Every Call</td>
+      <td>Every Claude API call → row in <code>token_usage</code> with exact input/output token counts and calculated USD cost.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-51</span></td>
+      <td>Daily Budget Alert</td>
+      <td>If daily cost exceeds configurable threshold (default $0.50): log warning. Never block pipeline.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-52</span></td>
+      <td>Monthly Budget Alert</td>
+      <td>If monthly cost exceeds configurable threshold (default $10): alert admin via WhatsApp.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-rule">BR-53</span></td>
+      <td>Dashboard Display</td>
+      <td>Dashboard shows: today's cost, MTD cost, daily trend chart, cost per module breakdown.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 7. ACCEPTANCE CRITERIA -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">7</span> Feature-Level Acceptance Criteria</h2>
+
+  <h3>AC-01: Daily Newsletter Generation</h3>
+  <table>
+    <tr><th>#</th><th>Criterion</th><th>Verification</th></tr>
+    <tr><td>1</td><td>Pipeline runs at 09:00 IST via cron and produces HTML file</td><td>HTML file exists at expected path, size > 1KB</td></tr>
+    <tr><td>2</td><td>At least 1 article per active member in the edition</td><td>NEO.member_sections all non-empty</td></tr>
+    <tr><td>3</td><td>Shaked's section is fully in English</td><td>No Hebrew characters in Shaked's headlines/summaries</td></tr>
+    <tr><td>4</td><td>צליל's section includes a math puzzle</td><td>NEO.trivia.puzzle is non-empty</td></tr>
+    <tr><td>5</td><td>No duplicate content from last 30 days</td><td>No content_hash matches in content_archive for last 30 days</td></tr>
+    <tr><td>6</td><td>Token usage logged for every Claude call</td><td>token_usage rows match number of API calls</td></tr>
+    <tr><td>7</td><td>NEO archived to SQLite + JSON</td><td>newsletters row + editions/YYYY-MM-DD.json both exist</td></tr>
+  </table>
+
+  <h3>AC-02: Family Submissions</h3>
+  <table>
+    <tr><th>#</th><th>Criterion</th><th>Verification</th></tr>
+    <tr><td>1</td><td>Family member sends WhatsApp message → receives confirmation within 10s</td><td>Automated reply sent</td></tr>
+    <tr><td>2</td><td>Submission appears in next edition's "ידיעות מהמשפחה" section</td><td>HTML contains submission content</td></tr>
+    <tr><td>3</td><td>Media (image/video/PDF) is downloaded and stored locally</td><td>File exists at submissions/YYYY-MM-DD/</td></tr>
+    <tr><td>4</td><td>AI edits submission as professional editor (headline + summary)</td><td>edited_headline and edited_summary non-empty in DB</td></tr>
+    <tr><td>5</td><td>Submissions from unknown numbers are rejected</td><td>No DB entry, logged as unknown</td></tr>
+    <tr><td>6</td><td>Failed edits retry in next build, up to 3 times</td><td>retry_count increments, eventually publishes with raw text</td></tr>
+  </table>
+
+  <h3>AC-03: Distribution</h3>
+  <table>
+    <tr><th>#</th><th>Criterion</th><th>Verification</th></tr>
+    <tr><td>1</td><td>HTML uploaded to nimrod.bio via FTP at 12:00 IST — <strong>mandatory, blocking</strong></td><td>Public URL returns 200</td></tr>
+    <tr><td>2</td><td>Each family member receives personalized message (WhatsApp or email)</td><td>send_log shows success per member with channel used</td></tr>
+    <tr><td>3</td><td>Newsletter URL in message is correct and live</td><td>URL matches nimrod.bio/newsletter/YYYY-MM-DD/</td></tr>
+    <tr><td>4</td><td>FTP failure → retry 3x → SEND_FAILED, no messages sent</td><td>No broken links distributed</td></tr>
+    <tr><td>5</td><td>WhatsApp failure → automatic email fallback</td><td>Email sent when WhatsApp fails, send_log records fallback</td></tr>
+    <tr><td>6</td><td>One member's failure doesn't block others</td><td>Other members still receive messages</td></tr>
+  </table>
+
+  <h3>AC-04: Feedback System (Phase 1)</h3>
+  <table>
+    <tr><th>#</th><th>Criterion</th><th>Verification</th></tr>
+    <tr><td>1</td><td>Varied survey question generated daily based on edition content</td><td>Survey text differs day-to-day, relates to today's articles</td></tr>
+    <tr><td>2</td><td>Survey sent at 21:00 to all active members via WhatsApp</td><td>WhatsApp send log at 21:00</td></tr>
+    <tr><td>3</td><td>Survey response (free text or number) recorded in feedback table</td><td>feedback row with type="survey"</td></tr>
+    <tr><td>4</td><td>Survey for Shaked is in English</td><td>No Hebrew in Shaked's survey question</td></tr>
+  </table>
+
+  <h3>AC-05: Dashboard (Phase 2)</h3>
+  <table>
+    <tr><th>#</th><th>Criterion</th><th>Verification</th></tr>
+    <tr><td>1</td><td>Runs on home server or dev machine — NOT on nimrod.bio</td><td>Dashboard URL is local/home server IP</td></tr>
+    <tr><td>2</td><td>Shows daily + monthly token costs</td><td>Dashboard displays accurate totals matching token_usage sum</td></tr>
+    <tr><td>3</td><td>All past newsletters viewable</td><td>Can browse any past edition</td></tr>
+    <tr><td>4</td><td>Source management (add/edit/disable)</td><td>Changes persist to sources.json</td></tr>
+    <tr><td>5</td><td>Schedule management</td><td>Time changes persist to settings.json and update cron</td></tr>
+    <tr><td>6</td><td>System health visible</td><td>Shows last run status, errors, source health</td></tr>
+  </table>
+
+  <h3>AC-06: Error Handling</h3>
+  <table>
+    <tr><th>#</th><th>Criterion</th><th>Verification</th></tr>
+    <tr><td>1</td><td>Single source failure doesn't abort pipeline</td><td>Other sources still processed</td></tr>
+    <tr><td>2</td><td>Claude API failure falls back to title-only mode</td><td>Newsletter generated without summaries</td></tr>
+    <tr><td>3</td><td>All errors logged with timestamp and stack trace</td><td>Log file contains structured error entries</td></tr>
+    <tr><td>4</td><td>Critical failures alert admin (WhatsApp or email)</td><td>Alert message received</td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 8. OPEN DESIGN QUESTIONS (RESOLVED) -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">8</span> Open Design Questions (Resolved)</h2>
+  <div class="desc">שאלות עיצוב שנפתרו במהלך האפיון. חלק מהשאלות עדיין פתוחות — מסומנות בהתאם.</div>
+
+  <table>
+    <tr><th>Question</th><th>Decision</th><th>Rationale</th></tr>
+    <tr>
+      <td>Where does server-side logic run?</td>
+      <td>Home server only. nimrod.bio serves static files. Dashboard on home server or dev machine.</td>
+      <td>upress.co.il hosting doesn't support server-side processes. Production hosting stays lean — no DB, no logic.</td>
+    </tr>
+    <tr>
+      <td>Is click tracking / analytics worth the complexity in Phase 1?</td>
+      <td><strong>No.</strong> Deferred to Phase 2. Static hosting on nimrod.bio can't run tracking endpoints. WhatsApp survey provides sufficient Phase 1 feedback.</td>
+      <td>Simplicity > completeness. Focus Phase 1 on content quality and design.</td>
+    </tr>
+    <tr>
+      <td>What if WhatsApp API is complex or slow to set up?</td>
+      <td>Email as fallback from day 1. WhatsApp can be added later. FTP is the only mandatory channel.</td>
+      <td>Distribution must work. Email is universally available, zero approval process.</td>
+    </tr>
+    <tr>
+      <td>How are M2 sources updated?</td>
+      <td>Phase 1: Cowork session edits sources.json + git push. Phase 2: Dashboard UI.</td>
+      <td>Avoids building UI early. JSON config is simple and version-controlled.</td>
+    </tr>
+    <tr>
+      <td>How are submissions distinguished from feedback?</td>
+      <td>Numeric reply 1-4 during active survey → feedback. All other messages → submission.</td>
+      <td>Simple routing rule. No ambiguity.</td>
+    </tr>
+    <tr>
+      <td>What happens when Claude API is down?</td>
+      <td>Retry 3x with exponential backoff. Then: title-only mode (no summaries).</td>
+      <td>Newsletter must go out. Degraded quality is better than no newsletter.</td>
+    </tr>
+    <tr>
+      <td>Send time?</td>
+      <td>12:00 IST, configurable.</td>
+      <td>User requirement. Build starts at 09:00 to allow 3h processing window.</td>
+    </tr>
+    <tr>
+      <td>Submission cutoff?</td>
+      <td>08:30 IST. After that → next day.</td>
+      <td>Allows 30 min before build starts at 09:00.</td>
+    </tr>
+    <tr>
+      <td>Database engine?</td>
+      <td>SQLite single file. No external DB server.</td>
+      <td>Simple, portable, zero config. Sufficient for family-scale data.</td>
+    </tr>
+    <tr>
+      <td>How to handle source degradation?</td>
+      <td>3 failures → degraded (trust -0.2). 10 total → disabled. Manual reactivation.</td>
+      <td>Auto-healing for transient issues. Manual intervention for dead sources.</td>
+    </tr>
+  </table>
+
+  <h3>Still Open (Require User Input)</h3>
+  <table>
+    <tr><th>#</th><th>Question</th><th>Impact</th><th>Needed Before</th></tr>
+    <tr><td>1</td><td>Twilio or Meta Cloud API for WhatsApp?</td><td>M5 + M6 implementation</td><td>Phase 2</td></tr>
+    <tr><td>2</td><td>FTP credentials for upress.co.il</td><td>M5 upload</td><td>Phase 2</td></tr>
+    <tr><td>3</td><td>ANTHROPIC_API_KEY</td><td>M3 all AI calls</td><td>Phase 1</td></tr>
+    <tr><td>4</td><td>Family phone numbers for WhatsApp</td><td>M5 + M6</td><td>Phase 2</td></tr>
+    <tr><td>5</td><td>Shaked: WhatsApp or Discord?</td><td>M5 distribution channel</td><td>Phase 2</td></tr>
+    <tr><td>6</td><td>יויו + צליל: own WhatsApp or through parents?</td><td>M5 distribution</td><td>Phase 2</td></tr>
+    <tr><td>7</td><td>Daily including weekends?</td><td>Cron schedule</td><td>Phase 4</td></tr>
+    <tr><td>8</td><td>Home server SSH access details</td><td>Deployment</td><td>Phase 4</td></tr>
+    <tr><td>9</td><td>Monthly token budget limit</td><td>M7 alerts</td><td>Phase 5</td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 9. LOD300 EXIT CRITERIA -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">9</span> LOD300 Exit Criteria</h2>
+  <div class="desc">תנאים שחייבים להתמלא לפני מעבר ל-LOD400.</div>
+
+  <ul class="checklist">
+    <li>All component interfaces defined (§4: 11 interfaces with full contracts)</li>
+    <li>All state transitions defined (§3: Edition, Submission, Source — 3 state machines)</li>
+    <li>No open design questions (§8: all architectural decisions resolved; operational questions deferred to deploy time)</li>
+    <li>Consuming team (builder) confirms: executable from this design</li>
+    <li>Complete data model with entity definitions, relationships, constraints (§5)</li>
+    <li>Business rules enumerated and unambiguous (§6: 27 rules, Phase 1/2 tagged)</li>
+    <li>Acceptance criteria at feature level (§7: 6 feature areas, Phase 1/2 tagged)</li>
+    <li>API surface defined (§4.2-4.4: WhatsApp/Email out, WhatsApp in, Claude API patterns)</li>
+    <li>Clear Phase 1/Phase 2 separation (§1.2: Phase Map)</li>
+  </ul>
+
+  <div class="note-red">
+    <strong>Iron Rule:</strong> L-GATE_V validation MUST use a different engine than the builder. See <code>gates/L-GATE_V_VALIDATE_AND_LOCK.md</code>.
+  </div>
+</div>
+
+<!-- Footer -->
+<div style="text-align: center; padding: 32px; color: #aaa; font-size: 12px;">
+  Famely Neuslettr LOD300 System Design · v1.1.0 (simplified) · April 2026<br>
+  Track B · parent_lod200: architecture-lod200.html v3.0<br>
+  מסמך זה ממתין לאישור לפני מעבר ל-LOD400
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Famely Neuslettr - שבוע 11-17 באפריל 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #c0392b;
+    --blue: #2471a3;
+    --green: #27ae60;
+    --purple: #7d3c98;
+    --yellow: #f39c12;
+    --orange: #e67e22;
+    --bg: #fdf6e3;
+    --ink: #2c2c2c;
+    --panel-bg: #fff;
+    --nimrod: #2471a3;
+    --michal: #27ae60;
+    --shaked: #7d3c98;
+    --maayan: #c0392b;
+    --tzlil: #e67e22;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Patrick Hand', 'Comic Sans MS', cursive, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    direction: rtl;
+    background-image: radial-gradient(circle, #e8dcc8 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+  .page { max-width: 640px; margin: 0 auto; padding: 8px; }
+
+  /* ===== COVER / HEADER ===== */
+  .cover {
+    background: var(--panel-bg);
+    border: 4px solid var(--ink);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    box-shadow: 6px 6px 0 var(--ink);
+    position: relative;
+  }
+  .cover-top {
+    background: linear-gradient(135deg, var(--red) 0%, #e74c3c 50%, var(--orange) 100%);
+    padding: 24px 20px 16px;
+    text-align: center;
+    position: relative;
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,255,255,0.08) 10px, rgba(255,255,255,0.08) 20px);
+  }
+  .cover-top .masthead {
+    font-family: 'Bangers', cursive;
+    font-size: 36px;
+    color: #fff;
+    letter-spacing: 3px;
+    text-shadow: 3px 3px 0 var(--ink), -1px -1px 0 var(--ink);
+    line-height: 1.1;
+  }
+  .cover-top .subtitle { font-size: 15px; color: rgba(255,255,255,0.9); margin-top: 2px; }
+  .cover-top .edition-badge {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--ink);
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    padding: 2px 12px;
+    border-radius: 20px;
+    border: 2px solid var(--ink);
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+  .cover-body { padding: 16px 20px; position: relative; }
+  .mascot-bubble {
+    background: #fff;
+    border: 3px solid var(--ink);
+    border-radius: 18px;
+    padding: 14px 16px;
+    position: relative;
+    font-size: 16px;
+    line-height: 1.55;
+    margin-bottom: 8px;
+  }
+  .mascot-bubble::before { content: ''; position: absolute; bottom: -14px; right: 30px; width: 0; height: 0; border-left: 14px solid transparent; border-right: 0px solid transparent; border-top: 14px solid var(--ink); }
+  .mascot-bubble::after { content: ''; position: absolute; bottom: -10px; right: 32px; width: 0; height: 0; border-left: 11px solid transparent; border-right: 0px solid transparent; border-top: 11px solid #fff; }
+  .mascot-name { font-family: 'Bangers', cursive; font-size: 13px; color: var(--red); margin-top: 16px; padding-right: 4px; letter-spacing: 1px; }
+
+  /* ===== OPENER (פתיח) ===== */
+  .opener {
+    background: linear-gradient(135deg, #fef9e7 0%, #fcf3cf 100%);
+    border: 3px solid var(--yellow);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  .opener::before {
+    content: '☀️';
+    position: absolute;
+    top: -10px;
+    left: -5px;
+    font-size: 60px;
+    opacity: 0.12;
+  }
+  .opener h3 { font-family: 'Bangers', cursive; font-size: 18px; color: var(--orange); margin-bottom: 6px; letter-spacing: 1px; }
+  .opener p { font-size: 15px; color: #555; }
+
+  /* ===== WEATHER BAR ===== */
+  .weather-bar { display: flex; gap: 8px; margin-bottom: 12px; }
+  .weather-card {
+    flex: 1;
+    background: var(--panel-bg);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    padding: 10px 12px;
+    text-align: center;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .weather-card .city { font-family: 'Bangers', cursive; font-size: 14px; color: var(--blue); letter-spacing: 1px; }
+  .weather-card .temp { font-size: 28px; font-weight: bold; }
+  .weather-card .desc { font-size: 12px; color: #888; }
+  .wind-alert { background: var(--yellow); border-color: var(--orange); animation: pulse 2s infinite; }
+  .wind-alert .city { color: var(--red); }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+
+  /* ===== SECTION SEPARATOR ===== */
+  .section-sep {
+    text-align: center;
+    padding: 10px 0;
+    font-family: 'Bangers', cursive;
+    font-size: 14px;
+    color: #ccc;
+    letter-spacing: 3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-sep::before, .section-sep::after { content: ''; flex: 1; height: 2px; background: repeating-linear-gradient(90deg, #ddd, #ddd 4px, transparent 4px, transparent 8px); }
+
+  /* ===== CONTENT GRID ===== */
+  .grid { display: flex; flex-direction: column; gap: 10px; }
+
+  /* ===== LEVEL 1: HERO PANEL ===== */
+  .panel-level1 {
+    background: var(--panel-bg);
+    border: 4px solid var(--ink);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 6px 6px 0 var(--ink);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative;
+  }
+  .panel-level1:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
+  .panel-level1 .hero-visual {
+    position: relative;
+    min-height: 220px;
+    background: linear-gradient(135deg, #e8f4fd, #d6eaf8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .panel-level1 .hero-visual img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    border-bottom: 3px solid var(--ink);
+  }
+  /* Character placeholder overlay */
+  .character-placeholder {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 90px;
+    height: 120px;
+    background: rgba(255,255,255,0.9);
+    border: 2px dashed var(--ink);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #888;
+    font-family: sans-serif;
+  }
+  .character-placeholder .char-emoji { font-size: 36px; margin-bottom: 4px; }
+  .panel-level1 .hero-body { padding: 16px 20px; }
+  .panel-level1 .hero-body .category {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .panel-level1 .hero-body h3 {
+    font-family: 'Bangers', cursive;
+    font-size: 24px;
+    line-height: 1.2;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .panel-level1 .hero-body h3 a { color: var(--ink); text-decoration: none; }
+  .panel-level1 .hero-body h3 a:hover { text-decoration: underline; }
+  .panel-level1 .hero-body .excerpt { font-size: 15px; color: #555; line-height: 1.6; margin-bottom: 8px; }
+  .panel-level1 .hero-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 12px; color: #999; }
+  .panel-level1 .member-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--panel-bg);
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    padding: 2px 10px 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+  }
+  .member-tag .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .source-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-family: sans-serif;
+  }
+  .level-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--red);
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    letter-spacing: 1px;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+  }
+
+  /* ===== LEVEL 2: FEATURE PANELS ===== */
+  .level2-row { display: flex; gap: 10px; }
+  .panel-level2 {
+    flex: 1;
+    background: var(--panel-bg);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 var(--ink);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .panel-level2:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--ink); }
+  .panel-level2 .feat-visual {
+    height: 110px;
+    position: relative;
+    overflow: hidden;
+  }
+  .panel-level2 .feat-visual img { width: 100%; height: 110px; object-fit: cover; display: block; border-bottom: 2px solid var(--ink); }
+  .panel-level2 .feat-body { padding: 10px 12px; }
+  .panel-level2 .feat-body .category { font-family: 'Bangers', cursive; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+  .panel-level2 .feat-body h3 { font-family: 'Bangers', cursive; font-size: 15px; line-height: 1.25; letter-spacing: 0.3px; }
+  .panel-level2 .feat-body h3 a { color: var(--ink); text-decoration: none; }
+
+  /* ===== LEVEL 3: COMPACT PANELS ===== */
+  .panel-level3 {
+    background: var(--panel-bg);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 3px 3px 0 var(--ink);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .panel-level3:hover { transform: translate(-1px, -1px); }
+  .panel-level3 .compact-body {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+  }
+  .panel-level3 .member-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .panel-level3 h4 { font-family: 'Bangers', cursive; font-size: 14px; flex: 1; letter-spacing: 0.3px; }
+  .panel-level3 h4 a { color: var(--ink); text-decoration: none; }
+  .panel-level3 .tag { font-size: 10px; background: #f0f0f0; padding: 2px 8px; border-radius: 4px; color: #888; font-family: sans-serif; white-space: nowrap; }
+
+  /* ===== SHARED: EXPAND/COLLAPSE ===== */
+  .expand-hint { font-size: 11px; color: #bbb; text-align: left; padding: 0 16px 8px; font-family: sans-serif; }
+  .expand-hint::before { content: '▼ '; }
+  .expanded .expand-hint::before { content: '▲ '; }
+  .panel-detail {
+    display: none;
+    padding: 0 16px 14px;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.7;
+    border-top: 2px dashed #eee;
+    margin-top: 2px;
+    padding-top: 10px;
+  }
+  .panel-detail.open { display: block; }
+  .panel-detail .read-more {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: 'Bangers', cursive;
+    font-size: 14px;
+    color: var(--blue);
+    text-decoration: none;
+    border-bottom: 2px solid var(--blue);
+    letter-spacing: 1px;
+  }
+  .panel-detail .read-more:hover { color: var(--red); border-color: var(--red); }
+
+  /* ===== SPECIAL SECTIONS ===== */
+  /* Discovery */
+  .discovery-panel { background: #f4ecf7; border-color: var(--purple); border-style: dashed; }
+  .discovery-panel .bridge-text { font-size: 12px; font-weight: bold; color: var(--purple); margin-bottom: 4px; }
+
+  /* Puzzle */
+  .puzzle-panel { background: #fef9e7; border-color: var(--yellow); }
+  .puzzle-panel .panel-body { text-align: center; }
+  .puzzle-panel h3 { color: var(--orange); }
+
+  /* History */
+  .history-panel { background: #fef3e2; border-color: var(--orange); }
+
+  /* Survey */
+  .survey-panel { background: linear-gradient(135deg, #eaf2f8, #d5e8f0); border-color: var(--blue); text-align: center; padding: 20px; }
+  .survey-panel h3 { color: var(--blue); margin-bottom: 8px; }
+  .survey-panel p { font-size: 17px; font-weight: bold; }
+  .survey-panel .hint { font-size: 12px; color: #888; margin-top: 6px; }
+
+  /* Closer */
+  .closer {
+    background: linear-gradient(135deg, #e8f8f5, #d5f5e3);
+    border: 3px solid var(--green);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-top: 12px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  .closer h3 { font-family: 'Bangers', cursive; font-size: 18px; color: var(--green); margin-bottom: 6px; }
+  .closer p { font-size: 15px; color: #555; }
+
+  /* ===== LTR ===== */
+  .ltr { direction: ltr; text-align: left; }
+
+  /* ===== FAMILY STRIP (who's in this issue) ===== */
+  .family-strip {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 10px;
+    background: var(--panel-bg);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .family-strip .member-chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 2px solid var(--ink);
+  }
+  .family-strip .member-chip .count { font-family: 'Bangers', cursive; font-size: 14px; }
+
+  /* ===== FOOTER ===== */
+  .footer-strip { text-align: center; padding: 16px; font-size: 12px; color: #999; }
+  .footer-strip .family-icons { font-size: 20px; margin-bottom: 4px; letter-spacing: 6px; }
+
+  /* ===== MINI MASCOT (inline) ===== */
+  .mini-mascot { display: inline-block; vertical-align: middle; margin: 0 4px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===== COVER ===== -->
+  <div class="cover">
+    <div class="cover-top">
+      <div class="masthead">Famely Neuslettr!</div>
+      <div class="subtitle">משפחת בן-צבי ולד</div>
+      <div class="edition-badge">שבוע 11-17 באפריל 2026 &bull; גיליון #12</div>
+    </div>
+    <div class="cover-body">
+      <div class="mascot-bubble">
+        שבוע טוב, משפחת בן-צבי ולד! ☀️ השבוע מתחיל עם רוחות מערביות מצוינות לקייט, סדנת קפוארה ביפו, ופרקים חדשים ב-Royal Road. שבוע של גילויים!
+      </div>
+      <div class="mascot-name">🎩 Cat in the Hat &mdash; המלווה שלנו לחודש אפריל</div>
+      <!-- CHARACTER PLACEHOLDER: Replace with external illustration -->
+      <div style="text-align:center; margin-top:10px;">
+        <div style="display:inline-block; width:80px; height:100px; border:2px dashed #ccc; border-radius:12px; background:#fafafa; text-align:center; padding-top:20px; font-size:32px;">🎩</div>
+        <div style="font-size:10px; color:#bbb; font-family:sans-serif; margin-top:4px;">PLACEHOLDER — see prompt file</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== OPENER (פתיח) ===== -->
+  <div class="opener">
+    <h3>☀️ פתיח — מה מחכה לכם השבוע?</h3>
+    <p>
+      <strong>נימרוד</strong> — הפלגה אפית ביוון, טכנולוגיית Foil חדשה, פרמקלצ'ר עירוני
+      &bull; <strong>מיכל</strong> — בנייה ירוקה בת"א, סדנת קפוארה ביפו, מיינדפולנס ב-5 דקות
+      &bull; <strong>Shaked</strong> — ETH catalyst breakthrough, Royal Road top 10, consciousness & chemistry
+      &bull; <strong>יויו</strong> — Cirque du Soleil 'Elemental', CNAC אודישנים 2027!
+      &bull; <strong>צליל</strong> — חידת מיליון דולר, מסלולי סחר עתיקים, גיאומטריה בטבע
+    </p>
+  </div>
+
+  <!-- ===== FAMILY STRIP ===== -->
+  <div class="family-strip">
+    <div class="member-chip" style="background: #e6f0fa;"><span class="dot" style="background:var(--nimrod);width:8px;height:8px;border-radius:50%;"></span> נימרוד <span class="count">3</span></div>
+    <div class="member-chip" style="background: #e6f5ed;"><span class="dot" style="background:var(--michal);width:8px;height:8px;border-radius:50%;"></span> מיכל <span class="count">3</span></div>
+    <div class="member-chip" style="background: #ece6f5;"><span class="dot" style="background:var(--shaked);width:8px;height:8px;border-radius:50%;"></span> שקד <span class="count">3</span></div>
+    <div class="member-chip" style="background: #fce8ec;"><span class="dot" style="background:var(--maayan);width:8px;height:8px;border-radius:50%;"></span> יויו <span class="count">2</span></div>
+    <div class="member-chip" style="background: #fef3e2;"><span class="dot" style="background:var(--tzlil);width:8px;height:8px;border-radius:50%;"></span> צליל <span class="count">3</span></div>
+  </div>
+
+  <!-- ===== WEEKLY FORECAST BAR ===== -->
+  <div class="weather-bar">
+    <div class="weather-card">
+      <div class="city">🏠 פרדס חנה</div>
+      <div class="temp">22-28°</div>
+      <div class="desc">בהיר, חם מהרגיל. גשם ביום ד׳</div>
+    </div>
+    <div class="weather-card wind-alert">
+      <div class="city">🌊 תחזית רוח</div>
+      <div class="temp">15-22 קשר</div>
+      <div class="desc">יום ב׳+ד׳ מצוינים לקייט!</div>
+    </div>
+    <div class="weather-card">
+      <div class="city">🏔️ באזל</div>
+      <div class="temp">10-16°</div>
+      <div class="desc">מעונן חלקית, יום ו׳ שמשי</div>
+    </div>
+  </div>
+
+  <div class="grid">
+
+  <!-- ============================== -->
+  <!--       LEVEL 1: HERO            -->
+  <!-- ============================== -->
+  <div class="section-sep">⭐ HERO ⭐</div>
+
+  <div class="panel-level1" onclick="togglePanel(this)">
+    <div class="hero-visual">
+      <img src="https://images.unsplash.com/photo-1500514966906-fe245eea9344?w=640&h=300&fit=crop" alt="Mediterranean Sailing Routes" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--nimrod);"></span>
+        ⛵ נימרוד
+      </div>
+      <div class="source-badge">Yachting World</div>
+      <div class="level-badge">HERO</div>
+      <!-- CHARACTER PLACEHOLDER -->
+      <div class="character-placeholder">
+        <div class="char-emoji">🎩</div>
+        <span>character<br>placeholder</span>
+      </div>
+    </div>
+    <div class="hero-body">
+      <div class="category" style="color: var(--nimrod);">שייט וסקיפרים &bull; נושא משפחתי</div>
+      <h3><a href="https://example.com/sailing-2026">סקיפר ישראלי מתעד הפלגה אפית ביוון — מסלולי 2026</a></h3>
+      <div class="excerpt">מדריך מקיף למסלולי ההפלגה הטובים ביותר בים התיכון ל-2026. מרינות חדשות ומפרצים ביוון, קרואטיה וטורקיה.</div>
+      <div class="hero-meta">
+        Yachting World &bull; 2026-04-10 &bull; <span style="background:#eee;padding:1px 6px;border-radius:4px;font-size:10px;">EN</span>
+      </div>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>A comprehensive guide to the best sailing routes across the Mediterranean for 2026, including new marinas and anchorages in Greece, Croatia and Turkey. Features interviews with Israeli skippers who completed remarkable voyages last season.</p>
+      <a href="https://example.com/sailing-2026" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!--     LEVEL 2: FEATURE (5 items) -->
+  <!--   at least 1 per member        -->
+  <!-- ============================== -->
+  <div class="section-sep">📰 FEATURE 📰</div>
+
+  <!-- Row 1: Nimrod + Michal -->
+  <div class="level2-row">
+    <div class="panel-level2" onclick="togglePanel(this)">
+      <div class="feat-visual">
+        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=400&h=200&fit=crop" alt="Kite Foil Technology" loading="lazy">
+        <div class="member-tag" style="position:absolute;top:6px;right:6px;">
+          <span class="dot" style="background:var(--nimrod);"></span> ⛵
+        </div>
+      </div>
+      <div class="feat-body">
+        <div class="category" style="color:var(--nimrod);">גלישת קייט</div>
+        <h3><a href="#">טכנולוגיית Foil חדשה — 40+ קשר!</a></h3>
+      </div>
+      <div class="expand-hint">לחצו</div>
+      <div class="panel-detail">
+        <p>The latest hydrofoil technology is changing competitive kiteboarding, with new designs reaching speeds of 40+ knots.</p>
+        <a href="#" class="read-more">למאמר &larr;</a>
+      </div>
+    </div>
+    <div class="panel-level2" onclick="togglePanel(this)">
+      <div class="feat-visual">
+        <img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=400&h=200&fit=crop" alt="Green Building TLV" loading="lazy">
+        <div class="member-tag" style="position:absolute;top:6px;right:6px;">
+          <span class="dot" style="background:var(--michal);"></span> 🌿
+        </div>
+      </div>
+      <div class="feat-body">
+        <div class="category" style="color:var(--michal);">ארכיטקטורה ירוקה</div>
+        <h3><a href="#">בנייה ירוקה: הפרויקט שמשנה את ת"א</a></h3>
+      </div>
+      <div class="expand-hint">לחצו</div>
+      <div class="panel-detail">
+        <p>פרויקט בנייה ירוקה חדשני בלב תל אביב משלב passive house עם עיצוב מקומי ובנייה מעץ.</p>
+        <a href="#" class="read-more">למאמר &larr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2: Shaked + Maayan -->
+  <div class="level2-row">
+    <div class="panel-level2 ltr" onclick="togglePanel(this)">
+      <div class="feat-visual">
+        <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=400&h=200&fit=crop" alt="Catalyst Discovery" loading="lazy">
+        <div class="member-tag" style="position:absolute;top:6px;left:6px;right:auto;">
+          <span class="dot" style="background:var(--shaked);"></span> ⚗️
+        </div>
+      </div>
+      <div class="feat-body">
+        <div class="category" style="color:var(--shaked);">Chemistry</div>
+        <h3><a href="#">ETH Zurich: Breakthrough Catalyst for Organic Synthesis</a></h3>
+      </div>
+      <div class="expand-hint" style="text-align:right;">tap</div>
+      <div class="panel-detail">
+        <p>Researchers developed a novel asymmetric catalyst enabling previously impossible reactions at room temperature.</p>
+        <a href="#" class="read-more">Read more &rarr;</a>
+      </div>
+    </div>
+    <div class="panel-level2" onclick="togglePanel(this)">
+      <div class="feat-visual">
+        <img src="https://images.unsplash.com/photo-1569930784237-ea65a2f40a83?w=400&h=200&fit=crop" alt="Cirque du Soleil" loading="lazy">
+        <div class="member-tag" style="position:absolute;top:6px;right:6px;">
+          <span class="dot" style="background:var(--maayan);"></span> 🎪
+        </div>
+      </div>
+      <div class="feat-body">
+        <div class="category" style="color:var(--maayan);">קרקס</div>
+        <h3><a href="#">Cirque du Soleil — שואו חדש: 'Elemental'</a></h3>
+      </div>
+      <div class="expand-hint">לחצו</div>
+      <div class="panel-detail">
+        <p>הפקה חדשה משלבת אקרובטיקה אווירית, ריקוד עכשווי ומיפוי הקרנות.</p>
+        <a href="#" class="read-more">למאמר &larr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 3: Tzlil (single, wider) -->
+  <div class="level2-row">
+    <div class="panel-level2" onclick="togglePanel(this)" style="flex:1;">
+      <div class="feat-visual">
+        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=640&h=200&fit=crop" alt="Numberphile" loading="lazy">
+        <div class="member-tag" style="position:absolute;top:6px;right:6px;">
+          <span class="dot" style="background:var(--tzlil);"></span> 🧮
+        </div>
+      </div>
+      <div class="feat-body">
+        <div class="category" style="color:var(--tzlil);">מתמטיקה</div>
+        <h3><a href="#">Numberphile: הבעיה הלא-פתורה שווה מיליון דולר 🧮</a></h3>
+      </div>
+      <div class="expand-hint">לחצו</div>
+      <div class="panel-detail">
+        <p>Numberphile חוקר את השערת רימן — אחת מבעיות פרס המילניום — ולמה היא מבלבלת מתמטיקאים כבר מעל מאה שנה.</p>
+        <a href="#" class="read-more">למאמר &larr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!--     LEVEL 3: COMPACT           -->
+  <!-- ============================== -->
+  <div class="section-sep">📋 עוד היום 📋</div>
+
+  <div class="panel-level3" onclick="togglePanel(this)">
+    <div class="compact-body">
+      <div class="member-icon" style="background:var(--nimrod);color:#fff;">⛵</div>
+      <h4><a href="#">Urban Permaculture: Growing Food in Small Spaces</a></h4>
+      <span class="tag">קיימות</span>
+    </div>
+    <div class="panel-detail">
+      <p>How families are transforming balconies into productive food forests using permaculture principles.</p>
+      <a href="#" class="read-more">למאמר &larr;</a>
+    </div>
+  </div>
+
+  <div class="panel-level3" onclick="togglePanel(this)">
+    <div class="compact-body">
+      <div class="member-icon" style="background:var(--michal);color:#fff;">🌿</div>
+      <h4><a href="#">קפוארה אנגולה: סדנה בינלאומית בישראל</a></h4>
+      <span class="tag">קפוארה</span>
+    </div>
+    <div class="panel-detail">
+      <p>סדנה בינלאומית עם מאסטרים מברזיל, פתוחה לכל הרמות, ביפו.</p>
+      <a href="#" class="read-more">למאמר &larr;</a>
+    </div>
+  </div>
+
+  <div class="panel-level3" onclick="togglePanel(this)">
+    <div class="compact-body">
+      <div class="member-icon" style="background:var(--michal);color:#fff;">🌿</div>
+      <h4><a href="#">Mindfulness for Busy Parents: 5-Minute Practices</a></h4>
+      <span class="tag">מיינדפולנס</span>
+    </div>
+    <div class="panel-detail">
+      <p>Five practices you can do while waiting for the kids.</p>
+      <a href="#" class="read-more">למאמר &larr;</a>
+    </div>
+  </div>
+
+  <div class="panel-level3 ltr" onclick="togglePanel(this)">
+    <div class="compact-body">
+      <div class="member-icon" style="background:var(--shaked);color:#fff;">⚗️</div>
+      <h4><a href="#">Top 10 Progression Fantasy Releases This Month</a></h4>
+      <span class="tag">Sci-Fi</span>
+    </div>
+    <div class="panel-detail">
+      <p>Latest trending progression fantasy on Royal Road, including new Dungeon Crawler Carl chapters.</p>
+      <a href="#" class="read-more">Read more &rarr;</a>
+    </div>
+  </div>
+
+  <div class="panel-level3" onclick="togglePanel(this)">
+    <div class="compact-body">
+      <div class="member-icon" style="background:var(--maayan);color:#fff;">🎪</div>
+      <h4><a href="#">Aerial Silks: Advanced Drops & Transitions</a></h4>
+      <span class="tag">אוויר</span>
+    </div>
+    <div class="panel-detail">
+      <p>Advanced aerial silks tutorial with slow-motion breakdowns.</p>
+      <a href="#" class="read-more">למאמר &larr;</a>
+    </div>
+  </div>
+
+  <div class="panel-level3" onclick="togglePanel(this)">
+    <div class="compact-body">
+      <div class="member-icon" style="background:var(--tzlil);color:#fff;">🧮</div>
+      <h4><a href="#">TED-Ed: איך מסלולי סחר עתיקים עיצבו את הכלכלה המודרנית</a></h4>
+      <span class="tag">היסטוריה</span>
+    </div>
+    <div class="panel-detail">
+      <p>מדרך המשי ועד מטבעות דיגיטליים — איך סחר עתיק יצר את הכלכלה של היום.</p>
+      <a href="#" class="read-more">למאמר &larr;</a>
+    </div>
+  </div>
+
+  <div class="panel-level3" onclick="togglePanel(this)">
+    <div class="compact-body">
+      <div class="member-icon" style="background:var(--tzlil);color:#fff;">🧮</div>
+      <h4><a href="#">Veritasium: למה גיאומטריה בכל מקום?</a></h4>
+      <span class="tag">מדע</span>
+    </div>
+    <div class="panel-detail">
+      <p>למה משושים הם הצורה המושלמת — מכוורות דבורים ועד גבישים.</p>
+      <a href="#" class="read-more">למאמר &larr;</a>
+    </div>
+  </div>
+
+  <!-- ===== DISCOVERY ===== -->
+  <div class="section-sep">🔮 גילוי 🔮</div>
+
+  <div class="panel-level3 discovery-panel" onclick="togglePanel(this)" style="border-style:dashed;">
+    <div style="padding: 12px 14px;">
+      <div class="bridge-text">🔮 נימרוד חשב שזה יעניין את יויו!</div>
+      <h4 style="font-family:'Bangers',cursive; font-size:16px;"><a href="#">הקרקס הצרפתי CNAC מכריז על מועדי אודישנים 2027</a></h4>
+      <p style="font-size:13px; color:#666; margin-top:4px;">ההרשמה נפתחת בקיץ. מועמדים חייבים להיות בני 16+.</p>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>בית הספר הלאומי לאומנויות הקרקס בצרפת פרסם את תאריכי האודישנים לשנת הלימודים 2027.</p>
+      <a href="#" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+
+  <!-- ===== PUZZLE ===== -->
+  <div class="section-sep">🧩 חידה 🧩</div>
+
+  <div class="panel-level3 puzzle-panel" style="border-color:var(--yellow);">
+    <div style="padding: 14px 16px; text-align:center;">
+      <h3 style="font-family:'Bangers',cursive; font-size:18px; color:var(--orange); margin-bottom:8px;">
+        <!-- MINI MASCOT inline -->
+        <span class="mini-mascot" style="font-size:24px;">🎩</span>
+        חידת היום — לצליל (ולכל מי שמעז!)
+      </h3>
+      <p style="font-size:16px; line-height:1.8; white-space:pre-line;">בכיתה של צליל יש 30 תלמידים.
+כל תלמיד לוחץ יד לכל תלמיד אחר בדיוק פעם אחת.
+כמה לחיצות יד בסה"כ?
+
+<span style="font-size:13px; color:#aaa;">(רמז: חשבו על צירופים)</span>
+
+<strong style="color:var(--orange);">תשובת אתמול: 42</strong></p>
+    </div>
+  </div>
+
+  <!-- ===== TODAY IN HISTORY ===== -->
+  <div class="section-sep">📜 היום 📜</div>
+
+  <div class="panel-level3 history-panel" style="border-color:var(--orange);">
+    <div style="padding: 12px 14px;">
+      <div style="font-family:'Bangers',cursive; font-size:13px; color:var(--orange); letter-spacing:1px; margin-bottom:4px;">📜 היום בהיסטוריה — 10 באפריל</div>
+      <p style="font-size:14px;">ב-1925 יצא לאור "הגטסבי הגדול" של פ. סקוט פיצג'רלד. ב-1970 פול מקרטני הכריז על פירוק הביטלס. ב-1912 יצאה הטיטאניק מנמל סאות'המפטון.</p>
+    </div>
+  </div>
+
+  <!-- ===== SURVEY ===== -->
+  <div class="section-sep">💬 משוב 💬</div>
+
+  <div class="panel-level3 survey-panel" style="border-color:var(--blue); text-align:center;">
+    <div style="padding:16px;">
+      <h3 style="font-family:'Bangers',cursive; font-size:18px; color:var(--blue); margin-bottom:8px;">
+        <span class="mini-mascot" style="font-size:24px;">🎩</span>
+        שאלת היום
+      </h3>
+      <p style="font-size:17px; font-weight:bold;">מה הכתבה שהכי הפתיעה אתכם היום? למה?</p>
+      <div style="font-size:12px; color:#888; margin-top:8px;">ענו בקבוצת וואטסאפ! 📱</div>
+    </div>
+  </div>
+
+  </div><!-- /grid -->
+
+  <!-- ===== CLOSER (סגיר) ===== -->
+  <div class="closer">
+    <h3>🌙 סגיר — שבוע נפלא!</h3>
+    <p>
+      השבוע גילינו מסלולי הפלגה חדשים ביוון, קטליסט פורץ דרך ב-ETH, ודיברנו על מתמטיקה של מיליון דולר.
+      <br>בשבוע הבא נמשיך לסקרן, להפתיע, ולחבר. שבוע מעולה למשפחה! 💙
+    </p>
+    <div style="margin-top:10px; text-align:center;">
+      <!-- CHARACTER PLACEHOLDER -->
+      <span style="font-size:40px;">🎩</span>
+      <div style="font-size:10px; color:#aaa; font-family:sans-serif;">Cat in the Hat says see you next week!</div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="footer-strip">
+    <div class="family-icons">⛵ 🌿 ⚗️ 🎪 🧮</div>
+    Famely Neuslettr &bull; גיליון #12 &bull; שבוע 11-17 באפריל 2026
+    <br><span style="font-family:sans-serif; font-size:11px; color:#bbb; letter-spacing:0.5px;">by <strong style="color:#999;">AgentsOS</strong> @ nimrod.bio</span>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+function togglePanel(el) {
+  var detail = el.querySelector('.panel-detail');
+  if (!detail) return;
+  var isOpen = detail.classList.contains('open');
+  document.querySelectorAll('.panel-detail.open').forEach(function(d) {
+    d.classList.remove('open');
+    d.parentElement.classList.remove('expanded');
+  });
+  if (!isOpen) {
+    detail.classList.add('open');
+    el.classList.add('expanded');
+  }
+}
+</script>
+</body>
+</html>

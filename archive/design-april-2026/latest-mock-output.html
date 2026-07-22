@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Famely Neuslettr - 2026-04-09</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #f5f3ef; color: #3a3a3a; line-height: 1.75; direction: rtl; padding: 12px; }
+  .container { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 2px 24px rgba(0,0,0,0.06); }
+
+  /* Header */
+  .header { background: linear-gradient(135deg, #e8f0e4 0%, #d4e4cf 100%); padding: 32px 24px 28px; text-align: center; }
+  .header .logo { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #6b8f5e; margin-bottom: 6px; }
+  .header h1 { font-size: 24px; font-weight: 800; color: #2d3a28; margin-bottom: 4px; }
+  .header .date { font-size: 13px; color: #6b8f5e; }
+  .header .greeting { font-size: 15px; color: #4a6343; margin-top: 10px; font-style: italic; }
+
+  /* Sections */
+  .section { padding: 20px 24px 24px; border-bottom: 1px solid #f0ede8; }
+  .section:last-of-type { border-bottom: none; }
+  .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .section-header .icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .section-header h2 { font-size: 16px; font-weight: 700; color: #3a3a3a; }
+
+  /* Family submissions */
+  .family .icon { background: #fef3e2; }
+  .family-card { background: #fefbf6; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; border-right: 3px solid #f0c873; }
+  .family-card .who { font-size: 12px; font-weight: 600; color: #c8942a; margin-bottom: 2px; }
+  .family-card p { font-size: 14px; color: #555; }
+
+  /* Member colors */
+  .nimrod .icon { background: #e6f0fa; } .nimrod .cat { color: #3b7dd8; } .nimrod .card { border-right-color: #3b7dd8; }
+  .michal .icon { background: #e6f5ed; } .michal .cat { color: #2d8e5e; } .michal .card { border-right-color: #2d8e5e; }
+  .shaked .icon { background: #ece6f5; } .shaked .cat { color: #6b3fa0; } .shaked .card { border-right-color: #6b3fa0; }
+  .maayan .icon { background: #fce8ec; } .maayan .cat { color: #c4304a; } .maayan .card { border-right-color: #c4304a; }
+  .tzlil .icon { background: #fef3e2; } .tzlil .cat { color: #b8860b; } .tzlil .card { border-right-color: #b8860b; }
+
+  /* Article card */
+  .card { background: #fafaf8; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; border-right: 3px solid #ddd; }
+  .card:hover { background: #f5f4f0; }
+  .card .cat { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 3px; }
+  .card h3 { font-size: 15px; font-weight: 700; line-height: 1.4; margin-bottom: 4px; }
+  .card h3 a { color: #3a3a3a; text-decoration: none; }
+  .card h3 a:hover { text-decoration: underline; }
+  .card .excerpt { font-size: 13px; color: #777; line-height: 1.6; }
+  .card .meta { margin-top: 6px; font-size: 11px; color: #aaa; display: flex; gap: 6px; align-items: center; }
+  .lang-tag { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; background: #eee; color: #888; }
+
+  /* Discovery */
+  .discovery .icon { background: #f0e6fa; }
+  .discovery-card { background: #faf7fd; border-radius: 12px; padding: 14px 16px; border: 1px dashed #d4c0ea; margin-bottom: 10px; }
+  .discovery-card .bridge { font-size: 12px; font-weight: 600; color: #7c50a8; margin-bottom: 6px; }
+  .discovery-card h3 { font-size: 15px; font-weight: 700; line-height: 1.4; margin-bottom: 4px; }
+  .discovery-card h3 a { color: #3a3a3a; text-decoration: none; }
+  .discovery-card .excerpt { font-size: 13px; color: #777; }
+  .discovery-card .meta { margin-top: 6px; font-size: 11px; color: #aaa; }
+
+  /* Trivia */
+  .trivia .icon { background: #fef3e2; }
+  .trivia-card { background: #fefbf6; border-radius: 12px; padding: 14px 16px; border-right: 3px solid #daa520; }
+  .trivia-card h3 { font-size: 15px; font-weight: 700; color: #b8860b; margin-bottom: 6px; }
+  .trivia-card p { font-size: 14px; color: #555; line-height: 1.7; white-space: pre-line; }
+
+  /* Puzzle */
+  .puzzle-card { background: #fefbf6; border-radius: 12px; padding: 14px 16px; border-right: 3px solid #b8860b; margin-top: 8px; }
+  .puzzle-card .label { font-size: 12px; font-weight: 700; color: #b8860b; margin-bottom: 4px; }
+  .puzzle-card p { font-size: 14px; color: #555; line-height: 1.7; white-space: pre-line; }
+
+  /* Footer */
+  .footer { padding: 20px 24px; text-align: center; font-size: 12px; color: #bbb; border-top: 1px solid #f0ede8; }
+
+  /* LTR for English sections */
+  .ltr { direction: ltr; text-align: left; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 1. Header -->
+  <div class="header">
+    <div class="logo">Famely Neuslettr</div>
+    <h1>משפחת בן-צבי ולד</h1>
+    <div class="date">2026-04-09</div>
+    <div class="greeting">בוקר טוב, משפחת בן-צבי ולד! ☀️ היום ב-9 באפריל 1865 הסתיימה מלחמת האזרחים האמריקנית. יום מצוין לקריאה!</div>
+  </div>
+
+  
+
+  
+
+  <!-- 3-7. Member Sections -->
+  
+  
+  <div class="section nimrod">
+    <div class="section-header">
+      <div class="icon">⛵</div>
+      <h2>הפינה של נימרוד</h2>
+    </div>
+    
+    <div class="card">
+      <div class="cat">קיימות וגידול מזון</div>
+      <h3><a href="https://example.com/permaculture">Urban Permaculture: Growing Food in Small Spaces</a></h3>
+      <div class="excerpt">How families are transforming balconies and small gardens into productive food forests using permaculture principles.</div>
+      <div class="meta">
+        Permaculture Magazine
+        <span>&middot;</span>
+        2026-04-09
+        
+        <span class="lang-tag">EN</span>
+        
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="cat">שייט וסקיפרים</div>
+      <h3><a href="https://example.com/sailing-2026">Mediterranean Sailing Routes: 2026 Guide</a></h3>
+      <div class="excerpt">A comprehensive guide to the best sailing routes across the Mediterranean for 2026, including new marinas and anchorages.</div>
+      <div class="meta">
+        Yachting World
+        <span>&middot;</span>
+        2026-04-09
+        
+        <span class="lang-tag">EN</span>
+        
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="cat">גלישת קייט</div>
+      <h3><a href="https://example.com/kite-foil">New Kite Foil Technology Revolutionizes Racing</a></h3>
+      <div class="excerpt">The latest hydrofoil technology is changing competitive kiteboarding, with new designs reaching speeds of 40+ knots.</div>
+      <div class="meta">
+        IKSURFMAG
+        <span>&middot;</span>
+        2026-04-09
+        
+        <span class="lang-tag">EN</span>
+        
+      </div>
+    </div>
+    
+
+    
+  </div>
+  
+  
+  <div class="section michal">
+    <div class="section-header">
+      <div class="icon">🌿</div>
+      <h2>הפינה של מיכל</h2>
+    </div>
+    
+    <div class="card">
+      <div class="cat">ארכיטקטורה ירוקה</div>
+      <h3><a href="https://example.com/green-build-tlv">בנייה ירוקה: הפרויקט שמשנה את תל אביב</a></h3>
+      <div class="excerpt">פרויקט בנייה ירוקה חדשני בלב תל אביב משלב טכנולוגיות passive house עם עיצוב מקומי. הפרויקט צפוי לחסוך 60% באנרגיה.</div>
+      <div class="meta">
+        ArchDaily
+        <span>&middot;</span>
+        2026-04-09
+        
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="cat">קפוארה</div>
+      <h3><a href="https://example.com/capoeira-israel">קפוארה אנגולה: סדנה בינלאומית בישראל</a></h3>
+      <div class="excerpt">סדנת קפוארה בינלאומית תתקיים בחודש הבא עם מאסטרים מברזיל. הסדנה פתוחה לכל הרמות.</div>
+      <div class="meta">
+        ABADÁ Capoeira Israel
+        <span>&middot;</span>
+        2026-04-09
+        
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="cat">מיינדפולנס וגוף-נפש</div>
+      <h3><a href="https://example.com/mindfulness-parents">Mindfulness for Busy Parents: 5-Minute Practices</a></h3>
+      <div class="excerpt">Quick mindfulness techniques designed for parents who struggle to find time for meditation practice.</div>
+      <div class="meta">
+        Mindful.org
+        <span>&middot;</span>
+        2026-04-09
+        
+        <span class="lang-tag">EN</span>
+        
+      </div>
+    </div>
+    
+
+    
+  </div>
+  
+  
+  <div class="section shaked ltr">
+    <div class="section-header">
+      <div class="icon">⚗️</div>
+      <h2>Shaked&#39;s Corner</h2>
+    </div>
+    
+    <div class="card">
+      <div class="cat">Chemistry &amp; Science</div>
+      <h3><a href="https://example.com/catalyst">Breakthrough in Organic Synthesis: New Catalyst Design</a></h3>
+      <div class="excerpt">Researchers have developed a novel catalyst that enables previously impossible organic reactions at room temperature.</div>
+      <div class="meta">
+        Nature Chemistry
+        <span>&middot;</span>
+        2026-04-09
+        
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="cat">Sci-Fi &amp; Web Fiction</div>
+      <h3><a href="https://example.com/prog-fantasy">Top 10 Progression Fantasy Releases This Month</a></h3>
+      <div class="excerpt">The latest trending progression fantasy novels on Royal Road, including new chapters of Dungeon Crawler Carl.</div>
+      <div class="meta">
+        Royal Road
+        <span>&middot;</span>
+        2026-04-09
+        
+      </div>
+    </div>
+    
+
+    
+  </div>
+  
+  
+  <div class="section maayan">
+    <div class="section-header">
+      <div class="icon">🎪</div>
+      <h2>הפינה של יויו</h2>
+    </div>
+    
+
+    
+  </div>
+  
+  
+  <div class="section tzlil">
+    <div class="section-header">
+      <div class="icon">🧮</div>
+      <h2>הפינה של צליל</h2>
+    </div>
+    
+    <div class="card">
+      <div class="cat">היסטוריה וכלכלה</div>
+      <h3><a href="https://example.com/ted-trade">TED-Ed: How Ancient Trade Routes Shaped Modern Economy</a></h3>
+      <div class="excerpt">Exploring how the Silk Road and other ancient trade routes created the foundations of modern global economics.</div>
+      <div class="meta">
+        TED-Ed
+        <span>&middot;</span>
+        2026-04-09
+        
+        <span class="lang-tag">EN</span>
+        
+      </div>
+    </div>
+    
+
+    
+    <!-- Puzzle for Tzlil -->
+    <div class="puzzle-card">
+      <div class="label">חידת היום 🧩</div>
+      <p>חידת היום 🧩
+בכיתה של צליל יש 30 תלמידים. כל תלמיד לוחץ יד לכל תלמיד אחר בדיוק פעם אחת. כמה לחיצות יד בסה&#34;כ?
+
+(רמז: חשבו על צירופים)
+
+תשובת אתמול: 42</p>
+    </div>
+    
+  </div>
+  
+
+  
+  <!-- 8. Discovery -->
+  <div class="section discovery">
+    <div class="section-header">
+      <div class="icon">🔮</div>
+      <h2>גילוי היום</h2>
+    </div>
+    
+    <div class="discovery-card">
+      <div class="bridge">נימרוד חשב שזה יעניין אותך!</div>
+      <h3><a href="https://example.com/cnac-auditions">הקרקס הצרפתי CNAC מכריז על מועדי אודישנים 2027</a></h3>
+      <div class="excerpt">בית הספר הלאומי לאומנויות הקרקס בצרפת פרסם את תאריכי האודישנים לשנת הלימודים 2027. ההרשמה נפתחת בקיץ.</div>
+      <div class="meta">CircusTalk</div>
+    </div>
+    
+    <div class="discovery-card">
+      <div class="bridge">נימרוד חשב שזה יעניין אותך!</div>
+      <h3><a href="https://example.com/aerial-silks">Aerial Silks Tutorial: Advanced Drops for Intermediate</a></h3>
+      <div class="excerpt">New video tutorial covering advanced aerial silks drops with detailed safety tips.</div>
+      <div class="meta">CircusTalk</div>
+    </div>
+    
+    <div class="discovery-card">
+      <div class="bridge">נימרוד חשב שזה יעניין אותך!</div>
+      <h3><a href="https://example.com/numberphile-million">Numberphile: The Unsolved Problem Worth $1 Million</a></h3>
+      <div class="excerpt">Numberphile explores one of the Millennium Prize Problems and why it has stumped mathematicians for decades.</div>
+      <div class="meta">Numberphile</div>
+    </div>
+    
+    <div class="discovery-card">
+      <div class="bridge">נימרוד חשב שזה יעניין אותך!</div>
+      <h3><a href="https://example.com/veritasium-geo">Veritasium: Why Geometry is Everywhere</a></h3>
+      <div class="excerpt">A deep dive into how geometric patterns appear throughout nature, from honeycombs to crystal structures.</div>
+      <div class="meta">Veritasium</div>
+    </div>
+    
+  </div>
+  
+
+  <!-- 9. Trivia / Today in History -->
+  <div class="section trivia">
+    <div class="section-header">
+      <div class="icon">📜</div>
+      <h2>היום בהיסטוריה</h2>
+    </div>
+    <div class="trivia-card">
+      <p>בוקר טוב, משפחת בן-צבי ולד! ☀️ היום ב-9 באפריל 1865 הסתיימה מלחמת האזרחים האמריקנית. יום מצוין לקריאה!</p>
+    </div>
+  </div>
+
+  <!-- 10. Footer -->
+  <div class="footer">
+    Famely Neuslettr &middot; powered by AI with ❤️ &middot; גליון #1
+  </div>
+
+</div>
+</body>
+</html>

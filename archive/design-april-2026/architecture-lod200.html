@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Famely Neuslettr - System Architecture LOD200</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #f8f9fa; color: #1a1a2e; line-height: 1.6; direction: rtl; }
+
+  .page { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+  /* Header */
+  .doc-header { background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 40px 32px; border-radius: 16px; margin-bottom: 32px; }
+  .doc-header h1 { font-size: 28px; margin-bottom: 8px; }
+  .doc-header .sub { font-size: 15px; opacity: 0.8; }
+  .doc-header .meta { margin-top: 16px; font-size: 13px; opacity: 0.6; display: flex; gap: 20px; flex-wrap: wrap; }
+
+  /* Section */
+  .section { background: white; border-radius: 16px; padding: 32px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+  .section h2 { font-size: 22px; margin-bottom: 6px; color: #1a1a2e; display: flex; align-items: center; gap: 10px; }
+  .section h2 .num { background: #1a1a2e; color: white; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .section .desc { color: #666; font-size: 14px; margin-bottom: 20px; }
+
+  h3 { font-size: 17px; margin: 20px 0 10px; color: #333; }
+  h4 { font-size: 14px; margin: 14px 0 6px; color: #555; font-weight: 600; }
+
+  /* Diagram box */
+  .diagram { background: #f8f9fa; border-radius: 12px; padding: 24px; margin: 16px 0; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.5; white-space: pre; overflow-x: auto; direction: ltr; text-align: left; border: 1px solid #e9ecef; }
+
+  /* Module cards */
+  .modules { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 16px 0; }
+  .mod-card { border: 2px solid #e9ecef; border-radius: 12px; padding: 16px; transition: all 0.2s; }
+  .mod-card:hover { border-color: #667eea; box-shadow: 0 4px 16px rgba(102,126,234,0.1); }
+  .mod-card .mod-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+  .mod-card .mod-desc { font-size: 13px; color: #666; margin-bottom: 8px; }
+  .mod-card .mod-io { font-size: 12px; color: #888; }
+  .mod-card .mod-io span { display: block; margin: 2px 0; }
+  .mod-card .in { color: #059669; } .mod-card .out { color: #2563eb; }
+
+  .m-profile { border-color: #f59e0b; } .m-profile .mod-name { color: #b45309; }
+  .m-scanner { border-color: #059669; } .m-scanner .mod-name { color: #047857; }
+  .m-normalize { border-color: #8b5cf6; } .m-normalize .mod-name { color: #6d28d9; }
+  .m-render { border-color: #3b82f6; } .m-render .mod-name { color: #1d4ed8; }
+  .m-distribute { border-color: #ef4444; } .m-distribute .mod-name { color: #dc2626; }
+  .m-feedback { border-color: #06b6d4; } .m-feedback .mod-name { color: #0891b2; }
+  .m-admin { border-color: #6366f1; } .m-admin .mod-name { color: #4f46e5; }
+
+  /* Data flow table */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  th { background: #f1f3f5; padding: 8px 12px; text-align: right; font-weight: 600; border-bottom: 2px solid #dee2e6; }
+  td { padding: 8px 12px; border-bottom: 1px solid #f1f3f5; vertical-align: top; }
+  tr:hover { background: #f8f9fa; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .badge-daily { background: #dbeafe; color: #1d4ed8; }
+  .badge-weekly { background: #fef3c7; color: #b45309; }
+  .badge-monthly { background: #fce7f3; color: #be185d; }
+  .badge-event { background: #d1fae5; color: #047857; }
+
+  /* Flow arrows */
+  .flow-row { display: flex; align-items: center; gap: 8px; margin: 8px 0; flex-wrap: wrap; }
+  .flow-box { background: #f1f3f5; border-radius: 8px; padding: 6px 12px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .flow-arrow { color: #adb5bd; font-size: 18px; }
+  .flow-box.active { background: #667eea; color: white; }
+
+  /* Notes */
+  .note { background: #fff8e1; border-right: 3px solid #f59e0b; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 13px; }
+  .note strong { color: #b45309; }
+  .note-blue { background: #e8f4fd; border-right: 3px solid #3b82f6; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 13px; }
+  .note-blue strong { color: #1d4ed8; }
+  .note-green { background: #ecfdf5; border-right: 3px solid #059669; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; font-size: 13px; }
+  .note-green strong { color: #047857; }
+
+  /* Status */
+  .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
+  .status-item { background: #f8f9fa; border-radius: 8px; padding: 12px; text-align: center; }
+  .status-item .label { font-size: 12px; color: #888; }
+  .status-item .value { font-size: 20px; font-weight: 800; margin-top: 4px; }
+
+  /* Env cards */
+  .env-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 16px 0; }
+  .env-card { border: 2px solid #e9ecef; border-radius: 12px; padding: 16px; }
+  .env-card .env-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .env-card .env-desc { font-size: 13px; color: #666; }
+  .env-card ul { font-size: 12px; margin-top: 8px; padding-right: 16px; color: #555; }
+  .env-card ul li { margin: 3px 0; }
+  .env-dev { border-color: #f59e0b; } .env-dev .env-name { color: #b45309; }
+  .env-home { border-color: #059669; } .env-home .env-name { color: #047857; }
+  .env-host { border-color: #3b82f6; } .env-host .env-name { color: #1d4ed8; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- HEADER -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="doc-header">
+  <h1>Famely Neuslettr — System Architecture</h1>
+  <div class="sub">אפיון מערכת LOD200 · ניוזלטר משפחתי יומי אוטומטי</div>
+  <div class="meta">
+    <span>v3.0 Draft</span>
+    <span>תאריך: 8.4.2026</span>
+    <span>סטטוס: ממתין לאישור</span>
+    <span>Production: Home Server → nimrod.bio</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 1. SYSTEM OVERVIEW -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">1</span> סקירת מערכת</h2>
+  <div class="desc">המערכת מורכבת מ-7 מודולים עצמאיים עם normalizers ברורים ביניהם. כל מודול אחראי לדומיין אחד. המערכת רצה על השרת הביתי ומפיצה תוכן סטטי לשרת nimrod.bio.</div>
+
+  <div class="diagram">
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                         FAMELY NEUSLETTR SYSTEM                                  │
+│                         Home Server (Production)                                 │
+│                                                                                  │
+│  ┌─────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    │
+│  │  M1          │    │  M2           │    │  M3           │    │  M4           │    │
+│  │  PROFILES    │───▶│  SCANNER     │───▶│  NORMALIZER  │───▶│  RENDERER    │    │
+│  │              │    │              │    │              │    │              │    │
+│  │  פרופילים    │    │  סריקה       │    │  נורמליזציה  │    │  רינדור      │    │
+│  │  ותחומי      │    │  ואיסוף      │    │  ואחסון      │    │  HTML        │    │
+│  │  עניין       │    │  תכנים       │    │              │    │              │    │
+│  └──────┬──────┘    └───────┬──────┘    └──────┬───────┘    └──────┬───────┘    │
+│         │                   │                   │                   │            │
+│         │   ┌───────────────┘                   │            ┌──────▼───────┐    │
+│         │   │  Family                           │            │  M5           │    │
+│         │   │  Submissions                      │            │  DISTRIBUTOR │    │
+│         │   │  (WhatsApp)                       │            │              │    │
+│         │   │                                   │            │  FTP → Web   │    │
+│         │   │       ┌──────────────┐            │            │  + WhatsApp  │    │
+│         │   └───────│  M6           │◀───────────┘            └──────────────┘    │
+│         │◀──────────│  FEEDBACK    │                                             │
+│         │           │  + SUBMISSIONS│                                             │
+│         │           │              │                                             │
+│         │           │  משוב, ידיעות │                                             │
+│         │           │  ולמידה      │                                             │
+│         │           └──────────────┘                                             │
+│         │                                                                        │
+│         │           ┌──────────────┐                                             │
+│         └──────────▶│  M7           │                                             │
+│                     │  DASHBOARD   │                                             │
+│                     │              │                                             │
+│                     │  בקרה,       │                                             │
+│                     │  תובנות,     │                                             │
+│                     │  עלויות      │                                             │
+│                     └──────────────┘                                             │
+└──────────────────────────────────────────────────────────────────────────────────┘
+
+DATA STORE (SQLite / JSON Archive)
+═══════════════════════════════════
+  content_archive │ newsletters │ feedback │ submissions │ profiles_log │ token_usage │ scan_log
+  </div>
+
+  <div class="modules">
+    <div class="mod-card m-profile">
+      <div class="mod-name">📋 M1 · PROFILES</div>
+      <div class="mod-desc">פרופילי בני משפחה, תחומי עניין, מקורות מידע, העדפות תוכן. מתעדכן מ-Feedback loop, מ-Dashboard ומסשן Cowork.</div>
+      <div class="mod-io">
+        <span class="in">→ IN: משוב מעובד, עדכון ידני (Dashboard/Cowork)</span>
+        <span class="out">← OUT: family.json, interest_vectors, scan_rules</span>
+      </div>
+    </div>
+    <div class="mod-card m-scanner">
+      <div class="mod-name">🔍 M2 · SCANNER</div>
+      <div class="mod-desc">סריקת RSS, אתרים, APIs. מקבל הנחיות סריקה מ-Profiles. <strong>מקורות ניתנים לעדכון דרך סשן Cowork או Dashboard.</strong></div>
+      <div class="mod-io">
+        <span class="in">→ IN: scan_rules, source_list (configurable)</span>
+        <span class="out">← OUT: raw_items[] (Normalized Content Items)</span>
+      </div>
+    </div>
+    <div class="mod-card m-normalize">
+      <div class="mod-name">⚙️ M3 · NORMALIZER</div>
+      <div class="mod-desc">ניקוד, סינון, דירוג, תמהיל. יצירת סיכומים (Claude API). שמירה לארכיון. הלב של המערכת.</div>
+      <div class="mod-io">
+        <span class="in">→ IN: raw_items[], family_submissions[], profiles</span>
+        <span class="out">← OUT: curated_edition{} (Normalized Edition Object)</span>
+      </div>
+    </div>
+    <div class="mod-card m-render">
+      <div class="mod-name">🎨 M4 · RENDERER</div>
+      <div class="mod-desc">בניית HTML מתבנית. Inline CSS, OG tags, tracking pixels. פלט: קובץ HTML מוכן להפצה.</div>
+      <div class="mod-io">
+        <span class="in">→ IN: curated_edition{}</span>
+        <span class="out">← OUT: newsletter.html + assets</span>
+      </div>
+    </div>
+    <div class="mod-card m-distribute">
+      <div class="mod-name">📱 M5 · DISTRIBUTOR</div>
+      <div class="mod-desc">העלאה לשרת nimrod.bio (FTP), שליחת WhatsApp לכל בן משפחה עם הודעה מותאמת.</div>
+      <div class="mod-io">
+        <span class="in">→ IN: newsletter.html, member_phones[]</span>
+        <span class="out">← OUT: public_url, send_log[]</span>
+      </div>
+    </div>
+    <div class="mod-card m-feedback">
+      <div class="mod-name">📊 M6 · FEEDBACK + SUBMISSIONS</div>
+      <div class="mod-desc">קליטת משוב + <strong>קליטת ידיעות מבני המשפחה</strong> (תמונות, וידאו, קישורים, טקסט, PDF). עיבוד ולמידה. עדכון פרופילים.</div>
+      <div class="mod-io">
+        <span class="in">→ IN: webhook events, click data, survey replies, family submissions</span>
+        <span class="out">← OUT: profile_adjustments, weekly_report, submission_items[]</span>
+      </div>
+    </div>
+    <div class="mod-card m-admin">
+      <div class="mod-name">🖥️ M7 · DASHBOARD</div>
+      <div class="mod-desc">כלי בקרה ותובנות לשיפור המערכת. מעקב עלות טוקנים, ביצועים, ותמיכה בתהליך הפיתוח. <strong>משמש את המפתח (Claude) באותה מידה כמו את המנהל.</strong></div>
+      <div class="mod-io">
+        <span class="in">→ IN: all data stores, token_usage_log</span>
+        <span class="out">← OUT: config changes, schedule changes, insights</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 2. ENVIRONMENTS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">2</span> סביבות עבודה</h2>
+  <div class="desc">שלוש סביבות נפרדות: פיתוח, פרודקשן (שרת ביתי), ואירוח (שרת web). כל צד השרת (לוגיקה, cron, API, DB) רץ בשרת הביתי. שרת האירוח מחזיק רק קבצי HTML סטטיים.</div>
+
+  <div class="env-grid">
+    <div class="env-card env-dev">
+      <div class="env-name">💻 סביבת פיתוח (Laptop)</div>
+      <div class="env-desc">המחשב הנוכחי — סביבת פיתוח בלבד</div>
+      <ul>
+        <li>עריכה וכתיבת קוד (Cowork / IDE)</li>
+        <li>הרצת בדיקות ו-mock runs</li>
+        <li>Push ל-GitHub</li>
+        <li>עדכון הגדרות ומקורות דרך Cowork session</li>
+        <li>אין cron, אין production data</li>
+      </ul>
+    </div>
+    <div class="env-card env-home">
+      <div class="env-name">🏠 שרת ביתי (Production)</div>
+      <div class="env-desc">Linux server — מריץ את כל הלוגיקה</div>
+      <ul>
+        <li>Clone מ-GitHub (production branch)</li>
+        <li>Cron jobs: סריקה, בנייה, הפצה, משוב</li>
+        <li>SQLite database (כל הנתונים)</li>
+        <li>Claude API calls (סיכומים + עריכה)</li>
+        <li>WhatsApp webhook endpoint (FastAPI)</li>
+        <li>FTP upload ל-nimrod.bio</li>
+        <li>Log files + monitoring</li>
+      </ul>
+    </div>
+    <div class="env-card env-host">
+      <div class="env-name">🌐 שרת אירוח (nimrod.bio / upress.co.il)</div>
+      <div class="env-desc">WordPress hosting — משמש לאירוח סטטי בלבד</div>
+      <ul>
+        <li>תיקיית משנה ייעודית (e.g. /newsletter/)</li>
+        <li>גישת FTP יעודית</li>
+        <li>קבצי צד לקוח בלבד (HTML, CSS, images)</li>
+        <li><strong>אין צד שרת פעיל</strong></li>
+        <li>nginx/Apache משרת קבצים סטטיים</li>
+        <li>כתובת ציבורית: nimrod.bio/newsletter/</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="diagram">
+DEPLOYMENT FLOW
+═══════════════
+
+  ┌──────────┐    git push     ┌──────────────┐    FTP upload    ┌────────────────┐
+  │  LAPTOP  │ ──────────────▶ │  HOME SERVER  │ ──────────────▶ │  nimrod.bio    │
+  │  (Dev)   │                 │  (Production) │                 │  (Static Host) │
+  └──────────┘                 └───────┬───────┘                 └────────────────┘
+       │                               │                                │
+       │ Cowork session                │ Cron + Logic                   │ Public URL
+       │ Config edits                  │ Claude API                     │ HTML only
+       │ Code + test                   │ WhatsApp API                   │
+       │                               │ SQLite DB                      │
+       │                               │ FastAPI webhook                │
+       │                               │                                │
+       │         ┌─────────────────────┘                                │
+       │         │                                                      │
+       │         ▼                                                      │
+       │    ┌──────────┐         WhatsApp link      ┌──────────────┐   │
+       │    │ WhatsApp  │ ─────────────────────────▶ │ בני המשפחה   │ ◀─┘
+       │    │ Business  │ ◀──── feedback + submissions│              │
+       │    └──────────┘                             └──────────────┘
+       │
+       └────── GitHub repo (version control, CI)
+  </div>
+
+  <h3>ניהול גרסאות</h3>
+  <table>
+    <tr><th style="width:30%">Repository</th><td>GitHub — famely-neuslettr</td></tr>
+    <tr><th>Branches</th><td><code>main</code> (production) · <code>dev</code> (development) · feature branches</td></tr>
+    <tr><th>Deploy</th><td>Home server pulls from <code>main</code> (manual or webhook trigger)</td></tr>
+    <tr><th>Config</th><td>Settings/sources/profiles stored in repo (sensitive keys in <code>.env</code>, not committed)</td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 3. DATA FLOW -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">3</span> זרימות מידע</h2>
+  <div class="desc">כל זרימה עוברת דרך normalizer שמבטיח מבנה נתונים אחיד.</div>
+
+  <h3>3.1 זרימה יומית — יצירת גליון</h3>
+  <div class="flow-row">
+    <div class="flow-box">CRON 09:00</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box active">M2 Scanner</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="font-size:11px;">NCI[]</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box active">M3 Normalizer</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="font-size:11px;">NEO{}</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box active">M4 Renderer</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="font-size:11px;">HTML</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box active">M5 Distributor</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">WhatsApp 12:00 ✓</div>
+  </div>
+
+  <h3>3.2 זרימת ידיעה משפחתית (Family Submission)</h3>
+  <div class="flow-row">
+    <div class="flow-box">בן משפחה שולח WhatsApp</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box active">M6 Webhook</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="font-size:11px;">Submission</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box active">AI Editor</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="font-size:11px;">Edited NCI</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box active">M3 (next edition)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">פרסום מחויב ✓</div>
+  </div>
+  <div class="note-green">
+    <strong>ידיעות משפחתיות — חובת פרסום:</strong> כל בן משפחה יכול לשלוח ידיעה ישירות לעיתון (טקסט, תמונה, וידאו, קישור, PDF). האיגנט מבצע עבודת עורך עיתון מקצועי: מסכם, מעצב כותרת, בודק תוכן — ו<strong>מחוייב לפרסם בגליון הקרוב</strong>. אין סינון, יש עריכה.
+  </div>
+
+  <h3>3.3 זרימת משוב (Feedback Loop)</h3>
+  <div class="flow-row">
+    <div class="flow-box">User click / reply</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box active">M6 Feedback</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="font-size:11px;">Analysis</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box active">M1 Profiles</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">Updated scan_rules</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">M2 (next day)</div>
+  </div>
+
+  <h3>3.4 זרימת עדכון מקורות / הגדרות</h3>
+  <div class="flow-row">
+    <div class="flow-box">Cowork session / Dashboard</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box active">M1 / M2 Config</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="font-size:11px;">Updated sources.json / settings.json</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">git commit + deploy</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box active">Home Server</div>
+  </div>
+  <div class="note-blue">
+    <strong>שני ערוצי עדכון:</strong> Phase 1 — עריכת settings/sources דרך סשן Cowork (עריכה ישירה + git push). Phase 2 — דרך Dashboard UI בשרת הביתי.
+  </div>
+
+  <h3>3.5 מבני הנתונים (Normalizers)</h3>
+
+  <h4>NCI — Normalized Content Item (פלט Scanner → קלט Normalizer)</h4>
+  <div class="diagram">
+NCI {
+  id:           string    // hash of URL
+  url:          string
+  title:        string
+  source:       { name, type, url, trust_score }
+  published_at: ISO8601
+  fetched_at:   ISO8601
+  language:     "he" | "en"
+  raw_text:     string    // original summary / excerpt
+  tags:         string[]
+  image_url:    string?
+  media:        { type, url, thumbnail }?   // for video/image submissions
+  content_hash: string    // for dedup across days
+  is_submission: boolean  // true if sent by family member
+  submitted_by: string?   // member_id if submission
+}
+  </div>
+
+  <h4>Family Submission (WhatsApp → M6 → NCI)</h4>
+  <div class="diagram">
+FamilySubmission {
+  id:           string    // unique ID
+  member_id:    string    // who sent it
+  timestamp:    ISO8601
+  message_type: "text" | "image" | "video" | "document" | "link"
+  content: {
+    text:       string?   // message text / caption
+    media_url:  string?   // WhatsApp media URL (downloaded + stored)
+    link_url:   string?   // extracted URL
+    file_name:  string?   // PDF / doc filename
+    mime_type:  string?
+  }
+  status:       "received" | "edited" | "published"
+  edited_nci:   NCI?      // the processed version ready for edition
+  edition_date: YYYY-MM-DD  // which edition it appeared in
+}
+  </div>
+
+  <h4>NEO — Normalized Edition Object (פלט Normalizer → קלט Renderer)</h4>
+  <div class="diagram">
+NEO {
+  date:           YYYY-MM-DD
+  family_name:    string
+  greeting:       string          // generated daily greeting
+  family_content: [{              // submissions from family members
+    submitted_by: string          // display name
+    headline:     string          // AI-edited headline
+    summary:      string          // AI-edited summary
+    media:        { type, url }?  // image/video if present
+    original_nci: NCI
+  }]
+  member_sections: [{
+    member_id:    string
+    display_name: string          // "יויו", "Shaked", etc.
+    icon:         string
+    subtitle:     string
+    language:     "he" | "en" | "both"
+    articles: [{
+      nci:        NCI             // original item reference
+      headline:   string          // generated headline
+      summary:    string          // generated summary (language-aware)
+      category:   string          // matched topic name
+      score:      number          // relevance 0-100
+    }]
+  }]
+  discovery: [{
+    nci:          NCI
+    from_member:  string
+    to_member:    string
+    bridge_text:  string          // "נימרוד → צליל: ..."
+  }]
+  trivia: {
+    history:      string          // today in history
+    puzzle:       string          // daily puzzle (for צליל)
+    answer:       string          // yesterday's answer
+  }
+  metadata: {
+    items_fetched:    number
+    items_selected:   number
+    sources_scanned:  number
+    submissions_count: number
+    generation_model: string
+    tokens_used:      { input, output, total, cost_usd }
+    build_duration:   number      // ms
+  }
+}
+  </div>
+
+  <h4>Feedback Event</h4>
+  <div class="diagram">
+FeedbackEvent {
+  member_id:    string
+  timestamp:    ISO8601
+  type:         "rating" | "click" | "text" | "share" | "time_on_page" | "submission"
+  newsletter:   YYYY-MM-DD
+  value:        string    // "1"-"4", URL clicked, free text, seconds
+  article_id:   string?   // which article was interacted with
+}
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 4. SCHEDULES -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">4</span> תזמונים ותהליכים</h2>
+  <div class="desc">שלושה מחזורים: יומי, שבועי, חודשי. שעת שליחה: 12:00 שעון ישראל. כל הזמנים ניתנים לשינוי — Phase 1 דרך Cowork, Phase 2 דרך Dashboard.</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>תהליך</th>
+        <th>מחזור</th>
+        <th>זמן (IST)</th>
+        <th>מודולים</th>
+        <th>מטרה</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Newsletter Build</strong></td>
+        <td><span class="badge badge-daily">יומי</span></td>
+        <td>09:00</td>
+        <td>M2→M3→M4</td>
+        <td>איסוף, עיבוד, שילוב ידיעות משפחתיות, בניית HTML</td>
+      </tr>
+      <tr>
+        <td><strong>Newsletter Send</strong></td>
+        <td><span class="badge badge-daily">יומי</span></td>
+        <td>12:00</td>
+        <td>M5</td>
+        <td>FTP upload ל-nimrod.bio + שליחת WhatsApp</td>
+      </tr>
+      <tr>
+        <td><strong>Feedback Survey</strong></td>
+        <td><span class="badge badge-daily">יומי</span></td>
+        <td>21:00</td>
+        <td>M5→M6</td>
+        <td>שליחת סקר מהיר + קליטת תשובות</td>
+      </tr>
+      <tr>
+        <td><strong>Click Analytics</strong></td>
+        <td><span class="badge badge-daily">יומי</span></td>
+        <td>23:00</td>
+        <td>M6</td>
+        <td>עיבוד קליקים ו-analytics מהיום</td>
+      </tr>
+      <tr>
+        <td><strong>Submissions Intake</strong></td>
+        <td><span class="badge badge-event">אירוע</span></td>
+        <td>24/7 (webhook)</td>
+        <td>M6</td>
+        <td>קליטת ידיעות מבני משפחה בזמן אמת, אישור קבלה</td>
+      </tr>
+      <tr>
+        <td><strong>Source Refresh</strong></td>
+        <td><span class="badge badge-weekly">שבועי</span></td>
+        <td>שישי 02:00</td>
+        <td>M2→M1</td>
+        <td>בדיקת תקינות מקורות, חיפוש מקורות חדשים, עדכון trust scores</td>
+      </tr>
+      <tr>
+        <td><strong>Profile Optimization</strong></td>
+        <td><span class="badge badge-weekly">שבועי</span></td>
+        <td>שישי 03:00</td>
+        <td>M6→M1</td>
+        <td>ניתוח משוב שבועי, התאמת ניקוד מקורות, שינוי priorities</td>
+      </tr>
+      <tr>
+        <td><strong>Content Dedup Deep Clean</strong></td>
+        <td><span class="badge badge-weekly">שבועי</span></td>
+        <td>שישי 04:00</td>
+        <td>M3</td>
+        <td>ניקוי כפילויות מתקדם (semantic similarity), עדכון content_hash index</td>
+      </tr>
+      <tr>
+        <td><strong>Monthly Report</strong></td>
+        <td><span class="badge badge-monthly">חודשי</span></td>
+        <td>1 לחודש</td>
+        <td>M6→M7</td>
+        <td>דו"ח חודשי: מגמות, שביעות רצון, עלויות, מה עניין, מה לא</td>
+      </tr>
+      <tr>
+        <td><strong>Family Conversation</strong></td>
+        <td><span class="badge badge-monthly">חודשי</span></td>
+        <td>1 לחודש (מומלץ)</td>
+        <td>M6→M1</td>
+        <td>סשן שיחה עם לפחות בן משפחה אחד — סקירה, רצונות, שיפורים. <strong>מומלץ, לא חוסם.</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Deep Profile Review</strong></td>
+        <td><span class="badge badge-monthly">חודשי</span></td>
+        <td>1 לחודש</td>
+        <td>M6→M1</td>
+        <td>סקר מעמיק ("מה תרצו לשנות?") + עדכון profiles מלא</td>
+      </tr>
+      <tr>
+        <td><strong>Archive Maintenance</strong></td>
+        <td><span class="badge badge-monthly">חודשי</span></td>
+        <td>1 לחודש</td>
+        <td>M3</td>
+        <td>vacuum DB, generate embeddings for old content, export monthly snapshot</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <strong>שינוי תזמונים:</strong> Phase 1 — עריכת <code>settings.json</code> דרך סשן Cowork (עריכה, commit, deploy). Phase 2 — שינוי דרך Dashboard UI עם שמירה ישירה ל-config ועדכון cron.
+  </div>
+  <div class="note">
+    <strong>איזון תוכן:</strong> התהליך השבועי מוודא שלא נחזור על תכנים. ה-Normalizer מחזיק index של content_hashes מ-30 יום אחרונים + semantic similarity check (embeddings) למניעת כפילויות רעיוניות.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 5. MODULE DETAILS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">5</span> פירוט מודולים</h2>
+
+  <h3>M1 · PROFILES — פרופילים ותחומי עניין</h3>
+  <table>
+    <tr><th style="width:30%">אחריות</th><td>ניהול פרופילי בני משפחה, תחומי עניין, מקורות, העדפות</td></tr>
+    <tr><th>קלט</th><td>עדכוני משוב (M6), עריכה ידנית (M7/Cowork), social media enrichment</td></tr>
+    <tr><th>פלט</th><td><code>family.json</code>, <code>scan_rules[]</code>, <code>interest_vectors[]</code></td></tr>
+    <tr><th>אחסון</th><td><code>profiles/</code> dir + <code>member_preferences_log</code> table</td></tr>
+    <tr><th>טכנולוגיה</th><td>JSON config + SQLite log + optional vector embeddings</td></tr>
+  </table>
+  <div class="note"><strong>תחזוקת פרופילים:</strong> כל שינוי נשמר כ-snapshot ב-preferences_log עם סיבה (feedback/manual/auto). מאפשר rollback ומעקב אחרי אבולוציית העדפות.</div>
+
+  <h3>M2 · SCANNER — סריקה ואיסוף</h3>
+  <table>
+    <tr><th style="width:30%">אחריות</th><td>סריקת מקורות מידע, איסוף תכנים חדשים, deduplicate ראשוני</td></tr>
+    <tr><th>קלט</th><td><code>scan_rules[]</code> (מ-M1), <code>sources.json</code> (configurable)</td></tr>
+    <tr><th>פלט</th><td><code>NCI[]</code> — רשימת Normalized Content Items</td></tr>
+    <tr><th>סוגי מקורות</th><td>RSS feeds, Web scraping (Playwright), YouTube API, WhatsApp incoming</td></tr>
+    <tr><th>עדכון מקורות</th><td><strong>Phase 1:</strong> עריכת <code>sources.json</code> דרך סשן Cowork + git push<br><strong>Phase 2:</strong> דרך Dashboard UI (הוספה/הסרה/עריכה)</td></tr>
+    <tr><th>טכנולוגיה</th><td>Python: <code>feedparser</code>, <code>httpx</code>, <code>playwright</code>, <code>yt-dlp</code></td></tr>
+  </table>
+  <div class="note"><strong>גמישות מקורות:</strong> <code>sources.json</code> מגדיר כל מקור עם type, URL, schedule, trust_score, linked_members. שינוי ב-JSON = שינוי בסריקה. לא צריך לגעת בקוד.</div>
+
+  <h3>M3 · NORMALIZER — עיבוד, ניקוד ואחסון</h3>
+  <table>
+    <tr><th style="width:30%">אחריות</th><td>ניקוד רלוונטיות, סינון, תמהיל, שילוב ידיעות משפחתיות, יצירת סיכומים, שמירה לארכיון</td></tr>
+    <tr><th>קלט</th><td><code>NCI[]</code> (מ-M2), <code>submissions[]</code> (מ-M6), <code>profiles</code> (מ-M1)</td></tr>
+    <tr><th>פלט</th><td><code>NEO{}</code> — Normalized Edition Object, מוכן לרינדור</td></tr>
+    <tr><th>תת-תהליכים</th><td>
+      1. <strong>Dedup</strong>: hash + semantic similarity vs 30-day archive<br>
+      2. <strong>Score</strong>: keyword match × priority × source trust × freshness × engagement history<br>
+      3. <strong>Merge Submissions</strong>: שילוב ידיעות משפחתיות (חובת פרסום, עריכת AI)<br>
+      4. <strong>Curate</strong>: top-N per member, topic balance, discovery selection<br>
+      5. <strong>Generate</strong>: Claude API → headlines, summaries, trivia, greeting, <strong>edit submissions</strong><br>
+      6. <strong>Track Tokens</strong>: log all API calls with input/output tokens + cost<br>
+      7. <strong>Archive</strong>: save all to SQLite + JSON daily snapshot
+    </td></tr>
+    <tr><th>טכנולוגיה</th><td>Python + Anthropic Claude API + SQLite + optional: sentence-transformers for embeddings</td></tr>
+  </table>
+  <div class="note-green"><strong>עריכת ידיעות משפחתיות:</strong> האיגנט פועל כעורך עיתון מקצועי — מסכם, מנסח כותרת, מארגן תמונות/מדיה, מוודא איכות. הידיעה <strong>תמיד</strong> מתפרסמת בגליון הקרוב.</div>
+
+  <h3>M4 · RENDERER — רינדור HTML</h3>
+  <table>
+    <tr><th style="width:30%">אחריות</th><td>הפיכת NEO לקובץ HTML מוכן, כולל CSS inline, OG tags, tracking</td></tr>
+    <tr><th>קלט</th><td><code>NEO{}</code></td></tr>
+    <tr><th>פלט</th><td><code>newsletter-YYYY-MM-DD.html</code> + <code>og-image.png</code></td></tr>
+    <tr><th>תבנית</th><td>Jinja2 template (Style 4 - light clean, מאושר)</td></tr>
+    <tr><th>סקשן חדש</th><td>"ידיעות מהמשפחה" — סקשן ייעודי לתכנים שנשלחו ע"י בני משפחה</td></tr>
+    <tr><th>טכנולוגיה</th><td>Jinja2 + CSS inliner + OG meta generation</td></tr>
+  </table>
+
+  <h3>M5 · DISTRIBUTOR — הפצה</h3>
+  <table>
+    <tr><th style="width:30%">אחריות</th><td>העלאת HTML לשרת nimrod.bio (FTP) + שליחת הודעות WhatsApp מותאמות</td></tr>
+    <tr><th>קלט</th><td><code>newsletter.html</code>, <code>member_phones[]</code></td></tr>
+    <tr><th>פלט</th><td><code>public_url</code> (nimrod.bio/newsletter/YYYY-MM-DD/), <code>send_log[]</code></td></tr>
+    <tr><th>שרת</th><td>FTP upload לתיקיית משנה ב-nimrod.bio (upress.co.il hosting)</td></tr>
+    <tr><th>WhatsApp</th><td>Twilio WhatsApp Business API / Meta Cloud API (template messages)</td></tr>
+    <tr><th>שעת שליחה</th><td><strong>12:00 IST</strong></td></tr>
+    <tr><th>טכנולוגיה</th><td>Python: <code>ftplib</code> (FTP to upress), <code>twilio</code></td></tr>
+  </table>
+  <div class="note"><strong>הודעת WhatsApp מותאמת:</strong> כל בן משפחה מקבל הודעה שונה עם הכותרות הרלוונטיות לו. שקד מקבל באנגלית. הלינק מוביל ל-nimrod.bio/newsletter/.</div>
+
+  <h3>M6 · FEEDBACK + SUBMISSIONS — משוב וידיעות</h3>
+  <table>
+    <tr><th style="width:30%">אחריות</th><td>קליטת משוב + <strong>קליטת ידיעות מבני המשפחה</strong> + עיבוד + למידה + עדכון פרופילים</td></tr>
+    <tr><th>ערוצי קלט (משוב)</th><td>
+      <strong>פסיבי:</strong> click tracking (UTM), read pixels, time-on-page<br>
+      <strong>אקטיבי-קל:</strong> emoji rating בניוזלטר, WhatsApp survey (1-4)<br>
+      <strong>אקטיבי-עמוק:</strong> סקר שבועי/חודשי
+    </td></tr>
+    <tr><th>ערוצי קלט (ידיעות)</th><td>
+      <strong>WhatsApp:</strong> כל בן משפחה שולח הודעה לבוט<br>
+      <strong>סוגי תוכן:</strong> טקסט, תמונה, וידאו, קישור, PDF<br>
+      <strong>עיבוד:</strong> זיהוי סוג, download media, AI editing, confirmation reply
+    </td></tr>
+    <tr><th>פלט</th><td>Profile adjustments → M1, submission_items[] → M3, reports → M7</td></tr>
+    <tr><th>Webhook</th><td>FastAPI endpoint (on home server) for incoming WhatsApp messages</td></tr>
+    <tr><th>טכנולוגיה</th><td>Python FastAPI webhook + SQLite + Claude for text analysis + media storage</td></tr>
+  </table>
+  <div class="note-green"><strong>תהליך ידיעה משפחתית:</strong><br>
+  1. בן משפחה שולח הודעה לבוט WhatsApp (טקסט/תמונה/וידאו/PDF/קישור)<br>
+  2. M6 מזהה סוג, מוריד מדיה, שומר ב-DB כ-FamilySubmission<br>
+  3. שולח תשובה אוטומטית: "התקבל! יפורסם בגליון הקרוב 📰"<br>
+  4. בזמן Build: M3 שולף submissions ממתינות, Claude עורך כעיתונאי מקצועי<br>
+  5. הידיעה נכנסת לסקשן "ידיעות מהמשפחה" בגליון — <strong>חובת פרסום</strong>
+  </div>
+
+  <h3>M7 · DASHBOARD — בקרה ותובנות</h3>
+  <table>
+    <tr><th style="width:30%">אחריות</th><td><strong>כלי בקרה</strong> ומקום לקבל <strong>תובנות לשיפור ושדרוג המערכת</strong>. תמיכה בתהליך הפיתוח. משמש את המפתח (Claude) ואת המנהל (נימרוד) באותה מידה.</td></tr>
+    <tr><th>יכולות בקרה</th><td>
+      - צפייה בכל הניוזלטרים שנוצרו<br>
+      - עריכת פרופילים והעדפות<br>
+      - הוספה/הסרה/עריכה של מקורות (M2)<br>
+      - שינוי תזמונים (Phase 2)<br>
+      - Preview לפני שליחה<br>
+      - Manual override: הוספת/הסרת תוכן מגליון
+    </td></tr>
+    <tr><th>תובנות ודוחות</th><td>
+      - <strong>עלות טוקנים: יומית + חודשית</strong> (input tokens, output tokens, total cost USD)<br>
+      - דשבורד: ratings, clicks, trends<br>
+      - זיהוי אנומליות (מקור תקוע, ירידת engagement)<br>
+      - המלצות לשיפור (AI-generated insights)<br>
+      - סטטוס בריאות מערכת
+    </td></tr>
+    <tr><th>טכנולוגיה</th><td>Web app: React/Svelte + FastAPI backend (or simple HTML dashboard)</td></tr>
+  </table>
+  <div class="note-blue"><strong>מעקב עלויות:</strong> כל קריאת Claude API מתועדת ב-<code>token_usage</code> table עם: תאריך, מודול, model, input_tokens, output_tokens, cost_usd. Dashboard מציג סיכום יומי + חודשי + trend + התראה אם חורגים מתקציב.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 6. INFRASTRUCTURE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">6</span> תשתית</h2>
+  <div class="desc">שרת ביתי מריץ את כל הלוגיקה. שרת nimrod.bio (upress.co.il) מאחסן HTML סטטי בלבד. הלפטופ משמש לפיתוח.</div>
+
+  <div class="diagram">
+HOME SERVER (Production) — Linux
+├── /opt/famely-neuslettr/               ← cloned from GitHub
+│   ├── config/
+│   │   ├── family.json                  ← M1: profiles
+│   │   ├── sources.json                 ← M2: source definitions (configurable!)
+│   │   └── settings.json                ← global settings (times, thresholds, etc.)
+│   ├── .env                             ← API keys, FTP creds (NOT in git)
+│   ├── src/
+│   │   ├── m1_profiles.py
+│   │   ├── m2_scanner.py
+│   │   ├── m3_normalizer.py
+│   │   ├── m4_renderer.py
+│   │   ├── m5_distributor.py
+│   │   ├── m6_feedback.py               ← handles both feedback + submissions
+│   │   ├── orchestrator.py              ← daily/weekly/monthly runners
+│   │   └── models.py                    ← NCI, NEO, FeedbackEvent, FamilySubmission
+│   ├── templates/
+│   │   └── newsletter.html              ← Jinja2 template
+│   ├── data/
+│   │   ├── famely.db                    ← SQLite: all structured data
+│   │   ├── submissions/                 ← downloaded media from family submissions
+│   │   │   └── YYYY-MM-DD/
+│   │   │       ├── img_001.jpg
+│   │   │       └── doc_001.pdf
+│   │   ├── archive/
+│   │   │   ├── raw/YYYY-MM-DD.json      ← daily raw fetch snapshot
+│   │   │   ├── editions/YYYY-MM-DD.json ← daily NEO snapshot
+│   │   │   └── html/YYYY-MM-DD.html     ← rendered newsletters
+│   │   └── feedback/
+│   │       └── YYYY-MM-DD.json          ← daily feedback
+│   ├── logs/
+│   │   └── famely.log
+│   └── venv/                            ← Python virtual environment
+│
+├── /etc/cron.d/famely                   ← cron jobs (times in IST)
+│   0  9 * * *  famely  /opt/famely-neuslettr/run.sh daily-build
+│   0 12 * * *  famely  /opt/famely-neuslettr/run.sh daily-send
+│   0 21 * * *  famely  /opt/famely-neuslettr/run.sh daily-feedback
+│   0 23 * * *  famely  /opt/famely-neuslettr/run.sh daily-analytics
+│   0  2 * * 5  famely  /opt/famely-neuslettr/run.sh weekly
+│   0  3 1 * *  famely  /opt/famely-neuslettr/run.sh monthly
+│
+└── FastAPI webhook server (port 8443)   ← WhatsApp incoming messages + submissions
+    └── Reverse proxy via nginx or direct
+
+REMOTE HOST (nimrod.bio / upress.co.il)
+═══════════════════════════════════════
+├── /newsletter/                         ← FTP-accessible subdirectory
+│   ├── YYYY-MM-DD/
+│   │   ├── index.html                   ← that day's newsletter
+│   │   └── media/                       ← images from submissions
+│   └── latest/                          ← symlink to most recent
+│       └── index.html
+│
+└── No server-side logic. Static files only.
+    Public URL: https://nimrod.bio/newsletter/YYYY-MM-DD/
+  </div>
+
+  <h3>Stack טכנולוגי</h3>
+  <table>
+    <tr><th style="width:30%">Runtime</th><td>Python 3.11+ / venv</td></tr>
+    <tr><th>Database</th><td>SQLite (single file, backed up daily)</td></tr>
+    <tr><th>Archive Format</th><td>SQLite tables + JSON daily snapshots (dual: queryable + portable)</td></tr>
+    <tr><th>AI Engine</th><td>Anthropic Claude API (Sonnet for summaries, Opus for analysis + editing)</td></tr>
+    <tr><th>Hosting</th><td>nimrod.bio (upress.co.il) — FTP upload, static HTML only</td></tr>
+    <tr><th>Upload</th><td>FTP from home server → nimrod.bio subdirectory</td></tr>
+    <tr><th>WhatsApp</th><td>Twilio WhatsApp Business API or Meta Cloud API</td></tr>
+    <tr><th>Webhook Server</th><td>FastAPI (home server, for WhatsApp incoming: feedback + submissions)</td></tr>
+    <tr><th>Scheduling</th><td>System cron (home server)</td></tr>
+    <tr><th>Version Control</th><td>GitHub — dev branch → main → deploy to home server</td></tr>
+    <tr><th>Token Tracking</th><td>SQLite <code>token_usage</code> table (per-call: model, tokens, cost)</td></tr>
+    <tr><th>Monitoring</th><td>Simple log rotation + daily health email + Dashboard health view</td></tr>
+  </table>
+
+  <h3>SQLite Schema (עיקרי)</h3>
+  <div class="diagram">
+-- Core tables
+content_archive     (id, url, title, source, published_at, fetched_at, language, content_hash, ...)
+newsletters         (date, greeting, metadata_json, html_path, public_url, ...)
+newsletter_items    (newsletter_date, member_id, content_id, headline, summary, score, ...)
+
+-- Submissions
+family_submissions  (id, member_id, timestamp, message_type, content_json, status, edition_date, ...)
+
+-- Feedback
+feedback            (id, member_id, timestamp, type, newsletter_date, value, article_id, ...)
+
+-- Profiles
+member_preferences_log  (member_id, date, preferences_snapshot, change_reason, ...)
+
+-- Token usage (NEW)
+token_usage         (id, timestamp, module, model, operation, input_tokens, output_tokens, cost_usd, ...)
+
+-- System
+scan_log            (date, source, items_found, items_new, errors, duration_ms, ...)
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 7. ARCHIVE AS ASSET -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">7</span> הארכיון כנכס — מודל הנתונים</h2>
+  <div class="desc">כל פריט שנאסף, כל ניוזלטר שנוצר, כל משוב, כל ידיעה משפחתית — נשמר לצמיתות. הארכיון הופך עם הזמן לזיכרון משפחתי.</div>
+
+  <div class="diagram">
+                    ┌─────────────────────────┐
+                    │     content_archive      │ ← כל פריט שנאסף אי פעם
+                    │  (5,400+ items/year)     │
+                    └────────────┬────────────┘
+                                 │
+       ┌─────────────────────────┼─────────────────────────┐
+       │                         │                         │
+  ┌────▼────────────┐  ┌────────▼────────┐  ┌────────────▼────┐
+  │   newsletters   │  │ newsletter_items │  │    feedback     │
+  │  (365/year)     │  │  (item-member    │  │  (ratings,      │
+  │                 │  │   mapping)       │  │   clicks, text) │
+  └────────┬────────┘  └─────────────────┘  └────────┬────────┘
+           │                                          │
+           │    ┌─────────────────────┐               │
+           │    │ family_submissions  │ ← ידיעות מבני המשפחה
+           │    │ (media, text, PDF)  │   (נשמרות לצמיתות)
+           │    └─────────────────────┘               │
+           │                                          │
+           └──────────────────┬───────────────────────┘
+                              │
+                    ┌─────────▼──────────┐
+                    │ preferences_log    │ ← snapshots of evolving interests
+                    │ (trends over time) │
+                    └────────────────────┘
+                              │
+                    ┌─────────▼──────────┐
+                    │   token_usage      │ ← עלויות יומיות וחודשיות
+                    │ (cost tracking)    │
+                    └────────────────────┘
+
+  QUERY EXAMPLES:
+  ─────────────────
+  "What interested Nimrod last winter?"
+    → SELECT * FROM newsletter_items ni
+      JOIN content_archive ca ON ni.content_id = ca.id
+      WHERE ni.member_id = 'nimrod'
+      AND ni.newsletter_date BETWEEN '2025-12-01' AND '2026-02-28'
+
+  "Which sources get the most clicks?"
+    → SELECT ca.source_name, COUNT(f.id) as clicks
+      FROM feedback f
+      JOIN content_archive ca ON f.value = ca.url
+      WHERE f.type = 'click'
+      GROUP BY ca.source_name ORDER BY clicks DESC
+
+  "How have Tzlil's interests evolved?"
+    → SELECT date, preferences_snapshot
+      FROM member_preferences_log
+      WHERE member_id = 'tzlil'
+      ORDER BY date
+
+  "How much did we spend on tokens this month?"
+    → SELECT SUM(cost_usd) as total_cost,
+             SUM(input_tokens) as total_input,
+             SUM(output_tokens) as total_output
+      FROM token_usage
+      WHERE timestamp >= date('now', 'start of month')
+
+  "What did the family share this year?"
+    → SELECT fs.member_id, COUNT(*) as submissions
+      FROM family_submissions fs
+      WHERE fs.status = 'published'
+      GROUP BY fs.member_id
+  </div>
+
+  <h3>שכבות אחסון</h3>
+  <table>
+    <tr><th>שכבה</th><th>פורמט</th><th>מטרה</th><th>גודל/שנה</th></tr>
+    <tr><td><strong>Hot</strong> (30 יום)</td><td>SQLite in-memory index</td><td>Dedup, scoring, fast queries</td><td>~50MB</td></tr>
+    <tr><td><strong>Warm</strong> (שנה)</td><td>SQLite on disk</td><td>Full archive, analytics, reports</td><td>~200MB</td></tr>
+    <tr><td><strong>Cold</strong> (שנה+)</td><td>JSON snapshots + SQLite</td><td>Historical record, family memory</td><td>~500MB</td></tr>
+    <tr><td><strong>Media</strong></td><td>Files on disk</td><td>Family submission media (images, video, PDF)</td><td>~1-5GB</td></tr>
+    <tr><td><strong>Portable</strong></td><td>JSON daily exports</td><td>Backup, migration, external tools</td><td>~100MB</td></tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 8. DEVELOPMENT PHASES -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">8</span> שלבי פיתוח</h2>
+
+  <table>
+    <tr><th>שלב</th><th>מודולים</th><th>Deliverable</th><th>תלויות</th></tr>
+    <tr>
+      <td><strong>Phase 1: Core Pipeline</strong><br><span class="badge badge-daily">שבוע 1-2</span></td>
+      <td>M1, M2, M3, M4</td>
+      <td>Pipeline שרץ מ-CLI ומייצר HTML<br>עם RSS אמיתיים + Claude API<br>+ token usage tracking</td>
+      <td>ANTHROPIC_API_KEY, GitHub repo</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 2: Distribution</strong><br><span class="badge badge-daily">שבוע 3</span></td>
+      <td>M5</td>
+      <td>FTP upload ל-nimrod.bio + WhatsApp send<br>Template message approval from Meta</td>
+      <td>FTP creds (upress), Twilio/Meta account</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 3: Feedback + Submissions</strong><br><span class="badge badge-weekly">שבוע 4-5</span></td>
+      <td>M6</td>
+      <td>Webhook endpoint, click tracking,<br>survey send/receive, <strong>family submissions</strong>,<br>basic learning loop</td>
+      <td>FastAPI server on home server, WhatsApp webhook URL</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 4: Automation + Deploy</strong><br><span class="badge badge-weekly">שבוע 6</span></td>
+      <td>All</td>
+      <td>Cron setup on home server, monitoring,<br>daily health check, log rotation,<br>DB backup, git deploy flow</td>
+      <td>Home server access, GitHub CI</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 5: Dashboard</strong><br><span class="badge badge-monthly">שבוע 8+</span></td>
+      <td>M7</td>
+      <td>Web dashboard: profiles, stats, overrides,<br><strong>token cost tracking (daily+monthly)</strong>,<br>source management, schedule management</td>
+      <td>Phase 1-4 complete</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- 9. OPEN QUESTIONS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section">
+  <h2><span class="num">9</span> שאלות פתוחות לאישור</h2>
+  <table>
+    <tr><th>#</th><th>שאלה</th><th>סטטוס</th><th>השפעה</th></tr>
+    <tr><td>1</td><td><s>כתובת השרת + פרטי FTP</s></td><td>✅ nimrod.bio / upress.co.il / FTP ייעודי</td><td>M5</td></tr>
+    <tr><td>2</td><td>Twilio account או Meta Cloud API לוואטסאפ?</td><td>⏳ פתוח</td><td>M5 + M6</td></tr>
+    <tr><td>3</td><td>דומיין/URL לניוזלטר (nimrod.bio/newsletter/?) </td><td>⏳ לאשר path</td><td>M5</td></tr>
+    <tr><td>4</td><td>ANTHROPIC_API_KEY</td><td>⏳ נדרש לפני Phase 1</td><td>M3</td></tr>
+    <tr><td>5</td><td>מספרי טלפון של בני המשפחה לוואטסאפ</td><td>⏳ פתוח</td><td>M5</td></tr>
+    <tr><td>6</td><td>שקד מקבל את הניוזלטר בוואטסאפ או דיסקורד?</td><td>⏳ פתוח</td><td>M5</td></tr>
+    <tr><td>7</td><td>האם יויו וצליל מקבלות הודעת WhatsApp משלהן?</td><td>⏳ פתוח</td><td>M5</td></tr>
+    <tr><td>8</td><td>תדירות: כל יום כולל שבת/שישי? או רק ימי חול?</td><td>⏳ פתוח</td><td>Cron</td></tr>
+    <tr><td>9</td><td>פרטי גישה FTP לשרת upress.co.il</td><td>⏳ נדרש לפני Phase 2</td><td>M5</td></tr>
+    <tr><td>10</td><td>כתובת השרת הביתי + גישת SSH</td><td>⏳ נדרש לפני Phase 4</td><td>Deploy</td></tr>
+    <tr><td>11</td><td>תקציב חודשי מומלץ לטוקנים (Claude API)?</td><td>⏳ מומלץ</td><td>M7 alerts</td></tr>
+  </table>
+</div>
+
+<!-- Footer -->
+<div style="text-align: center; padding: 32px; color: #aaa; font-size: 12px;">
+  Famely Neuslettr Architecture LOD200 · v3.0 Draft · April 2026<br>
+  מסמך זה ממתין לאישור לפני מעבר ל-LOD400 ופיתוח
+</div>
+
+</div>
+</body>
+</html>

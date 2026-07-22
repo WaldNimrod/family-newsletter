@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SVG Hero Prototype — Famely Neuslettr</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: #f5f3ef;
+    color: #2c2c2c;
+    padding: 20px;
+    direction: rtl;
+  }
+  .page { max-width: 640px; margin: 0 auto; }
+  h2 { margin: 30px 0 10px; font-size: 14px; color: #888; letter-spacing: 1px; text-transform: uppercase; }
+  .level-label { background: #333; color: #fff; display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 11px; margin-bottom: 8px; }
+
+  /* Hero container */
+  .hero-container {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    margin-bottom: 24px;
+  }
+
+  /* Feature cards */
+  .feature-row { display: flex; gap: 12px; margin-bottom: 16px; }
+  .feature-card {
+    flex: 1;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border-right: 4px solid #ddd;
+  }
+  .feature-card .card-visual { height: 100px; display: flex; align-items: center; justify-content: center; }
+  .feature-card .card-body { padding: 12px; }
+  .feature-card h3 { font-size: 14px; font-weight: 700; line-height: 1.4; margin-bottom: 4px; }
+  .feature-card .cat { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+
+  /* Compact items */
+  .compact-list { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .compact-item { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 10px; }
+  .compact-item:last-child { border-bottom: none; }
+  .compact-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .compact-item h4 { font-size: 13px; font-weight: 600; flex: 1; }
+  .compact-item .tag { font-size: 10px; background: #f0f0f0; padding: 2px 8px; border-radius: 4px; color: #888; }
+
+  /* Mini mascot */
+  .mini-mascot {
+    position: relative;
+    display: inline-block;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ============ HERO LEVEL ============ -->
+<h2>רמה 1 — Hero</h2>
+<span class="level-label">HERO — full width, character, rich media</span>
+
+<div class="hero-container">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 380" style="display:block;width:100%">
+  <defs>
+    <!-- Halftone pattern -->
+    <pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="1" fill="rgba(0,0,0,0.06)"/>
+    </pattern>
+    <!-- Wave pattern -->
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#87CEEB"/>
+      <stop offset="60%" stop-color="#E0F0FF"/>
+      <stop offset="100%" stop-color="#F5E6D3"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2471a3"/>
+      <stop offset="100%" stop-color="#1a5276"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="640" height="380" fill="url(#sky)"/>
+  <rect width="640" height="380" fill="url(#dots)"/>
+
+  <!-- Clouds -->
+  <g opacity="0.7">
+    <ellipse cx="120" cy="60" rx="50" ry="22" fill="white"/>
+    <ellipse cx="95" cy="55" rx="30" ry="18" fill="white"/>
+    <ellipse cx="145" cy="55" rx="35" ry="20" fill="white"/>
+    <ellipse cx="450" cy="80" rx="40" ry="18" fill="white"/>
+    <ellipse cx="425" cy="75" rx="25" ry="14" fill="white"/>
+    <ellipse cx="475" cy="75" rx="30" ry="16" fill="white"/>
+  </g>
+
+  <!-- Sun -->
+  <circle cx="560" cy="70" r="35" fill="#f39c12" opacity="0.9"/>
+  <circle cx="560" cy="70" r="28" fill="#f9e79f"/>
+
+  <!-- Sea -->
+  <path d="M0 240 Q80 225 160 240 Q240 255 320 240 Q400 225 480 240 Q560 255 640 240 L640 380 L0 380 Z" fill="url(#sea)"/>
+
+  <!-- Waves detail -->
+  <path d="M0 260 Q80 250 160 260 Q240 270 320 260 Q400 250 480 260 Q560 270 640 260" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+  <path d="M0 280 Q80 272 160 280 Q240 288 320 280 Q400 272 480 280 Q560 288 640 280" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+
+  <!-- Sailboat in distance -->
+  <g transform="translate(480, 210)">
+    <path d="M0 0 L-8 30 L8 30 Z" fill="white" stroke="#2c2c2c" stroke-width="1"/>
+    <line x1="0" y1="0" x2="0" y2="30" stroke="#2c2c2c" stroke-width="1.5"/>
+    <path d="M-12 30 Q0 28 12 30" fill="#5a3a1a" stroke="#2c2c2c" stroke-width="1"/>
+  </g>
+
+  <!-- === DR. SEUSS CHARACTER (The Skipper Cat) === -->
+  <g transform="translate(140, 100)">
+    <!-- Body -->
+    <ellipse cx="0" cy="90" rx="35" ry="45" fill="white" stroke="#2c2c2c" stroke-width="3"/>
+    <!-- Stripes on body -->
+    <path d="M-25 70 Q0 65 25 70" fill="none" stroke="#c0392b" stroke-width="5"/>
+    <path d="M-30 85 Q0 80 30 85" fill="none" stroke="#c0392b" stroke-width="5"/>
+    <path d="M-28 100 Q0 95 28 100" fill="none" stroke="#c0392b" stroke-width="5"/>
+    <path d="M-22 115 Q0 110 22 115" fill="none" stroke="#c0392b" stroke-width="5"/>
+
+    <!-- Head -->
+    <ellipse cx="0" cy="30" rx="28" ry="28" fill="white" stroke="#2c2c2c" stroke-width="3"/>
+
+    <!-- Tall red-white striped hat (Dr. Seuss style!) -->
+    <g transform="translate(0, -15)">
+      <rect x="-18" y="-70" width="36" height="75" rx="8" fill="white" stroke="#2c2c2c" stroke-width="2.5"/>
+      <rect x="-18" y="-70" width="36" height="12" rx="2" fill="#c0392b"/>
+      <rect x="-18" y="-46" width="36" height="12" rx="2" fill="#c0392b"/>
+      <rect x="-18" y="-22" width="36" height="12" rx="2" fill="#c0392b"/>
+      <!-- Hat brim -->
+      <ellipse cx="0" cy="5" rx="26" ry="6" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+    </g>
+
+    <!-- Eyes -->
+    <circle cx="-10" cy="25" r="8" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+    <circle cx="10" cy="25" r="8" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+    <circle cx="-8" cy="26" r="3.5" fill="#2c2c2c"/>
+    <circle cx="12" cy="26" r="3.5" fill="#2c2c2c"/>
+    <circle cx="-7" cy="24.5" r="1.2" fill="white"/>
+    <circle cx="13" cy="24.5" r="1.2" fill="white"/>
+
+    <!-- Nose -->
+    <ellipse cx="0" cy="35" rx="4" ry="3" fill="#ffcccc" stroke="#2c2c2c" stroke-width="1.5"/>
+
+    <!-- Smile -->
+    <path d="M-12 40 Q0 50 12 40" fill="none" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Whiskers -->
+    <line x1="-28" y1="32" x2="-45" y2="28" stroke="#2c2c2c" stroke-width="1.5"/>
+    <line x1="-28" y1="36" x2="-45" y2="38" stroke="#2c2c2c" stroke-width="1.5"/>
+    <line x1="28" y1="32" x2="45" y2="28" stroke="#2c2c2c" stroke-width="1.5"/>
+    <line x1="28" y1="36" x2="45" y2="38" stroke="#2c2c2c" stroke-width="1.5"/>
+
+    <!-- Left arm holding ship wheel -->
+    <path d="M-35 80 Q-55 70 -65 55" fill="none" stroke="#2c2c2c" stroke-width="3" stroke-linecap="round"/>
+    <!-- Paw -->
+    <circle cx="-65" cy="53" r="8" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+
+    <!-- Ship wheel -->
+    <g transform="translate(-65, 35)">
+      <circle cx="0" cy="0" r="18" fill="none" stroke="#8B4513" stroke-width="3"/>
+      <circle cx="0" cy="0" r="6" fill="#8B4513"/>
+      <line x1="0" y1="-18" x2="0" y2="-6" stroke="#8B4513" stroke-width="2.5"/>
+      <line x1="0" y1="18" x2="0" y2="6" stroke="#8B4513" stroke-width="2.5"/>
+      <line x1="-18" y1="0" x2="-6" y2="0" stroke="#8B4513" stroke-width="2.5"/>
+      <line x1="18" y1="0" x2="6" y2="0" stroke="#8B4513" stroke-width="2.5"/>
+      <line x1="-13" y1="-13" x2="-4" y2="-4" stroke="#8B4513" stroke-width="2.5"/>
+      <line x1="13" y1="13" x2="4" y2="4" stroke="#8B4513" stroke-width="2.5"/>
+      <line x1="13" y1="-13" x2="4" y2="-4" stroke="#8B4513" stroke-width="2.5"/>
+      <line x1="-13" y1="13" x2="-4" y2="4" stroke="#8B4513" stroke-width="2.5"/>
+      <!-- Knobs -->
+      <circle cx="0" cy="-18" r="3" fill="#5a3a1a"/>
+      <circle cx="0" cy="18" r="3" fill="#5a3a1a"/>
+      <circle cx="-18" cy="0" r="3" fill="#5a3a1a"/>
+      <circle cx="18" cy="0" r="3" fill="#5a3a1a"/>
+    </g>
+
+    <!-- Right arm waving -->
+    <path d="M35 75 Q55 50 60 30" fill="none" stroke="#2c2c2c" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="60" cy="28" r="8" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+    <!-- Fingers spread (waving) -->
+    <line x1="56" y1="22" x2="52" y2="15" stroke="#2c2c2c" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="60" y1="20" x2="60" y2="12" stroke="#2c2c2c" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="64" y1="22" x2="68" y2="15" stroke="#2c2c2c" stroke-width="1.5" stroke-linecap="round"/>
+
+    <!-- Tail -->
+    <path d="M20 125 Q45 130 50 110 Q55 90 45 85" fill="none" stroke="#2c2c2c" stroke-width="3" stroke-linecap="round"/>
+    <!-- Tail stripes -->
+    <path d="M30 125 Q38 122 42 118" fill="none" stroke="#c0392b" stroke-width="4"/>
+    <path d="M42 115 Q48 108 48 100" fill="none" stroke="#c0392b" stroke-width="4"/>
+
+    <!-- Feet -->
+    <ellipse cx="-15" cy="135" rx="15" ry="6" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+    <ellipse cx="15" cy="135" rx="15" ry="6" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+  </g>
+
+  <!-- Speech bubble -->
+  <g transform="translate(320, 40)">
+    <rect x="0" y="0" width="280" height="80" rx="16" fill="white" stroke="#2c2c2c" stroke-width="2.5"/>
+    <!-- Bubble tail -->
+    <polygon points="-10,50 20,40 20,60" fill="white" stroke="#2c2c2c" stroke-width="2.5"/>
+    <line x1="20" y1="41" x2="20" y2="59" stroke="white" stroke-width="4"/>
+
+    <text x="140" y="30" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="17" fill="#c0392b" direction="rtl">
+      !בוקר טוב, משפחת בן-צבי ולד
+    </text>
+    <text x="140" y="55" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#555" direction="rtl">
+      סקיפר ישראלי מתעד הפלגה ביוון
+    </text>
+    <text x="140" y="72" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#888" direction="rtl">
+      יום שישי, 10 באפריל 2026 | גיליון #12
+    </text>
+  </g>
+
+  <!-- Edition badge -->
+  <g transform="translate(540, 340)">
+    <rect x="0" y="0" width="80" height="24" rx="12" fill="#f39c12" stroke="#2c2c2c" stroke-width="2"/>
+    <text x="40" y="16" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="10" fill="#2c2c2c" letter-spacing="1">#12 APRIL</text>
+  </g>
+
+  <!-- Kite in sky (small detail) -->
+  <g transform="translate(350, 140)">
+    <path d="M0 -20 L15 0 L0 20 L-15 0 Z" fill="#e74c3c" stroke="#2c2c2c" stroke-width="1.5" opacity="0.8"/>
+    <path d="M0 20 Q10 35 5 50 Q0 65 -5 80" fill="none" stroke="#2c2c2c" stroke-width="1" opacity="0.5"/>
+  </g>
+
+  <!-- Fish jumping -->
+  <g transform="translate(400, 250)">
+    <path d="M0 0 Q5 -15 15 -12 Q25 -10 20 0" fill="#87CEEB" stroke="#2c2c2c" stroke-width="1.5"/>
+    <circle cx="18" cy="-8" r="1.5" fill="#2c2c2c"/>
+    <!-- Splash -->
+    <path d="M-5 2 Q0 -5 5 2" fill="none" stroke="white" stroke-width="1" opacity="0.6"/>
+  </g>
+</svg>
+</div>
+
+<!-- ============ FEATURE LEVEL ============ -->
+<h2>רמה 2 — Feature</h2>
+<span class="level-label">FEATURE — 2-3 cards, image + headline</span>
+
+<div class="feature-row">
+  <!-- Card 1: Michal -->
+  <div class="feature-card" style="border-right-color: #27ae60;">
+    <div class="card-visual" style="background: linear-gradient(135deg, #e8f0e4, #c9ddc3);">
+      <!-- Mini character in feature card -->
+      <svg viewBox="0 0 80 80" width="60" height="60">
+        <!-- Mini Cat with hard hat (architecture) -->
+        <circle cx="40" cy="45" r="20" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+        <circle cx="40" cy="28" r="14" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+        <!-- Hard hat -->
+        <path d="M26 22 Q40 12 54 22" fill="#27ae60" stroke="#2c2c2c" stroke-width="1.5"/>
+        <rect x="24" y="22" width="32" height="5" rx="2" fill="#27ae60" stroke="#2c2c2c" stroke-width="1"/>
+        <!-- Eyes -->
+        <circle cx="35" cy="28" r="3" fill="#2c2c2c"/>
+        <circle cx="45" cy="28" r="3" fill="#2c2c2c"/>
+        <circle cx="36" cy="27" r="1" fill="white"/>
+        <circle cx="46" cy="27" r="1" fill="white"/>
+        <!-- Smile -->
+        <path d="M35 34 Q40 38 45 34" fill="none" stroke="#2c2c2c" stroke-width="1.5"/>
+        <!-- T-square -->
+        <line x1="58" y1="35" x2="68" y2="55" stroke="#8B4513" stroke-width="2"/>
+        <line x1="63" y1="45" x2="73" y2="43" stroke="#8B4513" stroke-width="2"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="cat" style="color: #27ae60;">מיכל — ארכיטקטורה</div>
+      <h3>בית פסיבי בגליל: הפרויקט שמשנה כללים</h3>
+    </div>
+  </div>
+
+  <!-- Card 2: Maayan -->
+  <div class="feature-card" style="border-right-color: #c0392b;">
+    <div class="card-visual" style="background: linear-gradient(135deg, #fce8ec, #f5b7b1);">
+      <svg viewBox="0 0 80 80" width="60" height="60">
+        <!-- Mini Cat doing aerial -->
+        <circle cx="40" cy="28" r="14" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+        <!-- Cat ears -->
+        <path d="M30 18 L33 10 L38 18" fill="white" stroke="#2c2c2c" stroke-width="1.5"/>
+        <path d="M42 18 L47 10 L50 18" fill="white" stroke="#2c2c2c" stroke-width="1.5"/>
+        <!-- Eyes (excited!) -->
+        <text x="35" y="30" font-size="8" text-anchor="middle">★</text>
+        <text x="45" y="30" font-size="8" text-anchor="middle">★</text>
+        <!-- Smile -->
+        <path d="M34 34 Q40 40 46 34" fill="none" stroke="#2c2c2c" stroke-width="1.5"/>
+        <!-- Hoop -->
+        <circle cx="40" cy="50" r="18" fill="none" stroke="#c0392b" stroke-width="2.5"/>
+        <!-- Body hanging from hoop -->
+        <ellipse cx="40" cy="45" rx="10" ry="15" fill="white" stroke="#2c2c2c" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="cat" style="color: #c0392b;">יויו — קרקס</div>
+      <h3>CNAC פתחו הרשמה לאודישנים!</h3>
+    </div>
+  </div>
+</div>
+
+<!-- ============ COMPACT LEVEL ============ -->
+<h2>רמה 3 — Compact</h2>
+<span class="level-label">COMPACT — title + tag only</span>
+
+<div class="compact-list">
+  <div class="compact-item">
+    <span class="dot" style="background: #7d3c98;"></span>
+    <h4>New Royal Road serial breaks 10K followers</h4>
+    <span class="tag">Shaked · Sci-Fi</span>
+  </div>
+  <div class="compact-item">
+    <span class="dot" style="background: #e67e22;"></span>
+    <h4>חידת המתמטיקה של השבוע — Numberphile</h4>
+    <span class="tag">צליל · מתמטיקה</span>
+  </div>
+  <div class="compact-item">
+    <span class="dot" style="background: #2471a3;"></span>
+    <h4>עונת הקייט נפתחה — תחזית רוח לסוף שבוע</h4>
+    <span class="tag">נימרוד · קייט</span>
+  </div>
+  <div class="compact-item">
+    <span class="dot" style="background: #27ae60;"></span>
+    <h4>מדיטציית בוקר: 5 דקות שמשנות את היום</h4>
+    <span class="tag">מיכל · מיינדפולנס</span>
+  </div>
+</div>
+
+<!-- ============ MINI MASCOT throughout page ============ -->
+<h2 style="margin-top: 40px;">דמות קטנה לאורך הדף</h2>
+<p style="color: #888; font-size: 13px; margin-bottom: 12px;">הדמות מופיעה גם בהירו (גדול) וגם בגדלים קטנים לאורך הניוזלטר — ליד חידות, גילויים, ואלמנטים מיוחדים</p>
+
+<div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+  <!-- Pose 1: Thinking (for puzzles) -->
+  <div style="text-align: center;">
+    <svg viewBox="0 0 60 80" width="60" height="80">
+      <circle cx="30" cy="35" r="15" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+      <circle cx="30" cy="20" r="12" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+      <!-- Hat mini -->
+      <rect x="22" y="2" width="16" height="20" rx="4" fill="white" stroke="#2c2c2c" stroke-width="1.5"/>
+      <rect x="22" y="2" width="16" height="5" fill="#c0392b"/>
+      <rect x="22" y="12" width="16" height="5" fill="#c0392b"/>
+      <!-- Eyes looking up (thinking) -->
+      <circle cx="26" cy="19" r="2.5" fill="#2c2c2c"/>
+      <circle cx="34" cy="19" r="2.5" fill="#2c2c2c"/>
+      <!-- Thinking... -->
+      <text x="48" y="10" font-size="10" fill="#888">?</text>
+      <text x="52" y="6" font-size="8" fill="#aaa">?</text>
+    </svg>
+    <div style="font-size: 10px; color: #888;">חידה</div>
+  </div>
+
+  <!-- Pose 2: Pointing (for discovery) -->
+  <div style="text-align: center;">
+    <svg viewBox="0 0 70 80" width="70" height="80">
+      <circle cx="30" cy="40" r="15" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+      <circle cx="30" cy="25" r="12" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+      <!-- Hat mini -->
+      <rect x="22" y="7" width="16" height="20" rx="4" fill="white" stroke="#2c2c2c" stroke-width="1.5"/>
+      <rect x="22" y="7" width="16" height="5" fill="#c0392b"/>
+      <rect x="22" y="17" width="16" height="5" fill="#c0392b"/>
+      <!-- Eyes -->
+      <circle cx="26" cy="24" r="2.5" fill="#2c2c2c"/>
+      <circle cx="34" cy="24" r="2.5" fill="#2c2c2c"/>
+      <!-- Smile -->
+      <path d="M25 29 Q30 33 35 29" fill="none" stroke="#2c2c2c" stroke-width="1.5"/>
+      <!-- Pointing arm -->
+      <path d="M45 35 L58 28" stroke="#2c2c2c" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="60" cy="27" r="4" fill="white" stroke="#2c2c2c" stroke-width="1.5"/>
+      <line x1="60" y1="23" x2="65" y2="18" stroke="#2c2c2c" stroke-width="1.5" stroke-linecap="round"/>
+      <!-- Arrow -->
+      <text x="62" y="14" font-size="12" fill="#c0392b">!</text>
+    </svg>
+    <div style="font-size: 10px; color: #888;">גילוי</div>
+  </div>
+
+  <!-- Pose 3: Reading (for content) -->
+  <div style="text-align: center;">
+    <svg viewBox="0 0 60 80" width="60" height="80">
+      <circle cx="30" cy="40" r="15" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+      <circle cx="30" cy="25" r="12" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+      <!-- Hat mini -->
+      <rect x="22" y="7" width="16" height="20" rx="4" fill="white" stroke="#2c2c2c" stroke-width="1.5"/>
+      <rect x="22" y="7" width="16" height="5" fill="#c0392b"/>
+      <rect x="22" y="17" width="16" height="5" fill="#c0392b"/>
+      <!-- Eyes down (reading) -->
+      <path d="M24 24 Q26 26 28 24" fill="none" stroke="#2c2c2c" stroke-width="1.5"/>
+      <path d="M32 24 Q34 26 36 24" fill="none" stroke="#2c2c2c" stroke-width="1.5"/>
+      <!-- Book -->
+      <rect x="15" y="48" width="30" height="20" rx="2" fill="#f39c12" stroke="#2c2c2c" stroke-width="1.5"/>
+      <line x1="30" y1="48" x2="30" y2="68" stroke="#2c2c2c" stroke-width="1"/>
+      <!-- Text lines on book -->
+      <line x1="18" y1="53" x2="28" y2="53" stroke="#2c2c2c" stroke-width="0.5"/>
+      <line x1="18" y1="56" x2="26" y2="56" stroke="#2c2c2c" stroke-width="0.5"/>
+      <line x1="32" y1="53" x2="42" y2="53" stroke="#2c2c2c" stroke-width="0.5"/>
+      <line x1="32" y1="56" x2="40" y2="56" stroke="#2c2c2c" stroke-width="0.5"/>
+    </svg>
+    <div style="font-size: 10px; color: #888;">קריאה</div>
+  </div>
+
+  <!-- Pose 4: Waving (for greeting) -->
+  <div style="text-align: center;">
+    <svg viewBox="0 0 60 80" width="60" height="80">
+      <circle cx="30" cy="40" r="15" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+      <circle cx="30" cy="25" r="12" fill="white" stroke="#2c2c2c" stroke-width="2"/>
+      <!-- Hat mini -->
+      <rect x="22" y="7" width="16" height="20" rx="4" fill="white" stroke="#2c2c2c" stroke-width="1.5"/>
+      <rect x="22" y="7" width="16" height="5" fill="#c0392b"/>
+      <rect x="22" y="17" width="16" height="5" fill="#c0392b"/>
+      <!-- Happy eyes -->
+      <circle cx="26" cy="24" r="2.5" fill="#2c2c2c"/>
+      <circle cx="34" cy="24" r="2.5" fill="#2c2c2c"/>
+      <circle cx="27" cy="23" r="0.8" fill="white"/>
+      <circle cx="35" cy="23" r="0.8" fill="white"/>
+      <!-- Big smile -->
+      <path d="M24 29 Q30 35 36 29" fill="none" stroke="#2c2c2c" stroke-width="1.5"/>
+      <!-- Waving arm -->
+      <path d="M45 35 Q52 20 48 10" stroke="#2c2c2c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <circle cx="48" cy="9" r="4" fill="white" stroke="#2c2c2c" stroke-width="1.5"/>
+    </svg>
+    <div style="font-size: 10px; color: #888;">ברכה</div>
+  </div>
+</div>
+
+<div style="margin-top: 30px; padding: 16px; background: #f0f0f0; border-radius: 12px; font-size: 13px; color: #555;">
+  <strong>מערכת הדמויות:</strong>
+  <br>אפריל — Dr. Seuss Cat (פסים אדום-לבן, כובע גבוה)
+  <br>מאי — Popeye (יבוא בעדכון הבא)
+  <br>כל חודש הדמות מתחלפת, אבל המבנה נשאר: hero גדול + פוזות קטנות לאורך הדף
+</div>
+
+</div>
+</body>
+</html>

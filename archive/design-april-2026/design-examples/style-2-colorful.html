@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>סגנון 2 - צבעוני ומשפחתי</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    line-height: 1.7;
+    direction: rtl;
+    min-height: 100vh;
+    padding: 16px;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 32px 24px;
+    text-align: center;
+    color: white;
+  }
+  .header .emoji-big {
+    font-size: 48px;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .header .date {
+    font-size: 14px;
+    opacity: 0.85;
+  }
+  .header .greeting {
+    font-size: 16px;
+    margin-top: 12px;
+    opacity: 0.9;
+  }
+
+  /* Section */
+  .section {
+    padding: 20px 24px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid;
+  }
+  .section-header .icon {
+    font-size: 20px;
+  }
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  /* Family content */
+  .family-section .section-header { border-color: #ff6b6b; }
+  .family-card {
+    background: linear-gradient(135deg, #fff5f5, #ffe3e3);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-right: 4px solid #ff6b6b;
+  }
+  .family-card .who {
+    font-size: 13px;
+    font-weight: 600;
+    color: #ff6b6b;
+    margin-bottom: 4px;
+  }
+  .family-card p {
+    font-size: 15px;
+  }
+
+  /* Member sections with unique colors */
+  .member-1 .section-header { border-color: #339af0; }
+  .member-1 .content-card { border-right-color: #339af0; }
+  .member-1 .content-card .source { color: #339af0; }
+
+  .member-2 .section-header { border-color: #51cf66; }
+  .member-2 .content-card { border-right-color: #51cf66; }
+  .member-2 .content-card .source { color: #51cf66; }
+
+  .member-3 .section-header { border-color: #fcc419; }
+  .member-3 .content-card { border-right-color: #fcc419; }
+  .member-3 .content-card .source { color: #fcc419; }
+
+  .content-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-right: 4px solid;
+    transition: transform 0.2s;
+  }
+  .content-card:hover {
+    transform: translateX(-4px);
+  }
+  .content-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .content-card h3 a {
+    color: #333;
+    text-decoration: none;
+  }
+  .content-card .summary {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  .content-card .source {
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .tag {
+    display: inline-block;
+    background: white;
+    color: #666;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-left: 4px;
+    border: 1px solid #eee;
+  }
+
+  /* Discovery */
+  .discovery-section .section-header { border-color: #cc5de8; }
+  .discovery-card {
+    background: linear-gradient(135deg, #f3f0ff, #e5dbff);
+    border-radius: 16px;
+    padding: 16px;
+    border-right: 4px solid #cc5de8;
+  }
+  .discovery-card .from {
+    font-size: 13px;
+    font-weight: 600;
+    color: #cc5de8;
+    margin-bottom: 6px;
+  }
+
+  /* Trivia */
+  .trivia-box {
+    background: linear-gradient(135deg, #fff9db, #fff3bf);
+    border-radius: 16px;
+    padding: 20px;
+    margin: 0 24px 20px;
+    border-right: 4px solid #fcc419;
+  }
+  .trivia-box .label {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #e67700;
+  }
+  .trivia-box p {
+    font-size: 14px;
+    color: #666;
+  }
+
+  /* Feedback */
+  .feedback {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 24px;
+    text-align: center;
+    color: white;
+  }
+  .feedback p {
+    font-size: 16px;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .emoji-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .emoji-btn {
+    font-size: 32px;
+    text-decoration: none;
+    background: rgba(255,255,255,0.2);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .emoji-btn:hover {
+    background: rgba(255,255,255,0.4);
+    transform: scale(1.15);
+  }
+
+  /* Footer */
+  .footer {
+    padding: 16px 24px;
+    text-align: center;
+    font-size: 12px;
+    color: #aaa;
+    background: #f8f9fa;
+    border-radius: 0 0 24px 24px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
+    .container { background: #1e1e3f; color: #e0e0e0; }
+    .content-card { background: #2a2a5a; }
+    .content-card h3 a { color: #e0e0e0; }
+    .family-card { background: linear-gradient(135deg, #2a1a1a, #3a2020); }
+    .footer { background: #16163a; color: #666; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="emoji-big">🏠</div>
+    <h1>הניוזלטר המשפחתי</h1>
+    <div class="date">יום רביעי, 8 באפריל 2026</div>
+    <div class="greeting">שלום משפחת כהן! מה חדש היום? 🌟</div>
+  </div>
+
+  <!-- Family Content -->
+  <div class="section family-section">
+    <div class="section-header">
+      <span class="icon">📸</span>
+      <h2>מהמשפחה</h2>
+    </div>
+    <div class="family-card">
+      <div class="who">אמא שיתפה</div>
+      <p>הילדים בפארק אתמול - רגע קסום! ❤️</p>
+    </div>
+    <div class="family-card">
+      <div class="who">אבא שיתף</div>
+      <p>מצאתי מתכון מטורף לעוגת שוקולד - חייבים לנסות בשבת 🍫</p>
+    </div>
+  </div>
+
+  <!-- Member 1: Dad -->
+  <div class="section member-1">
+    <div class="section-header">
+      <span class="icon">👨‍💻</span>
+      <h2>הפינה של אבא</h2>
+    </div>
+    <div class="content-card">
+      <h3><a href="#">OpenAI השיקה מודל חדש שמבין קוד טוב יותר</a></h3>
+      <div class="summary">המודל החדש מציג שיפור של 40% ביכולות תכנות לעומת הגרסה הקודמת, ומאפשר פיתוח מהיר יותר.</div>
+      <div class="source">TechCrunch <span class="tag">AI</span> <span class="tag">Tech</span></div>
+    </div>
+    <div class="content-card">
+      <h3><a href="#">סטארטאפ ישראלי גייס 50M$</a></h3>
+      <div class="summary">החברה מפתחת פתרון סייבר חדשני מבוסס AI.</div>
+      <div class="source">Geektime <span class="tag">Startups</span></div>
+    </div>
+  </div>
+
+  <!-- Member 2: Mom -->
+  <div class="section member-2">
+    <div class="section-header">
+      <span class="icon">🧘‍♀️</span>
+      <h2>הפינה של אמא</h2>
+    </div>
+    <div class="content-card">
+      <h3><a href="#">5 מזונות שיחזקו את המערכת החיסונית</a></h3>
+      <div class="summary">פירות יער, שום וכורכום - שלישיית הכוח שתשמור עליכם בריאים.</div>
+      <div class="source">Ynet בריאות <span class="tag">תזונה</span></div>
+    </div>
+  </div>
+
+  <!-- Member 3: Kid -->
+  <div class="section member-3">
+    <div class="section-header">
+      <span class="icon">🎮</span>
+      <h2>הפינה של נועם</h2>
+    </div>
+    <div class="content-card">
+      <h3><a href="#">Minecraft הוסיפה ביומה חדש!</a></h3>
+      <div class="summary">העדכון החדש כולל ביומה של מערות קריסטל עם מובים חדשים.</div>
+      <div class="source">Minecraft Blog <span class="tag">Gaming</span></div>
+    </div>
+  </div>
+
+  <!-- Discovery -->
+  <div class="section discovery-section">
+    <div class="section-header">
+      <span class="icon">💡</span>
+      <h2>גילוי היום</h2>
+    </div>
+    <div class="discovery-card">
+      <div class="from">אבא חשב שזה יעניין את אמא →</div>
+      <h3 style="font-size: 15px; font-weight: 600; margin: 6px 0;">אפליקציה לתכנון ארוחות משפחתיות עם AI</h3>
+      <p style="font-size: 14px; color: #666;">לומדת את העדפות המשפחה ומציעה תפריט שבועי מותאם.</p>
+    </div>
+  </div>
+
+  <!-- Trivia -->
+  <div class="trivia-box">
+    <div class="label">📅 היום בהיסטוריה</div>
+    <p>ב-8 באפריל 1820 התגלה פסל ונוס דה מילו באי מילוס ביוון. באיזה מוזיאון הוא מוצג? הלובר בפריז! 🇫🇷</p>
+  </div>
+
+  <!-- Feedback -->
+  <div class="feedback" id="feedback">
+    <p>איך היה היום? 🎯</p>
+    <div class="emoji-row">
+      <a href="#" class="emoji-btn">😍</a>
+      <a href="#" class="emoji-btn">😊</a>
+      <a href="#" class="emoji-btn">😐</a>
+      <a href="#" class="emoji-btn">👎</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    Famely Neuslettr © 2026 | נבנה עם 💜 למשפחת כהן
+  </div>
+</div>
+</body>
+</html>

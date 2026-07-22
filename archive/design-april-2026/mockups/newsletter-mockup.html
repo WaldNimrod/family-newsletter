@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Famely Neuslettr - 9 באפריל 2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: #f5f3ef;
+    color: #3a3a3a;
+    line-height: 1.75;
+    direction: rtl;
+    padding: 12px;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.06);
+  }
+
+  /* --- Header --- */
+  .header {
+    background: linear-gradient(135deg, #e8f0e4 0%, #d4e4cf 100%);
+    padding: 32px 24px 28px;
+    text-align: center;
+  }
+  .header .logo {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #6b8f5e;
+    margin-bottom: 6px;
+  }
+  .header h1 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #2d3a28;
+    margin-bottom: 4px;
+  }
+  .header .date {
+    font-size: 13px;
+    color: #6b8f5e;
+  }
+  .header .greeting {
+    font-size: 15px;
+    color: #4a6343;
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* --- Sections --- */
+  .section {
+    padding: 20px 24px 24px;
+    border-bottom: 1px solid #f0ede8;
+  }
+  .section:last-of-type { border-bottom: none; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .section-header .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #3a3a3a;
+  }
+  .section-header .subtitle {
+    font-size: 12px;
+    color: #999;
+    font-weight: 400;
+  }
+
+  /* --- Family Submissions --- */
+  .family .icon { background: #fef3e2; }
+  .family-card {
+    background: #fefbf6;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-right: 3px solid #f0c873;
+  }
+  .family-card .who {
+    font-size: 12px;
+    font-weight: 600;
+    color: #c8942a;
+    margin-bottom: 2px;
+  }
+  .family-card p {
+    font-size: 14px;
+    color: #555;
+  }
+
+  /* --- Member Colors --- */
+  .nimrod .icon { background: #e6f0fa; }
+  .nimrod .cat { color: #3b7dd8; }
+  .nimrod .card { border-right-color: #3b7dd8; }
+
+  .michal .icon { background: #e6f5ed; }
+  .michal .cat { color: #2d8e5e; }
+  .michal .card { border-right-color: #2d8e5e; }
+
+  .shaked .icon { background: #ece6f5; }
+  .shaked .cat { color: #6b3fa0; }
+  .shaked .card { border-right-color: #6b3fa0; }
+
+  .maayan .icon { background: #fce8ec; }
+  .maayan .cat { color: #c4304a; }
+  .maayan .card { border-right-color: #c4304a; }
+
+  .tzlil .icon { background: #fef3e2; }
+  .tzlil .cat { color: #b8860b; }
+  .tzlil .card { border-right-color: #b8860b; }
+
+  /* --- Article Card --- */
+  .card {
+    background: #fafaf8;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-right: 3px solid #ddd;
+    transition: background 0.15s;
+  }
+  .card:hover { background: #f5f4f0; }
+  .card .cat {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  .card h3 a {
+    color: #3a3a3a;
+    text-decoration: none;
+  }
+  .card h3 a:hover { text-decoration: underline; }
+  .card .excerpt {
+    font-size: 13px;
+    color: #777;
+    line-height: 1.6;
+  }
+  .card .meta {
+    margin-top: 6px;
+    font-size: 11px;
+    color: #aaa;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .lang-tag {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: #eee;
+    color: #888;
+  }
+
+  /* --- Discovery --- */
+  .discovery .icon { background: #f0e6fa; }
+  .discovery-card {
+    background: #faf7fd;
+    border-radius: 12px;
+    padding: 14px 16px;
+    border: 1px dashed #d4c0ea;
+  }
+  .discovery-card .bridge {
+    font-size: 12px;
+    font-weight: 600;
+    color: #7c50a8;
+    margin-bottom: 6px;
+  }
+  .discovery-card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .discovery-card .excerpt {
+    font-size: 13px;
+    color: #777;
+  }
+
+  /* --- Trivia --- */
+  .trivia .icon { background: #fef3e2; }
+  .trivia-box {
+    background: #fefbf6;
+    border-radius: 12px;
+    padding: 16px;
+    border-right: 3px solid #daa520;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.8;
+  }
+
+  /* --- Footer --- */
+  .footer {
+    padding: 16px 24px;
+    text-align: center;
+    font-size: 11px;
+    color: #bbb;
+  }
+
+  /* LTR for Shaked's section */
+  .shaked {
+    direction: ltr;
+    text-align: left;
+  }
+  .shaked .section-header {
+    flex-direction: row-reverse;
+  }
+  .shaked .card {
+    border-right: none;
+    border-left: 3px solid #ddd;
+  }
+  .shaked.section h2 {
+    text-align: left;
+  }
+  .shaked .card h3 a {
+    color: #3a3a3a;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">Famely Neuslettr</div>
+    <h1>בוקר טוב, משפחת ולד!</h1>
+    <div class="date">יום רביעי, 9 באפריל 2026</div>
+    <div class="greeting">"כל יום חדש מתחיל בבחירה טובה" 🌱</div>
+  </div>
+
+  <!-- FAMILY SUBMISSIONS -->
+  <div class="section family">
+    <div class="section-header">
+      <div class="icon">📸</div>
+      <h2>ידיעות מהמשפחה</h2>
+    </div>
+    <div class="family-card">
+      <div class="who">שלחה: מיכל</div>
+      <p>אתמול בחוף - שקד עלה מספרו למים בפעם הראשונה השנה! 😊 תמונה בוואצאפ</p>
+    </div>
+    <div class="family-card">
+      <div class="who">שלח: נימרוד</div>
+      <p>מצאתי מיקום קייט פנומנלי ליד קיסריה, רוח מהירה. תכנון ליום ראשון? ⛵</p>
+    </div>
+  </div>
+
+  <!-- NIMROD'S CORNER -->
+  <div class="section nimrod">
+    <div class="section-header">
+      <div class="icon">⛵</div>
+      <div>
+        <h2>הפינה של נימרוד</h2>
+        <div class="subtitle">שייט · קייט · קיימות</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cat">שייט</div>
+      <h3><a href="#">מסע מפרשית עם משפחה - בחזרה לארכיפלג היווני</a></h3>
+      <div class="excerpt">סקיפר ישראלי מתעד 45 ימים בים עם שתי ילדות, הטיפול בטלטלות וכל מה שצריך לדעת על הפלגה משפחתית.</div>
+      <div class="meta">Sailing World <span>·</span> לפני 6 שעות</div>
+    </div>
+
+    <div class="card">
+      <div class="cat">קייט</div>
+      <h3><a href="#">מהפכה בציוד קייט: foil חדשות משנת 2026</a></h3>
+      <div class="excerpt">סקירה כוללת של הטכנולוגיה החדשה - כיצד הן משנות את הקייט באור קל וכוח רוח משתנה.</div>
+      <div class="meta">TheKiteMag <span>·</span> לפני 14 שעות <span class="lang-tag">EN</span></div>
+    </div>
+
+    <div class="card">
+      <div class="cat">קיימות</div>
+      <h3><a href="#">גידול עצמי בחוזה שנתי - תחנת קיץ בבית</a></h3>
+      <div class="excerpt">מדריך מעשי לגידול ירקות וחממה בחזית הבית - כולל לוח זריעה וטיפול במזגנים.</div>
+      <div class="meta">Permaculture Magazine <span>·</span> לפני יום</div>
+    </div>
+  </div>
+
+  <!-- MICHAL'S CORNER -->
+  <div class="section michal">
+    <div class="section-header">
+      <div class="icon">🌿</div>
+      <div>
+        <h2>הפינה של מיכל</h2>
+        <div class="subtitle">אדריכלות ירוקה · קפוארה · מיינדפולנס</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cat">אדריכלות ירוקה</div>
+      <h3><a href="#">בתים של חומר טבעי בגליל העליון - הסטנדרט החדש</a></h3>
+      <div class="excerpt">שישה בתי חימר וקש שהושלמו השנה בצפון - דיור עדיין זול יותר מבנייה קונבנציונלית ודלק מהנדסי.</div>
+      <div class="meta">ArchDaily <span>·</span> לפני יומיים</div>
+    </div>
+
+    <div class="card">
+      <div class="cat">מיינדפולנס</div>
+      <h3><a href="#">4 דקות בבוקר - טכניקה לעוד חודשים של שקט</a></h3>
+      <div class="excerpt">תרגיל נשימה פשוט המבוסס על מחקר של אוניברסיטת אוקספורד - מתאים לאנשים ממהירים.</div>
+      <div class="meta">Mindful Magazine <span>·</span> לפני 3 ימים</div>
+    </div>
+
+    <div class="card">
+      <div class="cat">קפוארה</div>
+      <h3><a href="#">Capoeira Communities Rise in Israel - New Studios in Tel Aviv</a></h3>
+      <div class="excerpt">Interview with master instructor Nina - how capoeira is blending Brazilian roots with Israeli urban culture in emerging communities.</div>
+      <div class="meta">Movement Culture <span>·</span> 2 days ago <span class="lang-tag">EN</span></div>
+    </div>
+  </div>
+
+  <!-- SHAKED'S CORNER (LTR English section) -->
+  <div class="section shaked">
+    <div class="section-header">
+      <div class="icon">⚗️</div>
+      <div>
+        <h2>Shaked's Corner</h2>
+        <div class="subtitle">Chemistry · Sci-Fi · Web Fiction</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cat">CHEMISTRY</div>
+      <h3><a href="#">Novel Platinum-Free Catalyst Boosts Water Electrolysis Efficiency</a></h3>
+      <div class="excerpt">Researchers at ETH Zurich developed a breakthrough catalyst using nickel and phosphorous that rivals platinum at a fraction of the cost. Could transform green hydrogen production.</div>
+      <div class="meta">Nature Chemistry <span>·</span> 8 hours ago <span class="lang-tag">EN</span></div>
+    </div>
+
+    <div class="card">
+      <div class="cat">WEB FICTION</div>
+      <h3><a href="#">Royal Road Top 10: Hard Sci-Fi Dominates Charts This Week</a></h3>
+      <div class="excerpt">A quantum computing thriller where a hacker solves physics equations to escape a simulated reality ranks #2. Also trending: new Dungeon Crawler Carl chapter and AI-narrative hybrids.</div>
+      <div class="meta">Royal Road <span>·</span> 12 hours ago <span class="lang-tag">EN</span></div>
+    </div>
+  </div>
+
+  <!-- MAAYAN'S CORNER -->
+  <div class="section maayan">
+    <div class="section-header">
+      <div class="icon">🎪</div>
+      <div>
+        <h2>הפינה של יויו</h2>
+        <div class="subtitle">קרקס · אומנויות אוויר · ביצוע</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cat">קרקס</div>
+      <h3><a href="#">בית הספר CNAC בצרנה, צרפת - סיבוב רישום חדש לתוכנית 2027</a></h3>
+      <div class="excerpt">אחת מתוכניות ההכשרה המובילות בעולם פותחת רישום עבור אומנים וזנגולנים בגיל 16+. אודישנים בחודש יוני.</div>
+      <div class="meta">CircusTalk <span>·</span> לפני 5 ימים</div>
+    </div>
+
+    <div class="card">
+      <div class="cat">אומנויות אוויר</div>
+      <h3><a href="#">אומנית טרפז ישראלית זוכה פרס בפסטיבל אדינבורו 2026</a></h3>
+      <div class="excerpt">נועה, 22, בוגרת תוכנית ESAC בבלגיה, הציגה סולו טרפז מביץ שזכה להשבחות בתיאטרון עולמי.</div>
+      <div class="meta">Circus Arts Magazine <span>·</span> לפני שבוע</div>
+    </div>
+  </div>
+
+  <!-- TZLIL'S CORNER -->
+  <div class="section tzlil">
+    <div class="section-header">
+      <div class="icon">🧮</div>
+      <div>
+        <h2>הפינה של צליל</h2>
+        <div class="subtitle">מתמטיקה · כלכלה · היסטוריה</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cat">חידת היום 🧩</div>
+      <h3>השיטה הרברסית של הטלות - קשה מאוד</h3>
+      <div class="excerpt">יש לך סדרה של עיגולים באמצעם מספרים 1 עד N. בכל שלב, אתה יכול להוציא עיגול ולהפוך את סדר כל העיגולים הנותרים לעיגולים הקטנים יותר. בכמה צעדים לכל היותר יכול אתה להגיע לסדר עולה? (רמז: התשובה קשורה למספר אוילר)</div>
+    </div>
+
+    <div class="card">
+      <div class="cat">כלכלה</div>
+      <h3><a href="#">למה יוקר הביעור מחדש כל קיץ - שרשרת קירור וחוקי ביקוש</a></h3>
+      <div class="excerpt">מעבר להיצע וביקוש, יש סיפור מסחרי עמוק על עלויות אנרגיה, ועמלות קרקע בקנה מידה קטן של מוכרים.</div>
+      <div class="meta">Numberphile <span>·</span> לפני 4 ימים</div>
+    </div>
+
+    <div class="card">
+      <div class="cat">היסטוריה</div>
+      <h3><a href="#">מתי המציאו את הכסף? סוד לידיה של אלפיים שנים</a></h3>
+      <div class="excerpt">לפני 2,700 שנה, מלך עשיר במיוחס (קרואזוס) המציא את המטבע הראשון. איך תגובה זו שינתה את הסחר העולמי?</div>
+      <div class="meta">TED-Ed <span>·</span> לפני 10 ימים</div>
+    </div>
+  </div>
+
+  <!-- DISCOVERY -->
+  <div class="section discovery">
+    <div class="section-header">
+      <div class="icon">💡</div>
+      <h2>גילוי היום</h2>
+    </div>
+    <div class="discovery-card">
+      <div class="bridge">מיכל → נימרוד: "תראה מה מצאתי בעבודה!"</div>
+      <h3>סירת מפרש בנויה מ-100% חומרים ממוחזרים - חוצה את האוקיינוס</h3>
+      <div class="excerpt">פרויקט בינלאומי שמשלב שייט עם קיימות - סירה בנויה כולה מפסולת פלסטיק ממוחזרת הסיימה הפלגה של 47 יום בסביבה מלחית קשה. אולי רעיון לפרויקט משפחתי?</div>
+    </div>
+  </div>
+
+  <!-- TODAY IN HISTORY -->
+  <div class="section trivia">
+    <div class="section-header">
+      <div class="icon">📅</div>
+      <h2>היום בהיסטוריה</h2>
+    </div>
+    <div class="trivia-box">
+      ב-9 באפריל 1865 הסתיים הלחימה בנקודה סימנטית במערכת הדרומית של מלחמת האזרחים בארה"ב כשגנרל ליאון הינה את הצבא הקונפדרלי בקסל ג'יימס לי הרוב בפורט אפומטוקס בווירג'יניה. יום זה מסמן את סוף מלחמת האזרחים האמריקאית רשמית.<br><br>
+      <strong>רעיון למשפחה:</strong> האם מדעים שהטלפון הראשון הוגה על ידי אלכסנדר גראהם בל בדיוק בשנה זו (1876)? 📞
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Famely Neuslettr · Edition #247 · 9 באפריל 2026<br>
+    <small>בנוי עם ❤️ ו-AI עבור משפחת ולד</small>
+  </div>
+
+</div>
+</body>
+</html>

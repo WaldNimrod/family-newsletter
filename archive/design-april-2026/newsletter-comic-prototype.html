@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Famely Neuslettr - 2026-04-10</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #c0392b;
+    --blue: #2471a3;
+    --green: #27ae60;
+    --purple: #7d3c98;
+    --yellow: #f39c12;
+    --orange: #e67e22;
+    --bg: #fdf6e3;
+    --ink: #2c2c2c;
+    --panel-bg: #fff;
+    --nimrod: #2471a3;
+    --michal: #27ae60;
+    --shaked: #7d3c98;
+    --maayan: #c0392b;
+    --tzlil: #e67e22;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Patrick Hand', 'Comic Sans MS', cursive, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    direction: rtl;
+    /* Halftone dot pattern */
+    background-image: radial-gradient(circle, #e8dcc8 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  .page { max-width: 640px; margin: 0 auto; padding: 8px; }
+
+  /* ===== COVER / HEADER ===== */
+  .cover {
+    background: var(--panel-bg);
+    border: 4px solid var(--ink);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    box-shadow: 6px 6px 0 var(--ink);
+    position: relative;
+  }
+  .cover-top {
+    background: linear-gradient(135deg, var(--red) 0%, #e74c3c 50%, var(--orange) 100%);
+    padding: 24px 20px 16px;
+    text-align: center;
+    position: relative;
+    /* Red/white stripes (Dr. Seuss) */
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 10px,
+      rgba(255,255,255,0.08) 10px,
+      rgba(255,255,255,0.08) 20px
+    );
+  }
+  .cover-top .masthead {
+    font-family: 'Bangers', cursive;
+    font-size: 36px;
+    color: #fff;
+    letter-spacing: 3px;
+    text-shadow: 3px 3px 0 var(--ink), -1px -1px 0 var(--ink);
+    line-height: 1.1;
+  }
+  .cover-top .subtitle {
+    font-size: 15px;
+    color: rgba(255,255,255,0.9);
+    margin-top: 2px;
+  }
+  .cover-top .edition-badge {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--ink);
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    padding: 2px 12px;
+    border-radius: 20px;
+    border: 2px solid var(--ink);
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+  .cover-body {
+    padding: 16px 20px;
+    position: relative;
+  }
+  /* Dr. Seuss mascot speech bubble */
+  .mascot-bubble {
+    background: #fff;
+    border: 3px solid var(--ink);
+    border-radius: 18px;
+    padding: 14px 16px;
+    position: relative;
+    font-size: 16px;
+    line-height: 1.55;
+    margin-bottom: 8px;
+  }
+  .mascot-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -14px;
+    right: 30px;
+    width: 0; height: 0;
+    border-left: 14px solid transparent;
+    border-right: 0px solid transparent;
+    border-top: 14px solid var(--ink);
+  }
+  .mascot-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: 32px;
+    width: 0; height: 0;
+    border-left: 11px solid transparent;
+    border-right: 0px solid transparent;
+    border-top: 11px solid #fff;
+  }
+  .mascot-name {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    color: var(--red);
+    margin-top: 16px;
+    padding-right: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* ===== WEATHER BAR ===== */
+  .weather-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .weather-card {
+    flex: 1;
+    background: var(--panel-bg);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    padding: 10px 12px;
+    text-align: center;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .weather-card .city { font-family: 'Bangers', cursive; font-size: 14px; color: var(--blue); letter-spacing: 1px; }
+  .weather-card .temp { font-size: 28px; font-weight: bold; }
+  .weather-card .desc { font-size: 12px; color: #888; }
+  .wind-alert {
+    background: var(--yellow);
+    border-color: var(--orange);
+    animation: pulse 2s infinite;
+  }
+  .wind-alert .city { color: var(--red); }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+
+  /* ===== CONTENT GRID ===== */
+  .grid { display: flex; flex-direction: column; gap: 10px; }
+
+  /* ===== COMIC PANEL (each article) ===== */
+  .panel {
+    background: var(--panel-bg);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 var(--ink);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .panel:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+  .panel:active { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--ink); }
+
+  .panel-hero {
+    position: relative;
+  }
+  .panel-hero img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    border-bottom: 3px solid var(--ink);
+    /* Comic book halftone overlay */
+    filter: contrast(1.05) saturate(1.1);
+  }
+  /* Member tag on image */
+  .member-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--panel-bg);
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    padding: 2px 10px 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+  }
+  .member-tag .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  /* Source badge */
+  .source-badge {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-family: sans-serif;
+  }
+
+  .panel-body { padding: 12px 16px; }
+  .panel-body .category {
+    font-family: 'Bangers', cursive;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .panel-body h3 {
+    font-family: 'Bangers', cursive;
+    font-size: 19px;
+    line-height: 1.25;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+  .panel-body h3 a { color: var(--ink); text-decoration: none; }
+  .panel-body h3 a:hover { text-decoration: underline; }
+
+  /* Expandable detail */
+  .panel-detail {
+    display: none;
+    padding: 0 16px 14px;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.7;
+    border-top: 2px dashed #eee;
+    margin-top: 2px;
+    padding-top: 10px;
+  }
+  .panel-detail.open { display: block; }
+  .panel-detail .read-more {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: 'Bangers', cursive;
+    font-size: 14px;
+    color: var(--blue);
+    text-decoration: none;
+    border-bottom: 2px solid var(--blue);
+    letter-spacing: 1px;
+  }
+  .panel-detail .read-more:hover { color: var(--red); border-color: var(--red); }
+
+  /* Panel without image (compact) */
+  .panel-compact .panel-body { display: flex; align-items: flex-start; gap: 10px; }
+  .panel-compact .member-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* ===== LTR for Shaked ===== */
+  .ltr { direction: ltr; text-align: left; }
+
+  /* ===== SPECIAL SECTIONS ===== */
+  /* Puzzle */
+  .puzzle-panel {
+    background: #fef9e7;
+    border-color: var(--yellow);
+  }
+  .puzzle-panel .panel-body { text-align: center; }
+  .puzzle-panel h3 { color: var(--orange); }
+
+  /* Discovery */
+  .discovery-panel {
+    background: #f4ecf7;
+    border-color: var(--purple);
+    border-style: dashed;
+  }
+  .discovery-panel .bridge-text {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--purple);
+    margin-bottom: 4px;
+  }
+
+  /* Survey */
+  .survey-panel {
+    background: linear-gradient(135deg, #eaf2f8, #d5e8f0);
+    border-color: var(--blue);
+    text-align: center;
+    padding: 20px;
+  }
+  .survey-panel h3 { color: var(--blue); margin-bottom: 8px; }
+  .survey-panel p { font-size: 17px; font-weight: bold; }
+  .survey-panel .hint { font-size: 12px; color: #888; margin-top: 6px; }
+
+  /* History */
+  .history-panel {
+    background: #fef3e2;
+    border-color: var(--orange);
+  }
+
+  /* ===== FOOTER ===== */
+  .footer-strip {
+    text-align: center;
+    padding: 16px;
+    font-size: 12px;
+    color: #999;
+  }
+  .footer-strip .family-icons { font-size: 20px; margin-bottom: 4px; letter-spacing: 6px; }
+
+  /* ===== EXPAND INDICATOR ===== */
+  .expand-hint {
+    font-size: 11px;
+    color: #bbb;
+    text-align: left;
+    padding: 0 16px 8px;
+    font-family: sans-serif;
+  }
+  .expand-hint::before { content: '▼ '; }
+  .panel.expanded .expand-hint::before { content: '▲ '; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===== COVER ===== -->
+  <div class="cover">
+    <div class="cover-top">
+      <div class="masthead">Famely Neuslettr!</div>
+      <div class="subtitle">משפחת בן-צבי ולד</div>
+      <div class="edition-badge">יום שישי, 10 באפריל 2026 &bull; #1</div>
+    </div>
+    <div class="cover-body">
+      <div class="mascot-bubble">
+        בוקר טוב, משפחת בן-צבי ולד! ☀️ היום ב-9 באפריל 1865 הסתיימה מלחמת האזרחים האמריקנית. יום מצוין לקריאה!
+      </div>
+      <div class="mascot-name">🎩 Dr. Seuss &mdash; המלווה שלנו לחודש אפריל</div>
+    </div>
+  </div>
+
+  <!-- ===== WEATHER ===== -->
+  
+
+  <!-- ===== FAMILY SUBMISSIONS ===== -->
+  
+
+  <!-- ===== MAIN CONTENT FEED ===== -->
+  <div class="grid">
+  
+  
+  
+
+  
+  
+  <div class="panel" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1500514966906-fe245eea9344?w=600&amp;h=400&amp;fit=crop" alt="Mediterranean Sailing Routes: 2026 Guide" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--nimrod);"></span>
+        ⛵ נימרוד
+      </div>
+      <div class="source-badge">Yachting World</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--nimrod);">שייט וסקיפרים</div>
+      <h3><a href="https://example.com/sailing-2026">Mediterranean Sailing Routes: 2026 Guide</a></h3>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>A comprehensive guide to the best sailing routes across the Mediterranean for 2026, including new marinas and anchorages in Greece, Croatia and Turkey.</p>
+      <a href="https://example.com/sailing-2026" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+  
+  <div class="panel" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&amp;h=400&amp;fit=crop" alt="New Kite Foil Technology Revolutionizes Racing" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--nimrod);"></span>
+        ⛵ נימרוד
+      </div>
+      <div class="source-badge">IKSURFMAG</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--nimrod);">גלישת קייט</div>
+      <h3><a href="https://example.com/kite-foil">New Kite Foil Technology Revolutionizes Racing</a></h3>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>The latest hydrofoil technology is changing competitive kiteboarding, with new designs reaching speeds of 40+ knots. Israeli rider Gal Zukerman placed 3rd in the European series.</p>
+      <a href="https://example.com/kite-foil" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+  
+  <div class="panel" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&amp;h=400&amp;fit=crop" alt="Urban Permaculture: Growing Food in Small Spaces" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--nimrod);"></span>
+        ⛵ נימרוד
+      </div>
+      <div class="source-badge">Permaculture Magazine</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--nimrod);">קיימות וגידול מזון</div>
+      <h3><a href="https://example.com/permaculture">Urban Permaculture: Growing Food in Small Spaces</a></h3>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>How families are transforming balconies and small gardens into productive food forests using permaculture principles. A step-by-step guide for Mediterranean climates.</p>
+      <a href="https://example.com/permaculture" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+  
+  
+  
+  <div class="panel" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=600&amp;h=400&amp;fit=crop" alt="בנייה ירוקה: הפרויקט שמשנה את תל אביב" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--michal);"></span>
+        🌿 מיכל
+      </div>
+      <div class="source-badge">ArchDaily</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--michal);">ארכיטקטורה ירוקה</div>
+      <h3><a href="https://example.com/green-build-tlv">בנייה ירוקה: הפרויקט שמשנה את תל אביב</a></h3>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>פרויקט בנייה ירוקה חדשני בלב תל אביב משלב טכנולוגיות passive house עם עיצוב מקומי ובנייה מעץ. הפרויקט צפוי לחסוך 60% באנרגיה.</p>
+      <a href="https://example.com/green-build-tlv" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+  
+  <div class="panel" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&amp;h=400&amp;fit=crop" alt="Dezeen Awards 2026: Sustainable Housing Shortlist" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--michal);"></span>
+        🌿 מיכל
+      </div>
+      <div class="source-badge">Dezeen</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--michal);">ארכיטקטורה ירוקה</div>
+      <h3><a href="https://example.com/dezeen-awards">Dezeen Awards 2026: Sustainable Housing Shortlist</a></h3>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>The Dezeen Awards shortlist features stunning eco-friendly residential projects from around the world, including a rammed-earth home in Portugal.</p>
+      <a href="https://example.com/dezeen-awards" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+  
+  <div class="panel" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1545959570-a94084071b5d?w=600&amp;h=400&amp;fit=crop" alt="קפוארה אנגולה: סדנה בינלאומית בישראל" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--michal);"></span>
+        🌿 מיכל
+      </div>
+      <div class="source-badge">ABADÁ Capoeira Israel</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--michal);">קפוארה</div>
+      <h3><a href="https://example.com/capoeira-israel">קפוארה אנגולה: סדנה בינלאומית בישראל</a></h3>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>סדנת קפוארה בינלאומית תתקיים בחודש הבא עם מאסטרים מברזיל. הסדנה פתוחה לכל הרמות ומתקיימת ביפו.</p>
+      <a href="https://example.com/capoeira-israel" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+  
+  <div class="panel" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&amp;h=400&amp;fit=crop" alt="Mindfulness for Busy Parents: 5-Minute Practices" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--michal);"></span>
+        🌿 מיכל
+      </div>
+      <div class="source-badge">Mindful.org</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--michal);">מיינדפולנס וגוף-נפש</div>
+      <h3><a href="https://example.com/mindfulness-parents">Mindfulness for Busy Parents: 5-Minute Practices</a></h3>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>Quick mindfulness techniques designed for parents who struggle to find time. Five practices you can do while waiting for the kids.</p>
+      <a href="https://example.com/mindfulness-parents" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+  
+  
+  
+  <div class="panel ltr" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=600&amp;h=400&amp;fit=crop" alt="Breakthrough in Organic Synthesis: New Catalyst Design" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--shaked);"></span>
+        ⚗️ Shaked
+      </div>
+      <div class="source-badge">Nature Chemistry</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--shaked);">Chemistry &amp; Science</div>
+      <h3><a href="https://example.com/catalyst">Breakthrough in Organic Synthesis: New Catalyst Design</a></h3>
+    </div>
+    <div class="expand-hint">tap to read</div>
+    <div class="panel-detail">
+      <p>Researchers at ETH Zurich have developed a novel asymmetric catalyst that enables previously impossible organic reactions at room temperature, with implications for drug synthesis.</p>
+      <a href="https://example.com/catalyst" class="read-more">Read full article &rarr;</a>
+    </div>
+  </div>
+  
+  <div class="panel ltr" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=600&amp;h=400&amp;fit=crop" alt="The Hard Problem of Consciousness: A Chemist&#39;s View" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--shaked);"></span>
+        ⚗️ Shaked
+      </div>
+      <div class="source-badge">Nature Chemistry</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--shaked);">Chemistry &amp; Science</div>
+      <h3><a href="https://example.com/consciousness-chem">The Hard Problem of Consciousness: A Chemist&#39;s View</a></h3>
+    </div>
+    <div class="expand-hint">tap to read</div>
+    <div class="panel-detail">
+      <p>An essay exploring how molecular neuroscience intersects with philosophy of mind — what can chemistry tell us about the nature of consciousness?</p>
+      <a href="https://example.com/consciousness-chem" class="read-more">Read full article &rarr;</a>
+    </div>
+  </div>
+  
+  <div class="panel ltr" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?w=600&amp;h=400&amp;fit=crop" alt="Top 10 Progression Fantasy Releases This Month" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--shaked);"></span>
+        ⚗️ Shaked
+      </div>
+      <div class="source-badge">Royal Road</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--shaked);">Sci-Fi &amp; Web Fiction</div>
+      <h3><a href="https://example.com/prog-fantasy">Top 10 Progression Fantasy Releases This Month</a></h3>
+    </div>
+    <div class="expand-hint">tap to read</div>
+    <div class="panel-detail">
+      <p>The latest trending progression fantasy novels on Royal Road, including new chapters of Dungeon Crawler Carl and a breakout LitRPG debut.</p>
+      <a href="https://example.com/prog-fantasy" class="read-more">Read full article &rarr;</a>
+    </div>
+  </div>
+  
+  
+  
+  <div class="panel" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1569930784237-ea65a2f40a83?w=600&amp;h=400&amp;fit=crop" alt="Cirque du Soleil Announces New Show: &#39;Elemental&#39;" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--maayan);"></span>
+        🎪 יויו
+      </div>
+      <div class="source-badge">Cirque du Soleil</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--maayan);">קרקס ואומנויות אוויר</div>
+      <h3><a href="https://example.com/cirque-elemental">Cirque du Soleil Announces New Show: &#39;Elemental&#39;</a></h3>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>Cirque du Soleil unveils &#39;Elemental&#39; — a breathtaking new production combining aerial acrobatics, contemporary dance, and cutting-edge projection mapping.</p>
+      <a href="https://example.com/cirque-elemental" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+  
+  <div class="panel" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&amp;h=400&amp;fit=crop" alt="Aerial Silks: Advanced Drops &amp; Transitions Guide" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--maayan);"></span>
+        🎪 יויו
+      </div>
+      <div class="source-badge">Dance Magazine</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--maayan);">קרקס ואומנויות אוויר</div>
+      <h3><a href="https://example.com/aerial-silks">Aerial Silks: Advanced Drops &amp; Transitions Guide</a></h3>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>A comprehensive tutorial on advanced aerial silks drops and transitions, with slow-motion breakdowns and safety protocols for intermediate aerialists.</p>
+      <a href="https://example.com/aerial-silks" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+  
+  
+  
+  <div class="panel" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&amp;h=400&amp;fit=crop" alt="Numberphile: The Unsolved Problem Worth $1 Million" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--tzlil);"></span>
+        🧮 צליל
+      </div>
+      <div class="source-badge">Numberphile</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--tzlil);">מתמטיקה וחידות</div>
+      <h3><a href="https://example.com/numberphile-million">Numberphile: The Unsolved Problem Worth $1 Million</a></h3>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>Numberphile explores the Riemann Hypothesis — one of the Millennium Prize Problems — and why it has stumped mathematicians for over a century.</p>
+      <a href="https://example.com/numberphile-million" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+  
+  <div class="panel" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1461360228754-6e81c478b882?w=600&amp;h=400&amp;fit=crop" alt="TED-Ed: How Ancient Trade Routes Shaped Modern Economy" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--tzlil);"></span>
+        🧮 צליל
+      </div>
+      <div class="source-badge">TED-Ed</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--tzlil);">היסטוריה וכלכלה</div>
+      <h3><a href="https://example.com/ted-trade">TED-Ed: How Ancient Trade Routes Shaped Modern Economy</a></h3>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>Exploring how the Silk Road and other ancient trade routes created the foundations of modern global economics — from spices to digital currencies.</p>
+      <a href="https://example.com/ted-trade" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+  
+  <div class="panel" onclick="togglePanel(this)">
+    
+    <div class="panel-hero">
+      <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?w=600&amp;h=400&amp;fit=crop" alt="Veritasium: Why Geometry is Everywhere" loading="lazy">
+      <div class="member-tag">
+        <span class="dot" style="background: var(--tzlil);"></span>
+        🧮 צליל
+      </div>
+      <div class="source-badge">Veritasium</div>
+    </div>
+    
+    <div class="panel-body">
+      
+      <div class="category" style="color: var(--tzlil);">מתמטיקה וחידות</div>
+      <h3><a href="https://example.com/veritasium-geo">Veritasium: Why Geometry is Everywhere</a></h3>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>A deep dive into how geometric patterns appear throughout nature, from honeycombs to crystal structures, and why hexagons are the bestagons.</p>
+      <a href="https://example.com/veritasium-geo" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+  
+  
+
+  <!-- ===== DISCOVERY ===== -->
+  
+  
+  <div class="panel discovery-panel" onclick="togglePanel(this)">
+    
+    <div class="panel-body">
+      <div class="bridge-text">🔮 נימרוד חשב שזה יעניין אותך!</div>
+      <h3><a href="https://example.com/cnac-auditions">הקרקס הצרפתי CNAC מכריז על מועדי אודישנים 2027</a></h3>
+    </div>
+    <div class="expand-hint">לחצו לפרטים</div>
+    <div class="panel-detail">
+      <p>בית הספר הלאומי לאומנויות הקרקס בצרפת פרסם את תאריכי האודישנים לשנת הלימודים 2027. ההרשמה נפתחת בקיץ. מועמדים חייבים להיות בני 16+.</p>
+      <a href="https://example.com/cnac-auditions" class="read-more">למאמר המלא &larr;</a>
+    </div>
+  </div>
+  
+  
+
+  <!-- ===== PUZZLE (for צליל) ===== -->
+  
+  <div class="panel puzzle-panel">
+    <div class="panel-body">
+      <h3>🧩 חידת היום</h3>
+      <p style="font-size:15px; margin-top:8px; white-space:pre-line;">חידת היום 🧩
+בכיתה של צליל יש 30 תלמידים. כל תלמיד לוחץ יד לכל תלמיד אחר בדיוק פעם אחת. כמה לחיצות יד בסה&#34;כ?
+
+(רמז: חשבו על צירופים)
+
+תשובת אתמול: 42</p>
+    </div>
+  </div>
+  
+
+  <!-- ===== TODAY IN HISTORY ===== -->
+  
+  <div class="panel history-panel">
+    <div class="panel-body">
+      <div class="category" style="color: var(--orange);">📜 היום בהיסטוריה</div>
+      <p style="font-size: 15px; margin-top: 4px;">[Mock response for history]</p>
+    </div>
+  </div>
+  
+
+  <!-- ===== SURVEY ===== -->
+  
+  <div class="panel survey-panel">
+    <h3>💬 שאלת היום</h3>
+    <p>מה הכתבה שהכי הפתיעה אתכם היום? למה?</p>
+    <div class="hint">ענו בוואטסאפ! 📱</div>
+  </div>
+  
+
+  </div><!-- /grid -->
+
+  <!-- ===== FOOTER ===== -->
+  <div class="footer-strip">
+    <div class="family-icons">⛵ 🌿 ⚗️ 🎪 🧮</div>
+    Famely Neuslettr &bull; powered by AI with ❤️
+    <br>יום שישי, 10 באפריל 2026
+  </div>
+
+</div><!-- /page -->
+
+<script>
+function togglePanel(el) {
+  var detail = el.querySelector('.panel-detail');
+  if (!detail) return;
+  var isOpen = detail.classList.contains('open');
+  // Close all others
+  document.querySelectorAll('.panel-detail.open').forEach(function(d) {
+    d.classList.remove('open');
+    d.parentElement.classList.remove('expanded');
+  });
+  if (!isOpen) {
+    detail.classList.add('open');
+    el.classList.add('expanded');
+  }
+}
+</script>
+</body>
+</html>
