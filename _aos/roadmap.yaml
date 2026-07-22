@@ -61,22 +61,26 @@ work_packages:
 
   - id: "FNL-S001-P001-WP001"
     label: "LOD200 product contract — edition-1 must-contain + happy-path acceptance criterion + weekly cost_cap"
-    status: PLANNED
+    status: COMPLETE
     track: A
-    current_lean_gate: L-GATE_ELIGIBILITY
-    lod_status: LOD100
+    current_lean_gate: L-GATE_SPEC
+    lod_status: LOD200
     assigned_builder: "familynewsletter_arch"
     assigned_validator: "familynewsletter_val"
     created_at: "2026-07-22"
     milestone_ref: "S001"
     stage_mapping: "Spec"
-    spec_ref: "TBD"
+    spec_ref: "_aos/work_packages/FNL-S001-P001-WP001/LOD200.md"
     gate_history:
       - gate: L-GATE_ELIGIBILITY
         result: PASS
         date: "2026-07-22"
         notes: "Registered at provisioning."
-    notes: "CLASS=STANDARD. The real missing gate (small). LOD100 intent ~done in REVIVAL_PLAN §3.7-ב; this is the LOD200 contract the whole build hangs on."
+      - gate: L-GATE_SPEC
+        result: PASS
+        date: "2026-07-22"
+        notes: "LOD200 product contract authored (team_100) + APPROVED by team_00 ('החוזה מאושר למהדורה ראשונה - נדייק בהתאם לתוצאות'). Edition-1 = FULL 13-section set, completeness over speed."
+    notes: "CLASS=STANDARD. LOD200 contract COMPLETE + approved. SSOT for P002 LOD400 build specs."
 
   - id: "FNL-S001-P001-WP002"
     label: "Commit the uncommitted 10.5 FTP-path fix (env_compat/settings/.env.example) + add data/ to .gitignore"
