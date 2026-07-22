@@ -1,6 +1,13 @@
 # April 2026 Design Archive — "Fish Worth Fishing"
 *Mined 2026-07-22 from this archive + `SVG_MODULE_SPEC.md` (repo root) + current `templates/newsletter.html.j2` / `STYLE_GUIDE.md`. Feeds the LOD400 specs for `teaser.py` (WP005) and the template extension (WP007).*
 
+## ✅ DECISION (Nimrod / team_00, 2026-07-22): incorporate ALL fish — "כל אחד דג שווה"
+Every fish below is a **REQUIRED** item in the P002 LOD400 specs (not optional), mapped so nothing drops:
+- **teaser.py (WP005):** the SVG hero + "Skipper Cat" mascot + 4 semantic poses + per-category costuming + `SVG_MODULE_SPEC.md` 5-member character briefs + art-direction one-liner ("Quentin Blake meets Hergé") + the topic→scene→character lookup table. (This mascot/character system ALSO feeds the newsletter template's hero + character slots — WP007.)
+- **template extension (WP007):** dark mode (`@media prefers-color-scheme:dark`) · "מהמדף שלנו / From Our Shelf" section · inline one-tap emoji rating in the footer · single wide L2 panel for an odd leftover item · YouTube thumbnail treatment (`.yt-thumb/.yt-play`) · the SVG hero + monthly-rotating character slots — PLUS WP007's baseline scope (the 3 missing sections Viewing / Family-Table / Extended-Family, restore "פינה אישית ×5", render `neo.family_content`, `og:image`→teaser).
+- **editor.py (WP004):** editorial techniques — discovery bridges that CLOSE with a concrete family-activity prompt ("אולי רעיון לפרויקט משפחתי?"); history/trivia paired with a "family idea" callout; fold the Simaniya(opener/closer) + Calcalist(articles) voice-choice reasoning into the system prompt.
+- **researcher.py (WP003):** surface "From Our Shelf" content (family.json `bookshelf` + shelf photos) and YouTube items where relevant, to feed the sections above.
+
 ## 1. Visual identity (canonical, comic style)
 **Fonts** (Google): headers/labels/badges = **`Bangers`** (loud comic display); body = **`Patrick Hand`** (handwritten); metadata = system sans 9–12px.
 **Palette** (`:root`, identical across comic prototypes + current template):

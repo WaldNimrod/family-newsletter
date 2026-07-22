@@ -152,16 +152,16 @@ work_packages:
 
   - id: "FNL-S001-P002-WP001"
     label: "llm.py dual-driver layer (cursor/grok default + anthropic fallback, prompt-in/JSON-out)"
-    status: PLANNED
+    status: IN_PROGRESS
     track: A
-    current_lean_gate: L-GATE_ELIGIBILITY
-    lod_status: LOD100
+    current_lean_gate: L-GATE_SPEC
+    lod_status: LOD400
     assigned_builder: "familynewsletter_build"
     assigned_validator: "familynewsletter_val"
     created_at: "2026-07-22"
     milestone_ref: "S001"
     stage_mapping: "Build"
-    spec_ref: "TBD"
+    spec_ref: "_aos/work_packages/FNL-S001-P002-WP001/LOD400_spec.md"
     gate_history:
       - gate: L-GATE_ELIGIBILITY
         result: PASS
@@ -171,16 +171,16 @@ work_packages:
 
   - id: "FNL-S001-P002-WP002"
     label: "token_tracker update (claude-sonnet-5 pricing, research() with server tools + pause_turn, web_search cost logging)"
-    status: PLANNED
+    status: IN_PROGRESS
     track: A
-    current_lean_gate: L-GATE_ELIGIBILITY
-    lod_status: LOD100
+    current_lean_gate: L-GATE_SPEC
+    lod_status: LOD400
     assigned_builder: "familynewsletter_build"
     assigned_validator: "familynewsletter_val"
     created_at: "2026-07-22"
     milestone_ref: "S001"
     stage_mapping: "Build"
-    spec_ref: "TBD"
+    spec_ref: "_aos/work_packages/FNL-S001-P002-WP002/LOD400_spec.md"
     gate_history:
       - gate: L-GATE_ELIGIBILITY
         result: PASS
@@ -190,16 +190,16 @@ work_packages:
 
   - id: "FNL-S001-P002-WP003"
     label: "researcher.py (5x research_member two-step gather+critique; watchlist + screen-scout sections)"
-    status: PLANNED
+    status: IN_PROGRESS
     track: A
-    current_lean_gate: L-GATE_ELIGIBILITY
-    lod_status: LOD100
+    current_lean_gate: L-GATE_SPEC
+    lod_status: LOD400
     assigned_builder: "familynewsletter_build"
     assigned_validator: "familynewsletter_val"
     created_at: "2026-07-22"
     milestone_ref: "S001"
     stage_mapping: "Build"
-    spec_ref: "TBD"
+    spec_ref: "_aos/work_packages/FNL-S001-P002-WP003/LOD400_spec.md"
     gate_history:
       - gate: L-GATE_ELIGIBILITY
         result: PASS
@@ -209,16 +209,16 @@ work_packages:
 
   - id: "FNL-S001-P002-WP004"
     label: "editor.py (editorial call, structured output, --mock mode)"
-    status: PLANNED
+    status: IN_PROGRESS
     track: A
-    current_lean_gate: L-GATE_ELIGIBILITY
-    lod_status: LOD100
+    current_lean_gate: L-GATE_SPEC
+    lod_status: LOD400
     assigned_builder: "familynewsletter_build"
     assigned_validator: "familynewsletter_val"
     created_at: "2026-07-22"
     milestone_ref: "S001"
     stage_mapping: "Build"
-    spec_ref: "TBD"
+    spec_ref: "_aos/work_packages/FNL-S001-P002-WP004/LOD400_spec.md"
     gate_history:
       - gate: L-GATE_ELIGIBILITY
         result: PASS
@@ -228,16 +228,16 @@ work_packages:
 
   - id: "FNL-S001-P002-WP005"
     label: "teaser.py (Pillow 1080x1350 cover card, Hebrew RTL via raqm/bidi)"
-    status: PLANNED
+    status: IN_PROGRESS
     track: A
-    current_lean_gate: L-GATE_ELIGIBILITY
-    lod_status: LOD100
+    current_lean_gate: L-GATE_SPEC
+    lod_status: LOD400
     assigned_builder: "familynewsletter_build"
     assigned_validator: "familynewsletter_val"
     created_at: "2026-07-22"
     milestone_ref: "S001"
     stage_mapping: "Build"
-    spec_ref: "TBD"
+    spec_ref: "_aos/work_packages/FNL-S001-P002-WP005/LOD400_spec.md"
     gate_history:
       - gate: L-GATE_ELIGIBILITY
         result: PASS
@@ -247,22 +247,41 @@ work_packages:
 
   - id: "FNL-S001-P002-WP006"
     label: "orchestrator rewire + m5_distributor -> publisher.py (FTP+email kept, Twilio removed)"
-    status: PLANNED
+    status: IN_PROGRESS
     track: A
-    current_lean_gate: L-GATE_ELIGIBILITY
-    lod_status: LOD100
+    current_lean_gate: L-GATE_SPEC
+    lod_status: LOD400
     assigned_builder: "familynewsletter_build"
     assigned_validator: "familynewsletter_val"
     created_at: "2026-07-22"
     milestone_ref: "S001"
     stage_mapping: "Build"
-    spec_ref: "TBD"
+    spec_ref: "_aos/work_packages/FNL-S001-P002-WP006/LOD400_spec.md"
     gate_history:
       - gate: L-GATE_ELIGIBILITY
         result: PASS
         date: "2026-07-22"
         notes: ""
     notes: "CLASS=STANDARD. Edits kept code (orchestrator, m5) -> LOD400 required. ABSORBS WP003 deferral: archive m2_scanner/m3_normalizer/m6_feedback + config/sources.json to archive/legacy/ and extract _fetch_weather/_format_hebrew_date/_build_neo shapes from m3 during the rewire."
+
+  - id: "FNL-S001-P002-WP007"
+    label: "template extension — 3 missing sections (Viewing/Family-Table/Extended-Family) + restore פינה אישית ×5 + render neo.family_content + ALL DESIGN_FISH fish + og:image->teaser"
+    status: IN_PROGRESS
+    track: A
+    current_lean_gate: L-GATE_SPEC
+    lod_status: LOD400
+    assigned_builder: "familynewsletter_build"
+    assigned_validator: "familynewsletter_val"
+    created_at: "2026-07-22"
+    milestone_ref: "S001"
+    stage_mapping: "Build"
+    spec_ref: "_aos/work_packages/FNL-S001-P002-WP007/LOD400_spec.md"
+    gate_history:
+      - gate: L-GATE_ELIGIBILITY
+        result: PASS
+        date: "2026-07-22"
+        notes: "Registered 2026-07-22 (team_100) — template gap: current template had only 8 of 13 LOD200 sections."
+    notes: "CLASS=STANDARD. Edits newsletter.html.j2 + m4_renderer + models -> LOD400. Incorporates ALL DESIGN_FISH fish (Nimrod ruling 2026-07-22). LOD400 spec authored; awaiting team_00 batch validation."
 
   # --- P003: WhatsApp + server (CLASS=OPS; runbook + deploy-verify) ---
 
