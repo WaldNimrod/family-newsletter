@@ -48,11 +48,7 @@ ENV/
 env/
 
 # --- Project data & SQLite ---
-data/*.db
-data/*.db-journal
-data/*.db-wal
-data/submissions/
-data/archive/
+data/
 
 # --- Runtime ---
 logs/

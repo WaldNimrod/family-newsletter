@@ -46,11 +46,16 @@ def ftp_remote_base(settings: Any) -> str:
 
 
 def newsletter_url_base(settings: Any) -> str:
-    """Public HTTPS base for built HTML (no trailing slash)."""
-    base = env_first("UPRESS_PUBLIC_BASE")
-    if base:
-        return base.rstrip("/")
-    return str(settings.newsletter.get("url_base", "https://nimrod.bio/newsletter")).rstrip("/")
+    """Public HTTPS base for built HTML (no trailing slash).
+    Canonical: UPRESS_PUBLIC_BASE=https://nimrod.bio + UPRESS_UPLOAD_PATH=/agents/newsletter
+    """
+    domain = env_first("UPRESS_PUBLIC_BASE")
+    upload_path = env_first("UPRESS_UPLOAD_PATH", "FTP_PATH")
+    if domain and upload_path:
+        return domain.rstrip("/") + "/" + upload_path.strip("/")
+    if domain:
+        return domain.rstrip("/")
+    return str(settings.newsletter.get("url_base", "https://nimrod.bio/agents/newsletter")).rstrip("/")
 
 
 def smtp_config(default_from: str = "newsletter@nimrod.bio") -> dict[str, Any]:

@@ -17,12 +17,12 @@
     "max_topic_ratio_per_member": 0.6
   },
   "newsletter": {
-    "url_base": "https://nimrod.bio/newsletter",
+    "url_base": "https://nimrod.bio/agents/newsletter",
     "family_name": "משפחת בן-צבי ולד",
     "family_name_en": "Ben-Tzvi Wald Family"
   },
   "ftp": {
-    "remote_path": "/newsletter",
+    "remote_path": "/agents/newsletter",
     "retry_count": 3,
     "retry_delay_seconds": 10
   },
