@@ -8,3 +8,10 @@ markdown>=3.5
 # Optional (for production)
 anthropic>=0.40         # Claude API SDK (recommended; else HTTP fallback in token_tracker)
 # twilio>=9.0             # WhatsApp via Twilio
+
+# P002 build / test stack (team_00-authorized Phase-0)
+pytest>=8.0
+pytest-mock>=3.12
+Pillow>=10.0
+python-bidi>=0.4.2
+arabic-reshaper>=3.0
