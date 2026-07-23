@@ -12,6 +12,12 @@ anthropic>=0.40         # Claude API SDK (recommended; else HTTP fallback in tok
 # P002 build / test stack (team_00-authorized Phase-0)
 pytest>=8.0
 pytest-mock>=3.12
-Pillow>=10.0
-python-bidi>=0.4.2
-arabic-reshaper>=3.0
+Pillow>=10.3            # rounded_rectangle(corners=) + draw.text(direction=/language=) require Pillow 10.3+
+python-bidi>=0.4.2     # RTL reordering fallback (bidi.algorithm.get_display legacy import path)
+arabic-reshaper>=3.0   # Hebrew/Arabic RTL shaping fallback (import name: arabic_reshaper)
+# Teaser card generation (src/teaser.py — FNL-S001-P002-WP005)
+# Font sources: Bangers via raw.githubusercontent.com/google/fonts/main/ofl/bangers/
+#               SecularOne via raw.githubusercontent.com/google/fonts/main/ofl/secularone/
+#               Rubik (Regular+Bold) via fonts.gstatic.com (Google Fonts API — on Cloud allowlist)
+#               Rubik-Regular URL: https://fonts.gstatic.com/s/rubik/v31/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-B4i1UA.ttf
+#               Rubik-Bold URL:    https://fonts.gstatic.com/s/rubik/v31/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-4I-1UA.ttf
