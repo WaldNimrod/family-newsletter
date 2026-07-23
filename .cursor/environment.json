@@ -1,0 +1,3 @@
+{
+  "install": "sudo apt-get update -qq && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq python3.12-venv python3-venv libraqm0 libraqm-dev libfreetype6-dev libharfbuzz-dev pkg-config && python3.12 -m venv .venv && .venv/bin/pip install --upgrade pip && .venv/bin/pip install -r requirements.txt"
+}

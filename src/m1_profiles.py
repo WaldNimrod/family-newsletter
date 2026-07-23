@@ -61,6 +61,7 @@ def load_profiles(config_dir: str = "config/") -> FamilyConfig:
             interests=interests,
             max_items_per_day=prefs.get('max_items_per_day', 3),
             preferred_format=prefs.get('preferred_format', 'summary'),
+            media_sources=m.get('media_sources', []),  # NEW — FNL-S001-P002-WP003
         ))
 
     family = FamilyConfig(

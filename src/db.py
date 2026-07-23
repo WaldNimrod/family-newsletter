@@ -3,12 +3,13 @@ Family Newsletter — Database Layer
 SQLite helpers per LOD400 §9.
 """
 
-import sqlite3
+import hashlib
 import json
 import logging
+import sqlite3
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
-from datetime import datetime
 
 logger = logging.getLogger('family.db')
 
@@ -137,12 +138,32 @@ class Database:
                 http_status     INTEGER
             );
 
+            CREATE TABLE IF NOT EXISTS watchlist (
+                id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+                title               TEXT NOT NULL,
+                service             TEXT NOT NULL CHECK(service IN ('netflix','prime')),
+                for_whom            TEXT NOT NULL,
+                pick_type           TEXT NOT NULL CHECK(pick_type IN ('family','personal')),
+                recommended_date    TEXT NOT NULL,
+                hebrew_subtitles    INTEGER NOT NULL DEFAULT 0,
+                availability_note   TEXT,
+                source_url          TEXT,
+                status              TEXT NOT NULL DEFAULT 'recommended'
+                                    CHECK(status IN ('recommended','watched','reaction')),
+                reaction_text       TEXT,
+                reaction_rating     TEXT,
+                created_at          TEXT NOT NULL DEFAULT (datetime('now')),
+                updated_at          TEXT NOT NULL DEFAULT (datetime('now'))
+            );
+
             CREATE INDEX IF NOT EXISTS idx_content_hash ON content_archive(content_hash);
             CREATE INDEX IF NOT EXISTS idx_content_date ON content_archive(fetched_at);
             CREATE INDEX IF NOT EXISTS idx_items_date ON newsletter_items(newsletter_date, member_id);
             CREATE INDEX IF NOT EXISTS idx_feedback_date ON feedback(newsletter_date, member_id);
             CREATE INDEX IF NOT EXISTS idx_submissions_status ON family_submissions(status);
             CREATE INDEX IF NOT EXISTS idx_token_date ON token_usage(timestamp);
+            CREATE INDEX IF NOT EXISTS idx_watchlist_date ON watchlist(recommended_date);
+            CREATE INDEX IF NOT EXISTS idx_watchlist_status ON watchlist(status);
         """)
         self.conn.commit()
         logger.info(f"Database initialized at {self.db_path}")
@@ -315,6 +336,76 @@ class Database:
             VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (date, source_id, items_found, items_new, errors, duration_ms, http_status))
         self.conn.commit()
+
+    # ─── Content Archive (dedup + researcher-item persistence) ──
+
+    def get_recent_content_urls(self, days: int = 45) -> set[str]:
+        """URLs archived in the last N days — the URL half of the
+        research_member() dedup blocklist. Mirrors get_recent_hashes()
+        query shape exactly, just selecting a different column."""
+        rows = self.conn.execute(
+            "SELECT url FROM content_archive WHERE fetched_at > date('now', ?)",
+            (f'-{days} days',)
+        ).fetchall()
+        return {r['url'] for r in rows}
+
+    def archive_researched_item(self, *, url: str, title: str, source_name: str,
+                                 raw_text: str, tags: list[str], language: str,
+                                 image_url: Optional[str] = None) -> str:
+        """Inserts a researcher-produced item into content_archive
+        (source_type='web', is_submission=0, source_trust=0.7 default,
+        published_at=NULL). Uses sha256(url)[:16] / sha256(title+raw_text)[:16]
+        for id/content_hash. INSERT OR IGNORE: if url already exists, the
+        existing row is left untouched. Returns the id for that url."""
+        item_id = hashlib.sha256(url.encode()).hexdigest()[:16]
+        content_hash = hashlib.sha256((title + raw_text).encode()).hexdigest()[:16]
+        fetched_at = datetime.now(timezone.utc).isoformat()
+        self.conn.execute("""
+            INSERT OR IGNORE INTO content_archive
+            (id, url, title, source_name, source_type, source_url, source_trust,
+             published_at, fetched_at, language, raw_text, tags, image_url,
+             content_hash, is_submission, submitted_by)
+            VALUES (?, ?, ?, ?, 'web', ?, 0.7, NULL, ?, ?, ?, ?, ?, ?, 0, NULL)
+        """, (item_id, url, title, source_name, url, fetched_at, language,
+              raw_text, json.dumps(tags, ensure_ascii=False), image_url, content_hash))
+        self.conn.commit()
+        return item_id
+
+    # ─── Watchlist ────────────────────────────────────────────
+
+    def get_recent_watchlist_titles(self, days: int = 45) -> set[str]:
+        """Lower-cased titles recommended in the last N days — the
+        screen_scout() dedup blocklist."""
+        rows = self.conn.execute(
+            "SELECT title FROM watchlist WHERE recommended_date > date('now', ?)",
+            (f'-{days} days',)
+        ).fetchall()
+        return {r['title'].strip().lower() for r in rows}
+
+    def get_last_personal_pick(self) -> Optional[dict]:
+        """Most recent pick_type='personal' row, or None if none exists yet.
+        Used by _next_personal_pick_member() for rotation."""
+        row = self.conn.execute(
+            "SELECT * FROM watchlist WHERE pick_type = 'personal' "
+            "ORDER BY recommended_date DESC, id DESC LIMIT 1"
+        ).fetchone()
+        return dict(row) if row else None
+
+    def insert_watchlist_pick(self, *, title: str, service: str, for_whom: str,
+                               pick_type: str, recommended_date: str,
+                               hebrew_subtitles: bool, availability_note: str,
+                               source_url: str) -> int:
+        """Inserts one watchlist row with status='recommended'. Returns the
+        new row's id (sqlite3 lastrowid)."""
+        cur = self.conn.execute("""
+            INSERT INTO watchlist
+            (title, service, for_whom, pick_type, recommended_date,
+             hebrew_subtitles, availability_note, source_url, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'recommended')
+        """, (title, service, for_whom, pick_type, recommended_date,
+              int(hebrew_subtitles), availability_note, source_url))
+        self.conn.commit()
+        return cur.lastrowid
 
     # ─── Utility ──────────────────────────────────────────────
 
