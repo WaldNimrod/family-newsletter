@@ -32,17 +32,23 @@
     "whatsapp_provider": "twilio"
   },
   "ai": {
-    "summary_model": "claude-sonnet-4-6",
+    "summary_model": "claude-sonnet-5",
     "summary_max_tokens": 200,
     "headline_max_tokens": 50,
     "greeting_max_tokens": 100,
     "puzzle_max_tokens": 150,
     "submission_edit_max_tokens": 300,
     "survey_max_tokens": 100,
-    "bridge_max_tokens": 100
+    "bridge_max_tokens": 100,
+    "thinking_enabled": false,
+    "research_max_tokens": 4096,
+    "research_web_search_max_uses": 5,
+    "research_web_fetch_max_uses": 3,
+    "research_web_fetch_max_content_tokens": 20000,
+    "research_max_continuations": 5
   },
   "budget": {
-    "weekly_alert_usd": 0.50,
+    "weekly_alert_usd": 2.50,
     "monthly_alert_usd": 10.00
   }
 }
