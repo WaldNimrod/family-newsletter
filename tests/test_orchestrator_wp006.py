@@ -6,6 +6,7 @@ No real network, DB, LLM, or FTP calls.
 
 import json
 import pytest
+from pathlib import Path
 from unittest.mock import MagicMock, patch, call
 from datetime import datetime
 
@@ -743,6 +744,11 @@ def test_cmd_weekly_send_no_teaser_file_passes_none(mocker, tmp_path):
         return r
 
     mocker.patch.object(orch.publisher, "publish", side_effect=fake_publish)
+
+    # Ensure leftover teaser from a prior mock build does not leak into this AC
+    teaser_path = Path(f"data/archive/teasers/{datetime.now().strftime('%Y-%m-%d')}.png")
+    if teaser_path.exists():
+        teaser_path.unlink()
 
     args = MagicMock(mock=False, config=None, db=None)
     orch.cmd_weekly_send(args)
