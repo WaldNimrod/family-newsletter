@@ -27,9 +27,11 @@
     "retry_delay_seconds": 10
   },
   "distribution": {
-    "primary_channel": "whatsapp",
+    "primary_channel": "email",
     "fallback_channel": "email",
-    "whatsapp_provider": "twilio"
+    "whatsapp_group_name": "בית ולד 📰",
+    "whatsapp_number": "972524242342",
+    "admin_email": ""
   },
   "ai": {
     "summary_model": "claude-sonnet-5",
@@ -45,7 +47,14 @@
     "research_web_search_max_uses": 5,
     "research_web_fetch_max_uses": 3,
     "research_web_fetch_max_content_tokens": 20000,
-    "research_max_continuations": 5
+    "research_max_continuations": 5,
+    "provider": "anthropic",
+    "provider_fallback": ["anthropic"],
+    "anthropic_model": "claude-sonnet-5",
+    "cursor_binary": "cursor-agent",
+    "cursor_model": "grok-4",
+    "cursor_timeout_seconds": 120,
+    "editorial_max_tokens": 2500
   },
   "budget": {
     "weekly_alert_usd": 2.50,
