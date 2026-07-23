@@ -151,6 +151,10 @@ class GeneratedContent:
     opener_text: str = ""  # warm intro paragraph (Style A)
     closer_text: str = ""  # warm closing paragraph (Style A)
     weather: list = field(default_factory=list)  # [{city, icon, temp, daily, ...}]
+    viewing: dict = field(default_factory=dict)  # {family_pick: {...}, personal_pick: {...}} — see WP007 LOD400 §2.3
+    family_table_text: str = ""  # שולחן שישי — conversation-starter + open question (Style A), rendered with |safe like opener_text/closer_text
+    extended_family: list = field(default_factory=list)  # [{name, relation, headline, pointer_text, link_url}] — public-only, NEVER an image field — see §2.6
+    shelf_pick: dict = field(default_factory=dict)  # {title_he, title_en, author, category, member_id, blurb} — shape mirrors config/family.json shared_interests.bookshelf.books[]
 
 
 @dataclass

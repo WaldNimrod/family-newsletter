@@ -11,8 +11,9 @@ from datetime import datetime
 
 from jinja2 import Environment, FileSystemLoader
 
-from .models import NEO
+from .models import NEO, Settings
 from .db import Database
+from .env_compat import newsletter_url_base
 
 logger = logging.getLogger('family.m4')
 
@@ -65,6 +66,8 @@ def get_character_html(pose: str, month: str = None) -> str:
     """
     Get character HTML image or emoji fallback.
 
+    Lookup order: month dir → assets/characters/_placeholder/ → emoji.
+
     Args:
         pose: Character pose name (e.g., 'hero-greeting', 'reading')
         month: Month in YYYY-MM format. Defaults to current month.
@@ -75,10 +78,18 @@ def get_character_html(pose: str, month: str = None) -> str:
     if month is None:
         month = datetime.now().strftime('%Y-%m')
 
-    # Check if character asset exists
+    # Check if character asset exists for the month
     asset_path = Path(f"assets/characters/{month}/{pose}.png")
     if asset_path.exists():
         return f'<img src="assets/characters/{month}/{pose}.png" alt="{pose}" class="character-img character-{pose}">'
+
+    # MEDIA_BRIEF / BUILD_DIRECTIVE: shared placeholder poses
+    placeholder_path = Path(f"assets/characters/_placeholder/{pose}.png")
+    if placeholder_path.exists():
+        return (
+            f'<img src="assets/characters/_placeholder/{pose}.png" '
+            f'alt="{pose}" class="character-img character-{pose}">'
+        )
 
     # Fallback to emoji
     emoji = POSE_EMOJI_MAP.get(pose, '🎭')
@@ -86,7 +97,7 @@ def get_character_html(pose: str, month: str = None) -> str:
 
 
 def render(neo: NEO, template_path: str = "templates/",
-           db: Database = None) -> str:
+           db: Database = None, settings: Settings = None) -> str:
     """Render NEO to HTML string using Jinja2 template."""
     env = Environment(
         loader=FileSystemLoader(template_path),
@@ -122,6 +133,13 @@ def render(neo: NEO, template_path: str = "templates/",
 
     build_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+    og_image_url = None
+    if settings is not None:
+        try:
+            og_image_url = f"{newsletter_url_base(settings)}/{neo.date}/teaser.png"
+        except Exception as e:
+            logger.warning(f"[M4] Could not compute og_image_url: {e}")
+
     html = template.render(
         neo=neo,
         edition_number=edition_number,
@@ -132,6 +150,7 @@ def render(neo: NEO, template_path: str = "templates/",
         current_month=current_month,
         system_version=SYSTEM_VERSION,
         build_timestamp=build_timestamp,
+        og_image_url=og_image_url,
     )
 
     # Validate output
