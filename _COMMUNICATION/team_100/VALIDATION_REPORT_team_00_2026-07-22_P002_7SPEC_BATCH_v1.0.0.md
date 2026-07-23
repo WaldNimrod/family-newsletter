@@ -108,14 +108,20 @@ silently `pip install`s undeclared deps. Needs explicit authorization + Cursor C
 pytest install (A2). These CANNOT be settled until the Cursor Cloud capabilities report
 lands.
 
-## 4. Scope ruling applied — Skipper Cat → edition #2
-Per team_00 (2026-07-22): the SVG "Skipper Cat" mascot system is **deferred to edition
-#2**. Independently corroborated by validation — no character art exists (only
-`.gitkeep`), `CHARACTER_SCHEDULE` stops at May, and no caller supplies `hero_category`,
-so the mascot would be invisible anyway. **Carve-out:** WP005 = teaser image (RTL) only;
-WP007 = sections/corners/dark-mode/footer, **no mascot slots**. The inert
-`neo.metadata['character_*']` credit-line is **deferred, not fixed** (dead-kwarg cleanup
-tracked separately).
+## 4. Scope ruling — ALL graphics in edition-1 (hand-made, not engine-generated)
+**CORRECTED 2026-07-23 (supersedes an earlier "defer to edition-2" reading; this §4
+governs — treat any "Skipper Cat/SVG → edition-2" or "no mascot slots" wording elsewhere
+in this report as void).** Per team_00: **all edition-1 graphics ship in edition-1.** The
+only change is the SOURCE — team_00 delivers finished PNGs by hand (online image engine)
+instead of the pipeline auto-drawing them. So WP005 teaser, WP007's 5 mascot slots
+(hero-greeting/thinking/pointing/reading/goodbye), AND the cover hero are all **in scope**,
+consuming pre-made assets from `assets/characters/…` + `assets/hero/` (see
+`_COMMUNICATION/team_00/MEDIA_BRIEF_…SKIPPER_CAT_ASSETS_EDITION1…`). The
+`neo.metadata['character_*']` credit-line is **activated** (populated from the mascot),
+not deferred. Out-of-scope = only the *SVG auto-generation engine* + topic→scene
+auto-selection (manual delivery replaces it); the Tranche-B per-member/per-category
+library is TBC (MEDIA_BRIEF §2). **Build add:** a `_placeholder/` fallback in
+`get_character_html()` (currently month-dir only).
 
 ## 5. Prioritized fix-list (spec edits before build)
 
