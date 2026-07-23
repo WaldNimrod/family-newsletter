@@ -5,13 +5,17 @@
 character and visual style across every asset and every session — that is the whole
 point (continuity + unified style).
 
-## Files
-- **STYLE_BIBLE.md** — the locked visual system + the "Skipper Cat" mascot. Single
-  source of truth for style / palette / character. Load this first.
-- **PROMPTS.md** — per-asset generation prompts (compact — they rely on the bible being
-  in context) + exact output sizes, formats, and file paths.
-- **FAMILY_CHARACTERS.md** — the 5 family-member character designs (per-member art +
-  continuity).
+## Setup — two kinds of files
+- **INSTRUCTIONS.md → paste into the project's "Instructions" / system-prompt field**
+  (the operating directive: how the AI must behave). This is the piece most projects
+  need separately from the knowledge files.
+- The other three → **upload as knowledge / context files**:
+  - **STYLE_BIBLE.md** — the locked visual system + the "Skipper Cat" mascot. Single
+    source of truth for style / palette / character.
+  - **PROMPTS.md** — per-asset generation prompts (compact — they rely on the bible in
+    context) + exact output sizes, formats, and file paths.
+  - **FAMILY_CHARACTERS.md** — the 5 family-member character designs (per-member art +
+    continuity).
 
 ## Workflow (for maximum consistency)
 1. Load all 3 files into the project context.
