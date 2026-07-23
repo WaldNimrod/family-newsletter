@@ -34,6 +34,7 @@ class MemberProfile:
     interests: list[Interest]
     max_items_per_day: int
     preferred_format: str  # "summary" | "headline"
+    media_sources: list[dict] = field(default_factory=list)  # NEW — FNL-S001-P002-WP003
 
 
 @dataclass
